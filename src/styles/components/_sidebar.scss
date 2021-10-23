@@ -7,6 +7,9 @@
     padding: 8px 10px;
     cursor: pointer;
     transition: all .2s ease-in-out;
+    &:active {
+      transform: scale(.9);
+    }
     &:hover {
       background: rgba($brandClr, .2);
       border-radius: 4px;
