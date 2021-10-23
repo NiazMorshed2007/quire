@@ -1,2 +1,2 @@
-import {createContext} from "vm";
-export const IsLogged = createContext();
+import {createContext} from "react";
+export const IsLogged = createContext<any>(false);
