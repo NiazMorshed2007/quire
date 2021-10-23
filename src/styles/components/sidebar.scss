@@ -1,0 +1,32 @@
+.sidebar {
+  transition: all .3s ease-in-out;
+  top: 0;
+  background-color: $sideBarBack;
+  padding: 17px 1px;
+  &>div {
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+    &:hover {
+      background: rgba($brandClr, .2);
+      border-radius: 4px;
+    }
+  }
+  i {
+    svg {
+      font-size: 22px;
+      color: black;
+    }
+  }
+  .burger-wrapper {
+    .burger {
+      cursor: pointer;
+      div {
+        width: 22px;
+        height: 2px;
+        background: black;
+        margin: 4px 0;
+      }
+    }
+  }
+}

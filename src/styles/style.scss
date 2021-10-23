@@ -2,7 +2,9 @@
 @import "fonts";
 @import 'color';
 @import 'variables';
+@import './mixins/mixin';
 @import './pages/login';
+@import './components/sidebar';
 
 body{
   padding: 0;
