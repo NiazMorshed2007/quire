@@ -3,10 +3,10 @@ import logo from '../assets/logo.png';
 import {FcGoogle} from 'react-icons/fc';
 import {IsLogged} from "../context/isLogged";
 import {firebase} from '../firebase/firebase';
-import {useHistory} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 
 const Login: FC = () => {
-    const {setLogged}: any = useContext(IsLogged);
+    const {logged, setLogged}: any = useContext(IsLogged);
     const history = useHistory();
     const authenticate = (): void => {
       const google_provider = new firebase.auth.GoogleAuthProvider();
@@ -18,6 +18,9 @@ const Login: FC = () => {
           }).catch((err) => {
               console.log(err);
       })
+    }
+    if(logged) {
+        return <Redirect to='/u' />
     }
     return <div className='login-page vw-100 vh-100 overflow-hidden position-relative'>
         <div className="header position-absolute top-0">

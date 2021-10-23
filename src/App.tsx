@@ -3,6 +3,7 @@ import SideBar from "./components/Sidebar";
 import Login from "./pages/Login";
 import {IsLogged} from "./context/isLogged";
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
+import UserSpace from "./pages/User/User";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -18,8 +19,13 @@ const App: FC = () => {
                     <Login />
                 </Route>
                 <Route path='/'>
-                    <div className="main w-100 h-100 position-relative">
+                    <div className="user-work-wrapper d-flex w-100 h-100 position-relative">
                         <SideBar />
+                        <div className="main">
+                            <Route path='/u' exact>
+                                <UserSpace />
+                            </Route>
+                        </div>
                     </div>
                 </Route>
             </div>
