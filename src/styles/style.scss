@@ -3,6 +3,7 @@
 @import 'color';
 @import 'variables';
 @import 'src/styles/mixins/mixin';
+@import './components/header';
 @import './pages/login';
 @import 'src/styles/components/sidebar';
 
@@ -11,4 +12,13 @@ body{
   margin: 0;
   box-sizing: border-box;
   font-family: $lato;
+}
+
+.dark-mode-layer {
+  transition: all .8s linear;
+  clip-path: circle(100px at -10% 100%);
+}
+
+.expand-dark-mode {
+  clip-path: circle(2000px at -10% 100%);
 }

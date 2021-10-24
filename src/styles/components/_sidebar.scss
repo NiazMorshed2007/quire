@@ -3,12 +3,12 @@
   top: 0;
   background-color: $sideBarBack;
   padding: 17px 1px;
-  &>div {
+  &>div > div {
     padding: 8px 10px;
     cursor: pointer;
     transition: all .2s ease-in-out;
     &:active {
-      transform: scale(.9);
+      transform: scale(.8);
     }
     &:hover {
       background: rgba($brandClr, .2);
@@ -31,5 +31,15 @@
         margin: 4px 0;
       }
     }
+  }
+}
+
+.dark {
+  background:transparent;
+  .burger-wrapper > .burger > div {
+    background: $laterClr;
+  }
+  i>svg {
+    color: $laterClr;
   }
 }

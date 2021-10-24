@@ -1,8 +1,3 @@
-import {createContext, Dispatch} from "react";
+import {createContext} from "react";
 
-type Object = {
-    logged: boolean,
-    setLogged: Dispatch<boolean>
-}
-
-export const IsLogged = createContext<Object | null>(null);
+export const IsLogged = createContext<any>(null);

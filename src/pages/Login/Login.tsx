@@ -1,12 +1,14 @@
 import React, { FC, useContext} from 'react';
-import logo from '../assets/logo.png';
+import logo from '../../assets/logo.png';
 import {FcGoogle} from 'react-icons/fc';
-import {IsLogged} from "../context/isLogged";
-import {firebase} from '../firebase/firebase';
+import {IsLogged} from "../../context/isLogged";
+import {firebase} from '../../firebase/firebase';
 import {Redirect, useHistory} from "react-router-dom";
+import {User} from '../../context/user';
 
 const Login: FC = () => {
     const {logged, setLogged}: any = useContext(IsLogged);
+    const {setUser}: any = useContext(User);
     const history = useHistory();
     const authenticate = (): void => {
       const google_provider = new firebase.auth.GoogleAuthProvider();
@@ -14,7 +16,9 @@ const Login: FC = () => {
           .then((re) => {
                 setLogged(true);
                 localStorage.setItem('logged', 'true');
-                history.push('/u')
+                history.push('/u');
+                setUser(re);
+                localStorage.setItem('user', JSON.stringify(re));
           }).catch((err) => {
               console.log(err);
       })
