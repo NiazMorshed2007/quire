@@ -1,4 +1,4 @@
-import React, { FC, useContext} from 'react';
+import React, {FC, useContext} from 'react';
 import logo from '../../assets/logo.png';
 import {FcGoogle} from 'react-icons/fc';
 import {IsLogged} from "../../context/isLogged";
@@ -11,17 +11,17 @@ const Login: FC = () => {
     const {setUser}: any = useContext(User);
     const history = useHistory();
     const authenticate = (): void => {
-      const google_provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(google_provider)
-          .then((re) => {
-                setLogged(true);
+        const google_provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(google_provider)
+            .then((re) => {
                 localStorage.setItem('logged', 'true');
-                history.push('/u');
-                setUser(re);
                 localStorage.setItem('user', JSON.stringify(re));
-          }).catch((err) => {
-              console.log(err);
-      })
+                setUser(re);
+                setLogged(true);
+                history.push('/u/overview');
+            }).catch((err) => {
+            console.log(err);
+        })
     }
     if(logged) {
         return <Redirect to='/u' />
@@ -40,7 +40,7 @@ const Login: FC = () => {
                 className="login-button d-flex gap-3 px-3 mt-3 shadow-sm align-items-center justify-content-between"
             >
                 <i className="h-100 d-flex align-items-center justify-content-center">
-                    <FcGoogle />
+                    <FcGoogle/>
                 </i>
                 <div className="h-100 w-100 d-flex align-items-center justify-content-center">
                     <p className="m-0">Sign in with Google</p>

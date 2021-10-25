@@ -6,7 +6,7 @@ import {IsDarkMode} from "./context/isDarkMode";
 import {User} from './context/user';
 import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import UserSpace from "./pages/User/User";
-import Overview from "./components/Overview";
+import Overview from "./pages/overview/Overview";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -27,8 +27,14 @@ const App: FC = () => {
     const [user, setUser] = useState<{} | []>(getUser());
     return <>
         <Router>
+            <Route path='/' exact>
+                <Redirect to='/u' />
+            </Route>
+            <Route path='/u'>
+                <Redirect to='/u/overview' />
+            </Route>
             {!logged && <Redirect to='/login' />}
-        <IsLogged.Provider value={{logged, setLogged}}>
+            <IsLogged.Provider value={{logged, setLogged}}>
             <User.Provider value={{user, setUser}}>
             <IsDarkMode.Provider value={{isDarkMode, setIsDarkMode}}>
             <div className="app vh-100 vw-100 overflow-hidden">
@@ -36,7 +42,7 @@ const App: FC = () => {
                     <Login />
                 </Route>
                 {logged &&
-                <Route path='/'>
+                    <>
                     <div className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${isDarkMode && 'expand-dark-mode'}`}>{''}</div>
                     <div className={`user-work-wrapper d-flex w-100 h-100 position-relative ${isDarkMode && 'text-white'}`}>
                         <SideBar />
@@ -50,7 +56,7 @@ const App: FC = () => {
                             </Route>
                         </div>
                     </div>
-                </Route>
+                    </>
                 }
             </div>
             </IsDarkMode.Provider>

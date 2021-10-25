@@ -30,7 +30,7 @@ const Header: FC<IHeader> = ({name, image, tabs}) => {
         </div>
         <div className="down d-flex gap-1">
             {tabs.map((tab) => (
-                <NavLink activeClassName='active-tab' className='text-decoration-none tab text-black bg-white' to={`${url}/${tab.id}`}>
+                <NavLink key={tab.id} activeClassName='active-tab' className='text-decoration-none tab text-black bg-white' to={`${url}/${tab.id}`}>
                     <p className='m-0'>{tab.text}</p>
                 </NavLink>
             ))}

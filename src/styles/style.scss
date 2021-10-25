@@ -2,10 +2,12 @@
 @import "fonts";
 @import 'color';
 @import 'variables';
-@import 'src/styles/mixins/mixin';
+@import './mixins/mixin';
 @import './components/header';
+@import './components/baseInfo';
 @import './pages/login';
-@import 'src/styles/components/sidebar';
+@import './components/sidebar';
+@import './pages/overview';
 
 body{
   padding: 0;
