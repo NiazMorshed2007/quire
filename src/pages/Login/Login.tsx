@@ -29,15 +29,15 @@ const Login: FC = () => {
     return <div className='login-page vw-100 vh-100 overflow-hidden position-relative'>
         <div className="header position-absolute top-0">
             <div className="logo-wrapper">
-                <img src={logo} alt=""/>
+                <img className='fitimage' src={logo} alt=""/>
             </div>
         </div>
         <div className="main w-100 h-100 d-flex flex-column align-items-center justify-content-center">
             <h2>Sign in to Quire</h2>
-            <h5>Unfold Your Ideas</h5>
+            <h5 className='text-silver'>Unfold Your Ideas</h5>
             <div
                 onClick={authenticate}
-                className="login-button d-flex gap-3 px-3 mt-3 shadow-sm align-items-center justify-content-between"
+                className="login-button pointer d-flex gap-3 px-3 mt-3 shadow-sm align-items-center justify-content-between"
             >
                 <i className="h-100 d-flex align-items-center justify-content-center">
                     <FcGoogle/>

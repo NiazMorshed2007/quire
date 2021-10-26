@@ -1,0 +1,17 @@
+.text-silver {
+  color: $silver;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.fitimage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

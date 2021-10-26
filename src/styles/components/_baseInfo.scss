@@ -6,10 +6,6 @@
     width: 155px;
     height: 155px;
     border-radius: 4px;
-    overflow: hidden;
-    img {
-      @include fitImage;
-    }
   }
   .user {
     border-radius: 50%;
@@ -17,15 +13,12 @@
   .content-wrapper {
     width: calc(100% - 155px);
     .up {
-        color: $silver;
       h5{
-        text-transform: uppercase;
-        font-weight: 400;
+        font-weight: 300;
         font-size: 15px;
       }
       svg {
         font-size: 21px;
-        cursor: pointer;
       }
     }
   }
