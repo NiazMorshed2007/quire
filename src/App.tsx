@@ -1,16 +1,16 @@
 import React, {FC, useState} from 'react';
-import SideBar from "./components/Sidebar";
 import Login from "./pages/Login/Login";
 import {IsLogged} from "./context/isLogged";
 import {IsDarkMode} from "./context/isDarkMode";
 import {User} from './context/user';
-import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
+import {BrowserRouter as Router, NavLink, Redirect, Route} from "react-router-dom";
 import UserSpace from "./pages/User/User";
 import Overview from "./pages/overview/Overview";
 import {Orgs} from "./context/orgs";
 import {IOrg} from "./interfaces/OrgInterface";
 import Organization from "./pages/Organization/Organization";
 import {setId} from "./functions/SetId";
+import SideBar from "./components/sidebar/SideBar";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -27,10 +27,9 @@ const App: FC = () => {
         }
     }
     const [logged, setLogged] = useState<boolean>(loggedData());
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(appearanceData());
-    const [user, setUser] = useState<{} | []>(getUser());
+    const [isDarkMode, setIsDarkMode] = useState(appearanceData());
+    const [user, setUser] = useState(getUser());
     const [orgs, setOrgs] = useState<IOrg[]>([]);
-    console.log(orgs);
     return <>
         <Router>
             <Route path='/' exact>
@@ -54,7 +53,7 @@ const App: FC = () => {
                                         className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${isDarkMode && 'expand-dark-mode'}`}>{''}</div>
                                     <div
                                         className={`user-work-wrapper d-flex w-100 h-100 position-relative ${isDarkMode && 'text-white'}`}>
-                                        <SideBar/>
+                                        <SideBar />
                                         <div className="main d-flex w-100 flex-column">
                                             <Route path='/u'>
                                                 <UserSpace>
@@ -71,6 +70,9 @@ const App: FC = () => {
                                                     </Route>
                                                 </UserSpace>
                                             </Route>
+                                            {orgs.map((org) => (
+                                                <NavLink to={`/w/${org.org_id}`}>{org.org_name}</NavLink>
+                                            ))}
                                             <Route path='/w/:orgId'>
                                                 <Organization/>
                                             </Route>

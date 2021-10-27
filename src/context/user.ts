@@ -1,3 +1,8 @@
 import {createContext} from "react";
 
-export const User = createContext<[] | {}>([]);
+interface GlobalUser {
+    user: [],
+    setUser: (user: []) => void
+}
+
+export const User = createContext<GlobalUser>({user: [], setUser: () => {}});

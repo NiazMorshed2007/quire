@@ -1,3 +1,8 @@
 import {createContext} from "react";
 
-export const IsLogged = createContext<any>(null);
+interface GlobalLogged {
+    logged: boolean,
+    setLogged: (set: boolean) => void
+}
+
+export const IsLogged = createContext<GlobalLogged>({logged: false, setLogged: () => {}});
