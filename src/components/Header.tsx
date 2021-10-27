@@ -1,10 +1,12 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {IHeader} from "../interfaces/HeaderInterface";
 import {BsChevronDown, AiOutlinePlus, AiOutlineSearch, IoMdNotificationsOutline} from 'react-icons/all';
 import {NavLink, useRouteMatch} from "react-router-dom";
+import {User} from "../context/user";
 
 const Header: FC<IHeader> = ({name, image, tabs}) => {
     const {url} = useRouteMatch();
+    const {user}: any = useContext(User);
     return <header className='main-header d-flex flex-column justify-content-between'>
         <div className="up d-flex align-items-center justify-content-between">
             <div className="left d-flex gap-1 align-items-center ">
@@ -24,7 +26,7 @@ const Header: FC<IHeader> = ({name, image, tabs}) => {
                     <IoMdNotificationsOutline/>
                 </i>
                 <div className="img-wrapper">
-                    <img src={image} alt=""/>
+                    <img src={user.user.photoURL} alt=""/>
                 </div>
             </div>
         </div>

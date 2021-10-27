@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Login from "./pages/Login/Login";
 import {IsLogged} from "./context/isLogged";
 import {IsDarkMode} from "./context/isDarkMode";
@@ -9,8 +9,8 @@ import Overview from "./pages/overview/Overview";
 import {Orgs} from "./context/orgs";
 import {IOrg} from "./interfaces/OrgInterface";
 import Organization from "./pages/Organization/Organization";
-import {setId} from "./functions/SetId";
 import SideBar from "./components/sidebar/SideBar";
+import BaseInfo from "./components/BaseInfo";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -26,10 +26,22 @@ const App: FC = () => {
             return [];
         }
     }
+    const getOrgs = (): [] => {
+        if (localStorage.getItem('orgs')) {
+            return JSON.parse(localStorage.getItem('orgs') as string);
+        } else {
+            return []
+        }
+    }
     const [logged, setLogged] = useState<boolean>(loggedData());
     const [isDarkMode, setIsDarkMode] = useState(appearanceData());
-    const [user, setUser] = useState(getUser());
-    const [orgs, setOrgs] = useState<IOrg[]>([]);
+    const [user, setUser] = useState<any>(getUser());
+    const [orgs, setOrgs] = useState<IOrg[]>(getOrgs);
+    useEffect(() => {
+        if (logged) {
+            localStorage.setItem("orgs", JSON.stringify(orgs));
+        }
+    }, [orgs, logged]);
     return <>
         <Router>
             <Route path='/' exact>
@@ -53,26 +65,24 @@ const App: FC = () => {
                                         className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${isDarkMode && 'expand-dark-mode'}`}>{''}</div>
                                     <div
                                         className={`user-work-wrapper d-flex w-100 h-100 position-relative ${isDarkMode && 'text-white'}`}>
-                                        <SideBar />
+                                        <SideBar/>
                                         <div className="main d-flex w-100 flex-column">
                                             <Route path='/u'>
                                                 <UserSpace>
                                                     <Route path='/u/overview'>
-                                                        <Overview/>
+                                                        <Overview>
+                                                            <BaseInfo type='USER' title={user.user.displayName} />
+                                                        </Overview>
                                                         <button onClick={() => {
-                                                        setOrgs([{
-                                                            org_name: 'gsdd',
-                                                            org_id: setId('sdjf asdf', "'s_organization"),
-                                                        }, ...orgs]);
-                                                        console.log(orgs);
+                                                            setOrgs([{org_name: 'new Org', org_id: Math.random().toString()}, ...orgs])
+                                                            console.log(...orgs)
+                                                            localStorage.setItem('orgs', JSON.stringify(orgs));
                                                         }
-                                                        }>create</button>
+                                                        }>create
+                                                        </button>
                                                     </Route>
                                                 </UserSpace>
                                             </Route>
-                                            {orgs.map((org) => (
-                                                <NavLink to={`/w/${org.org_id}`}>{org.org_name}</NavLink>
-                                            ))}
                                             <Route path='/w/:orgId'>
                                                 <Organization/>
                                             </Route>

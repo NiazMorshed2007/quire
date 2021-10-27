@@ -5,10 +5,13 @@ import {IsLogged} from "../../context/isLogged";
 import {firebase} from '../../firebase/firebase';
 import {Redirect, useHistory} from "react-router-dom";
 import {User} from '../../context/user';
+import {Orgs} from "../../context/orgs";
+import {setId} from "../../functions/SetId";
 
 const Login: FC = () => {
     const {logged, setLogged}: any = useContext(IsLogged);
     const {setUser}: any = useContext(User);
+    const {orgs, setOrgs} = useContext(Orgs);
     const history = useHistory();
     const authenticate = (): void => {
         const google_provider = new firebase.auth.GoogleAuthProvider();
@@ -16,9 +19,15 @@ const Login: FC = () => {
             .then((re) => {
                 localStorage.setItem('logged', 'true');
                 localStorage.setItem('user', JSON.stringify(re));
-                setUser(re);
+                setUser(JSON.parse(localStorage.getItem('user') as string));
                 setLogged(true);
                 history.push('/u/overview');
+                const user = JSON.parse(localStorage.getItem('user') as string);
+                setOrgs([{
+                    org_name: user.user.displayName + "'s Organization",
+                    org_id: setId(user.user.displayName, "'s_organization"),
+                }, ...orgs]);
+                localStorage.setItem('orgs', JSON.stringify(orgs));
             }).catch((err) => {
             console.log(err);
         })
