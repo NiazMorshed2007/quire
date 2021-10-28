@@ -2,3 +2,19 @@
   display: flex;
   flex-direction: $d;
 }
+
+
+@mixin point {
+  &::before {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $silver;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-10%);
+  }
+}

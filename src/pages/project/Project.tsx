@@ -23,7 +23,7 @@ const Project: FC = () => {
             <Header name={project_name} tabs={[...tabs, {text: 'Overview', id: 'overview'}]}/>
             <Route path='/w/p/:orgId/:projectId/overview'>
                 <Overview>
-                    <BaseInfo type={'PRJ'} title={project_name} avatarTxt={avatar_txt} background={avatar_back}/>
+                    <BaseInfo type={'PRJ'} title={project_name} path={org.org_id} parent_name={org.org_name} avatarTxt={avatar_txt} background={avatar_back}/>
                 </Overview>
             </Route>
         </Route>

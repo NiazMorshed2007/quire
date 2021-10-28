@@ -15,6 +15,7 @@ import {Acroname} from "./functions/Acroname";
 import {setRandomAvatarBack} from "./functions/SetRandomAvatarBack";
 import ErrorPage from "./pages/404/Error";
 import Project from "./pages/project/Project";
+import Create from "./pages/create/Create";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -90,6 +91,9 @@ const App: FC = () => {
                                             </Route>
                                             <Route path='/w/p/:orgId/:projectId'>
                                                 <Project />
+                                            </Route>
+                                            <Route path='/c'>
+                                                <Create />
                                             </Route>
                                             <Route path='/error'>
                                                 <ErrorPage />

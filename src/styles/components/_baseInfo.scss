@@ -2,10 +2,12 @@
 .base-info {
   padding-bottom: 40px;
   border-bottom: $border-silver;
+
   .avatar-wrapper {
     width: 155px;
     height: 155px;
     border-radius: 4px;
+
     .avatar {
       h1 {
         font-size: 70px;
@@ -15,25 +17,50 @@
       }
     }
   }
+
   .user {
     border-radius: 50%;
   }
+
   .content-wrapper {
     width: calc(100% - 155px);
+
     .up {
       transform: translateY(8px);
-      h5{
+
+      h5 {
         font-weight: 400;
         font-size: 16px;
         letter-spacing: .1px;
       }
+
       svg {
         font-size: 21px;
       }
+    }
+
+    p {
+      .joined-created {
+        position: relative;
+      }
+    }
+    .attachment-wrapper {
+      padding: 7px;
+      border-radius: 4px;
     }
   }
 }
 
 .org_base-info {
   padding-bottom: 10px;
+}
+
+.prj_base-info {
+  .content-wrapper {
+    p {
+      .joined-created {
+        @include point;
+      }
+    }
+  }
 }

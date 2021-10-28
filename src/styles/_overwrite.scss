@@ -2,8 +2,15 @@
   color: $silver;
 }
 
+.bg-silver {
+  background: $sideBarBack;
+}
 .uppercase {
   text-transform: uppercase;
+}
+
+.primary-color {
+  color: $brandClr;
 }
 
 .pointer {
