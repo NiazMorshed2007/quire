@@ -3,12 +3,12 @@ import {IbaseInfo} from "../interfaces/IbaseInfo";
 import {User} from '../context/user';
 import {FiMail, MdOutlineModeEditOutline} from 'react-icons/all';
 
-const BaseInfo: FC<IbaseInfo> = ({type, title}) => {
+const BaseInfo: FC<IbaseInfo> = ({type, title, background, avatarTxt}) => {
     const {user}: any = useContext(User);
-    return <div className='base-info d-flex align-items-center gap-3'>
+    return <div className={`base-info d-flex gap-3 ${type === 'ORG' && 'org_base-info'}`}>
         <div className={`avatar-wrapper ${type === 'USER' && 'user'} d-flex align-items-center justify-content-center overflow-hidden`}>
             {type === 'USER' ?
-                <img src={user.user.photoURL} className='fitimage' alt=""/> : <div>Avatar</div>
+                <img src={user.user.photoURL} className='fitimage' alt=""/> : <div className='avatar w-100 h-100 d-flex align-items-center justify-content-center' style={{background: background}}><h1>{avatarTxt}</h1></div>
             }
         </div>
         <div className="content-wrapper">
@@ -22,7 +22,7 @@ const BaseInfo: FC<IbaseInfo> = ({type, title}) => {
                     <MdOutlineModeEditOutline/>
                 </i>
             </div>
-            <h1 className='mt-0'>
+            <h1 className='m-0'>
                 {title}
             </h1>
             <p className="m-0 text-silver">Joined on Oct 25, 2021</p>

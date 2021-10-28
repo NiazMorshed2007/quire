@@ -6,6 +6,14 @@
     width: 155px;
     height: 155px;
     border-radius: 4px;
+    .avatar {
+      h1 {
+        font-size: 70px;
+        font-weight: 400;
+        color: white;
+        text-transform: uppercase;
+      }
+    }
   }
   .user {
     border-radius: 50%;
@@ -13,13 +21,19 @@
   .content-wrapper {
     width: calc(100% - 155px);
     .up {
+      transform: translateY(8px);
       h5{
-        font-weight: 300;
-        font-size: 15px;
+        font-weight: 400;
+        font-size: 16px;
+        letter-spacing: .1px;
       }
       svg {
         font-size: 21px;
       }
     }
   }
+}
+
+.org_base-info {
+  padding-bottom: 10px;
 }

@@ -3,7 +3,7 @@ import Login from "./pages/Login/Login";
 import {IsLogged} from "./context/isLogged";
 import {IsDarkMode} from "./context/isDarkMode";
 import {User} from './context/user';
-import {BrowserRouter as Router, NavLink, Redirect, Route} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
 import UserSpace from "./pages/User/User";
 import Overview from "./pages/overview/Overview";
 import {Orgs} from "./context/orgs";
@@ -11,6 +11,10 @@ import {IOrg} from "./interfaces/OrgInterface";
 import Organization from "./pages/Organization/Organization";
 import SideBar from "./components/sidebar/SideBar";
 import BaseInfo from "./components/BaseInfo";
+import {Acroname} from "./functions/Acroname";
+import {setRandomAvatarBack} from "./functions/SetRandomAvatarBack";
+import ErrorPage from "./pages/404/Error";
+import Project from "./pages/project/Project";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -72,19 +76,23 @@ const App: FC = () => {
                                                     <Route path='/u/overview'>
                                                         <Overview>
                                                             <BaseInfo type='USER' title={user.user.displayName} />
+                                                            <button onClick={() => {
+                                                                setOrgs([{org_name: 'new Org', org_id: Math.random().toString(), org_avatar_txt: Acroname('new org'), org_avatar_back: setRandomAvatarBack(), projects: []}, ...orgs])
+                                                            }
+                                                            }>create
+                                                            </button>
                                                         </Overview>
-                                                        <button onClick={() => {
-                                                            setOrgs([{org_name: 'new Org', org_id: Math.random().toString()}, ...orgs])
-                                                            console.log(...orgs)
-                                                            localStorage.setItem('orgs', JSON.stringify(orgs));
-                                                        }
-                                                        }>create
-                                                        </button>
                                                     </Route>
                                                 </UserSpace>
                                             </Route>
-                                            <Route path='/w/:orgId'>
+                                            <Route path='/w/o/:orgId'>
                                                 <Organization/>
+                                            </Route>
+                                            <Route path='/w/p/:orgId/:projectId'>
+                                                <Project />
+                                            </Route>
+                                            <Route path='/error'>
+                                                <ErrorPage />
                                             </Route>
                                         </div>
                                     </div>

@@ -8,7 +8,7 @@ const WorkSpaceSubMenu: FC = () => {
         <div className='d-flex flex-column'>
 
         {orgs.map((org) => (
-            <NavLink to={`/w/${org.org_id}/overview`} key={org.org_id}>{org.org_name}</NavLink>
+            <NavLink to={`/w/o/${org.org_id}/overview`} key={org.org_id}>{org.org_name}</NavLink>
         ))}
         </div>
     </>

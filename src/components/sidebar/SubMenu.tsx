@@ -1,6 +1,5 @@
 import React, {FC, useEffect} from 'react';
 import WorkSpaceSubMenu from "./submenus/WorkSpaceSubMenu";
-import * as _ from 'lodash';
 
 interface Props {
     expand: boolean,

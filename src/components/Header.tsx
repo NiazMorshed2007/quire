@@ -4,7 +4,7 @@ import {BsChevronDown, AiOutlinePlus, AiOutlineSearch, IoMdNotificationsOutline}
 import {NavLink, useRouteMatch} from "react-router-dom";
 import {User} from "../context/user";
 
-const Header: FC<IHeader> = ({name, image, tabs}) => {
+const Header: FC<IHeader> = ({name, tabs}) => {
     const {url} = useRouteMatch();
     const {user}: any = useContext(User);
     return <header className='main-header d-flex flex-column justify-content-between'>

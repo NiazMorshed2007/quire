@@ -7,6 +7,8 @@ import {Redirect, useHistory} from "react-router-dom";
 import {User} from '../../context/user';
 import {Orgs} from "../../context/orgs";
 import {setId} from "../../functions/SetId";
+import {Acroname} from "../../functions/Acroname";
+import {setRandomAvatarBack} from "../../functions/SetRandomAvatarBack";
 
 const Login: FC = () => {
     const {logged, setLogged}: any = useContext(IsLogged);
@@ -21,19 +23,28 @@ const Login: FC = () => {
                 localStorage.setItem('user', JSON.stringify(re));
                 setUser(JSON.parse(localStorage.getItem('user') as string));
                 setLogged(true);
-                history.push('/u/overview');
                 const user = JSON.parse(localStorage.getItem('user') as string);
                 setOrgs([{
                     org_name: user.user.displayName + "'s Organization",
                     org_id: setId(user.user.displayName, "'s_organization"),
+                    org_avatar_txt: Acroname(user.user.displayName),
+                    org_avatar_back: setRandomAvatarBack(),
+                    projects: [{
+                        project_name: user.user.displayName + "'s Project",
+                        project_id: setId(user.user.displayName, "'s_project"),
+                        project_avatar_txt: Acroname(user.user.displayName),
+                        project_avatar_back: setRandomAvatarBack(),
+                        tabs: [{text: 'Lists', id: 'lists', tasks: []}]
+                    }]
                 }, ...orgs]);
                 localStorage.setItem('orgs', JSON.stringify(orgs));
+                history.push('/u/overview');
             }).catch((err) => {
             console.log(err);
         })
     }
-    if(logged) {
-        return <Redirect to='/u' />
+    if (logged) {
+        return <Redirect to='/u'/>
     }
     return <div className='login-page vw-100 vh-100 overflow-hidden position-relative'>
         <div className="header position-absolute top-0">
