@@ -6,6 +6,7 @@ import {Acroname} from "../../functions/Acroname";
 import {setRandomAvatarBack} from "../../functions/SetRandomAvatarBack";
 import {setId} from "../../functions/SetId";
 import {Select} from 'antd';
+import {IProject} from "../../interfaces/ProjectInterface";
 
 const { Option } = Select;
 
@@ -28,11 +29,21 @@ const Create: FC = () => {
                 org_avatar_back: setRandomAvatarBack(),
                 projects: []
             }, ...orgs])
-            setName('');
             history.push(`/w/o/${setId(name)}/overview`);
         } else if (type === 'project') {
-
+            const project: IProject = {
+                project_name: name,
+                project_id: setId(name),
+                project_avatar_txt: Acroname(name),
+                project_avatar_back: setRandomAvatarBack(),
+                tabs: [{text: 'Lists', id: 'lists', tasks: []}]
+            }
+            org.projects.push(project);
+            setOrgs([...orgs]);
+            history.push(`/w/p/${org.org_id}/${setId(name)}/overview`);
         }
+    //    always
+        setName('');
     }
     return <div className='create d-flex flex-column w-100 h-100'>
         <header className='p-4 border-bottom d-flex align-items-center justify-content-end'>

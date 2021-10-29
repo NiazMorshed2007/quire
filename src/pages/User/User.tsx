@@ -5,7 +5,7 @@ import {User} from "../../context/user";
 const UserSpace: FC = ({children}) => {
     const {user}: any = useContext(User);
     return <>
-    <Header name={user.user.displayName} tabs={[{text: 'My Tasks', id: 'my_tasks'},{text: 'Overview', id:'overview'}]} />
+    <Header type='USER' name={user.user.displayName} tabs={[{text: 'My Tasks', id: 'my_tasks'},{text: 'Overview', id:'overview'}]} />
         <main className='main-content'>
             {children}
         </main>

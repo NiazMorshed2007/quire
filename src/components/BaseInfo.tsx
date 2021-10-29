@@ -27,7 +27,7 @@ const BaseInfo: FC<IbaseInfo> = ({type, path, title, background, avatarTxt, pare
                 {title}
             </h1>
             <p className="m-0 pt-1 text-silver d-flex gap-3">
-                {type === 'PRJ' && <Link to={`/w/o/${path}`} className='text-decoration-none primary-color pointer'>{parent_name}</Link>}
+                {type === 'PRJ' && <Link to={`/w/o/${path}/overview`} className='text-decoration-none primary-color pointer'>{parent_name}</Link>}
                 <span className='joined-created'>
                     Joined on Oct 25, 2021
                 </span>
