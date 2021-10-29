@@ -38,7 +38,7 @@ const SidebarMenu: FC<Props> = ({expand, setExpand, expandSubMenu, setExpandSubM
     const createDropdown = (
         <Menu>
             <Menu.Item key="0">
-                <Link className='text-decoration-none' to={`/c?org_id=${currentOrg}&&type=project`}>
+                <Link className='text-decoration-none' to={`/c?org_id=${currentOrg}&type=project`}>
                     Add Project
                 </Link>
             </Menu.Item>

@@ -19,6 +19,7 @@ const Create: FC = () => {
     const orgId = params.get('org_id');
     const type = params.get('type');
     const org: any = orgs.find(({org_id}) => org_id === orgId);
+    const [whichOrg, setWhichOrg] = useState<string>(org.org_name);
     const handleSubmit = (e: FormEvent):void => {
         e.preventDefault();
         if(type === 'org') {
@@ -31,6 +32,7 @@ const Create: FC = () => {
             }, ...orgs])
             history.push(`/w/o/${setId(name)}/overview`);
         } else if (type === 'project') {
+            const pushHere: any = orgs.find(({org_name}) => org_name === whichOrg);
             const project: IProject = {
                 project_name: name,
                 project_id: setId(name),
@@ -38,9 +40,9 @@ const Create: FC = () => {
                 project_avatar_back: setRandomAvatarBack(),
                 tabs: [{text: 'Lists', id: 'lists', tasks: []}]
             }
-            org.projects.push(project);
+            pushHere.projects.push(project);
             setOrgs([...orgs]);
-            history.push(`/w/p/${org.org_id}/${setId(name)}/overview`);
+            history.push(`/w/p/${pushHere.org_id}/${setId(name)}/overview`);
         }
     //    always
         setName('');
@@ -55,7 +57,9 @@ const Create: FC = () => {
             <h2>Create {type === 'org' ? 'Organization' : 'Project'}</h2>
             <form onSubmit={handleSubmit} className='mt-4 pt-2 d-flex gap-4 flex-column mb-5'>
                 <label className='w-100'>
-                    <input value={name} onChange={(e) => setName(e.target.value)} className='w-100' type="text" required/>
+                    <input value={name}
+                           onChange={(e) => setName(e.target.value)}
+                           className='w-100' type="text" required/>
                     <span className='text-silver thick'>{type === 'org' ? 'Organization' : 'Project'} name</span>
                 </label>
                 {type === 'project' &&
@@ -68,6 +72,7 @@ const Create: FC = () => {
                     style={{ width: 200 }}
                     placeholder="Search to Select"
                     optionFilterProp="children"
+                    onSelect={(e, value) => setWhichOrg(value.children)}
                     filterOption={(input, option:any) =>
                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                     }
