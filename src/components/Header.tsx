@@ -31,7 +31,6 @@ const Header: FC<IHeader> = ({name, tabs, type, project}) => {
     const {currentOrg} = useContext(CurrentOrg);
     const {orgs, setOrgs} = useContext(Orgs);
     const org: any = orgs.find(({org_id}) => org_id === currentOrg);
-    const projects: IProject[] = org.projects;
     const handleDelete = (): void => {
         if(type === 'ORG') {
             const org_index: number = orgs.findIndex(({org_id}) => org_id === currentOrg);
@@ -39,6 +38,7 @@ const Header: FC<IHeader> = ({name, tabs, type, project}) => {
             history.push('/u')
             setOrgs([...orgs]);
         } else if(type === 'PRJ') {
+            const projects: IProject[] = org.projects;
             const project_index: number = projects.findIndex(({project_name}) => project_name === name);
             projects.splice(project_index, 1);
             history.push(`/w/o/${currentOrg}/overview`);

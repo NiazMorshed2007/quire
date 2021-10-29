@@ -3,6 +3,21 @@
     h5 {
       font-size: 18px;
     }
+    .projects {
+      .project-single {
+        .avatar {
+          padding: 3px;
+          border-radius: 4px;
+          font-size: 12px;
+        }
+        a {
+          color: black;
+          &:hover {
+            color: $brandClr;
+          }
+        }
+      }
+    }
     button {
       @include button($primary: true);
     }

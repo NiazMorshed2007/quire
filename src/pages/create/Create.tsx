@@ -19,7 +19,7 @@ const Create: FC = () => {
     const orgId = params.get('org_id');
     const type = params.get('type');
     const org: any = orgs.find(({org_id}) => org_id === orgId);
-    const [whichOrg, setWhichOrg] = useState<string>(org.org_name);
+    const [whichOrg, setWhichOrg] = useState<string>(org && org.org_name);
     const handleSubmit = (e: FormEvent):void => {
         e.preventDefault();
         if(type === 'org') {
