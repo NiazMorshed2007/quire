@@ -3,6 +3,20 @@
   flex-direction: $d;
 }
 
+@mixin button($primary: false) {
+  outline: none;
+  background: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  border: $border-silver;
+  @if($primary) {
+    color: $brandClr;
+    border-color: $brandClr;
+  } @else {
+    color: rgba(0, 0, 0, 0.80);
+    border-color: rgba(0, 0, 0, 0.80);
+  }
+}
 
 @mixin point {
   &::before {
@@ -17,4 +31,9 @@
     left: -10px;
     transform: translateY(-10%);
   }
+}
+
+@mixin borderBottomStyle {
+  border: none;
+  border-bottom: $border-silver;
 }

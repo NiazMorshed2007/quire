@@ -1,4 +1,5 @@
 @import "~bootstrap/scss/bootstrap.scss";
+@import '~antd/dist/antd.css';
 @import "fonts";
 @import 'color';
 @import 'variables';
@@ -11,6 +12,7 @@
 @import './components/submenu';
 @import './pages/overview';
 @import './pages/organization';
+@import './pages/create';
 
 body{
   padding: 0;

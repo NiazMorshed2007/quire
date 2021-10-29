@@ -1,7 +1,8 @@
 .sub-menu {
+  width: 260px;
   padding: 20px;
   top: 0;
-  border: $border-silver;
+  border-right: $border-silver;
   transition: all .4s ease-in-out;
   z-index: 2;
 }

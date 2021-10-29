@@ -1,0 +1,61 @@
+.create {
+  header {
+    i {
+      svg {
+        font-size:28px;
+      }
+    }
+  }
+  .form-wrapper {
+    padding: 9% 24%;
+    form {
+      width: 94%;
+      label {
+        position: relative;
+        input {
+          outline: none;
+          @include borderBottomStyle;
+          padding: 7px 0;
+          &:focus {
+            border-color: $brandClr;
+          }
+          &:focus ~ span, &:valid ~ span {
+            transform: translateY(-16px);
+            font-size: 18px;
+          }
+        }
+        span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          font-size: 24px;
+          opacity: .7;
+          transition: all .2s ease-in-out;
+        }
+      .submit-btn {
+        @include button($primary: true);
+      }
+        .cancel-btn {
+          @include button();
+        }
+      }
+      .ant-select {
+        font-size: 20px;
+        .ant-select-selector {
+          padding: 0;
+          @include borderBottomStyle;
+          .ant-select-selection-search {
+            left: 0;
+          }
+        }
+      }
+      .ant-select-focused {
+        .ant-select-selector {
+          box-shadow: none !important;
+          border-color: $brandClr !important;
+        }
+      }
+    }
+  }
+}

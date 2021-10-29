@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import { useParams} from "react-router-dom";
 import {Orgs} from "../../context/orgs";
 import Header from "../../components/Header";
@@ -6,12 +6,18 @@ import Overview from "../overview/Overview";
 import BaseInfo from "../../components/BaseInfo";
 import {IProject} from "../../interfaces/ProjectInterface";
 import {NavLink} from "react-router-dom";
+import {CurrentOrg} from "../../context/currentOrg";
 
 const Organization: FC = () => {
     const {orgs} = useContext(Orgs);
     const {orgId}: any = useParams();
+    const {setCurrentOrg} = useContext(CurrentOrg);
     const org: any = orgs.find(({org_id}) => org_id === orgId);
     const projects: IProject[] = org.projects;
+    useEffect(() => {
+        setCurrentOrg(org.org_id);
+        //    eslint-disable-next-line
+    }, [org])
     return <div className='org'>
             <Header name={org.org_name} tabs={[{text: 'Overview', id:'overview'}]} />
             <Overview>

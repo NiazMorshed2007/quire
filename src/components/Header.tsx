@@ -1,6 +1,6 @@
 import React, {FC, useContext} from 'react';
 import {IHeader} from "../interfaces/HeaderInterface";
-import {BsChevronDown, AiOutlinePlus, AiOutlineSearch, IoMdNotificationsOutline} from 'react-icons/all';
+import {AiOutlineSearch, BsChevronDown, IoMdNotificationsOutline} from 'react-icons/all';
 import {NavLink, useRouteMatch} from "react-router-dom";
 import {User} from "../context/user";
 
@@ -17,9 +17,6 @@ const Header: FC<IHeader> = ({name, tabs}) => {
             </div>
             <div className="right d-flex align-items-center gap-3">
                 <i>
-                    <AiOutlinePlus/>
-                </i>
-                <i>
                     <AiOutlineSearch/>
                 </i>
                 <i>
@@ -32,7 +29,8 @@ const Header: FC<IHeader> = ({name, tabs}) => {
         </div>
         <div className="down d-flex gap-1">
             {tabs.map((tab) => (
-                <NavLink key={tab.id} activeClassName='active-tab' className='text-decoration-none tab text-black bg-white' to={`${url}/${tab.id}`}>
+                <NavLink key={tab.id} activeClassName='active-tab'
+                         className='text-decoration-none tab text-black bg-white' to={`${url}/${tab.id}`}>
                     <p className='m-0'>{tab.text}</p>
                 </NavLink>
             ))}

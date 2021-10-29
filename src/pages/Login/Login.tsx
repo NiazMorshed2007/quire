@@ -26,12 +26,12 @@ const Login: FC = () => {
                 const user = JSON.parse(localStorage.getItem('user') as string);
                 setOrgs([{
                     org_name: user.user.displayName + "'s Organization",
-                    org_id: setId(user.user.displayName, "'s_organization"),
+                    org_id: setId(user.user.displayName + "'s_organization"),
                     org_avatar_txt: Acroname(user.user.displayName),
                     org_avatar_back: setRandomAvatarBack(),
                     projects: [{
                         project_name: user.user.displayName + "'s Project",
-                        project_id: setId(user.user.displayName, "'s_project"),
+                        project_id: setId(user.user.displayName + "'s_project"),
                         project_avatar_txt: Acroname(user.user.displayName),
                         project_avatar_back: setRandomAvatarBack(),
                         tabs: [{text: 'Lists', id: 'lists', tasks: []}]
