@@ -1,2 +1,2 @@
-###Quire.io www.quire.io
+###Quire.io--clone www.quire.io
 A Project management software
