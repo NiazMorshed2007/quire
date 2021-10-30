@@ -32,7 +32,6 @@ import {CurrentOrg} from "../context/currentOrg";
 import {Orgs} from "../context/orgs";
 import {IProject} from "../interfaces/ProjectInterface";
 import {ITabs} from "../interfaces/TabInterface";
-import {OpenModal} from "../context/modalContext";
 import MyModal from "./modal/Modal";
 
 const {SubMenu} = Menu;
@@ -42,9 +41,9 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const {user}: any = useContext(User);
     const history = useHistory();
     const {currentOrg} = useContext(CurrentOrg);
-    const {setShowModal} = useContext(OpenModal);
     const {orgs, setOrgs} = useContext(Orgs);
     let [renderModal, setRenderModal] = useState<boolean>(false);
+    const [modalType, setModalType] = useState<string>('');
     const projects: IProject[] = org && org.projects;
     const sublists: ITabs[] = project && project.sublists;
     const handleAddSublist = (): void => {
@@ -199,7 +198,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                     </NavLink>
                 ))}
                 <div onClick={() => {setRenderModal(true);
-                    setShowModal(true);
+                    // setShowModal(true);
                     // handleAddSublist();
                 }
                 }

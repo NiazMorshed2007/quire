@@ -6,7 +6,6 @@
   left: 0;
   background: rgba(#eaeaea, .5);
   z-index: 1000;
-  visibility: hidden;
   transition: all .4s ease-in-out;
   @include flex(row);
   justify-content: center;
@@ -18,8 +17,4 @@
     padding: 10px;
     transform: translateY(-100%);
   }
-}
-
-.active-modal {
-  visibility: visible;
 }

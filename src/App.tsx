@@ -13,8 +13,6 @@ import ErrorPage from "./pages/404/Error";
 import Project from "./pages/project/Project";
 import Create from "./pages/create/Create";
 import {CurrentOrg} from "./context/currentOrg";
-import MyModal from "./components/modal/Modal";
-import {OpenModal} from "./context/modalContext";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -41,7 +39,6 @@ const App: FC = () => {
     const [isDarkMode, setIsDarkMode] = useState(appearanceData());
     const [user, setUser] = useState<any>(getUser());
     const [orgs, setOrgs] = useState<IOrg[]>(getOrgs);
-    const [showModal, setShowModal] = useState<boolean>(false);
     const [currentOrg, setCurrentOrg] = useState<string>(orgs.length > 0 ? orgs[0].org_id : '');
     useEffect(() => {
         if (logged) {
@@ -61,7 +58,6 @@ const App: FC = () => {
                 <User.Provider value={{user, setUser}}>
                     <IsDarkMode.Provider value={{isDarkMode, setIsDarkMode}}>
                         <Orgs.Provider value={{orgs, setOrgs}}>
-                            <OpenModal.Provider value={{showModal, setShowModal}}>
                                 <CurrentOrg.Provider value={{currentOrg, setCurrentOrg}}>
                                     <div className="app vh-100 vw-100 overflow-hidden">
                                         <Route path='/login'>
@@ -96,7 +92,6 @@ const App: FC = () => {
                                         }
                                     </div>
                                 </CurrentOrg.Provider>
-                            </OpenModal.Provider>
                         </Orgs.Provider>
                     </IsDarkMode.Provider>
                 </User.Provider>
