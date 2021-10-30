@@ -34,7 +34,8 @@ const Login: FC = () => {
                         project_id: setId(user.user.displayName + "'s_project"),
                         project_avatar_txt: Acroname(user.user.displayName),
                         project_avatar_back: setRandomAvatarBack(),
-                        tabs: [{text: 'Lists', id: 'lists', tasks: []}]
+                        tabs: [{text: 'Lists', id: 'lists', tasks: []}],
+                        sublists: []
                     }]
                 }, ...orgs]);
                 localStorage.setItem('orgs', JSON.stringify(orgs));

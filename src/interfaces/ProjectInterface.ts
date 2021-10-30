@@ -5,5 +5,6 @@ export interface IProject {
     project_id: string,
     project_avatar_txt?: string,
     project_avatar_back?: string,
-    tabs: ITabs[]
+    tabs: ITabs[],
+    sublists: ITabs[],
 }

@@ -38,7 +38,8 @@ const Create: FC = () => {
                 project_id: setId(name),
                 project_avatar_txt: Acroname(name),
                 project_avatar_back: setRandomAvatarBack(),
-                tabs: [{text: 'Lists', id: 'lists', tasks: []}]
+                tabs: [{text: 'Lists', id: 'lists', tasks: []}],
+                sublists: []
             }
             pushHere.projects.push(project);
             setOrgs([...orgs]);

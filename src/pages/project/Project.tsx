@@ -13,7 +13,7 @@ const Project: FC = () => {
     const {orgs} = useContext(Orgs);
     const {setCurrentOrg} = useContext(CurrentOrg);
     const org: any = orgs.find(({org_id}) => org_id === orgId);
-    const projects: IProject[] = org.projects;
+    const projects: IProject[] = org && org.projects;
     const project: any = projects.find(({project_id}) => project_id === projectId);
     //breaking down for usage
     const project_name: string = project.project_name;
@@ -27,7 +27,7 @@ const Project: FC = () => {
     }, [project])
     return <>
         <Route path='/w/p/:orgId/:projectId'>
-            <Header project={project} type='PRJ' name={project_name} tabs={[...tabs, {text: 'Overview', id: 'overview'}]}/>
+            <Header project={project} org={org} type='PRJ' name={project_name} tabs={[...tabs, {text: 'Overview', id: 'overview'}]} />
             <Route path='/w/p/:orgId/:projectId/overview'>
                 <Overview>
                     <BaseInfo type={'PRJ'} title={project_name} path={org.org_id} parent_name={org.org_name} avatarTxt={avatar_txt} background={avatar_back}/>

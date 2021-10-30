@@ -15,13 +15,13 @@ const Organization: FC = () => {
     const {orgId}: any = useParams();
     const {setCurrentOrg} = useContext(CurrentOrg);
     const org: any = orgs.find(({org_id}) => org_id === orgId);
-    const projects: IProject[] = org.projects;
+    const projects: IProject[] = org && org.projects;
     useEffect(() => {
         setCurrentOrg(org.org_id);
         //    eslint-disable-next-line
     }, [org])
     return <div className='org'>
-        <Header type='ORG' name={org.org_name} tabs={[{text: 'Overview', id: 'overview'}]}/>
+        <Header org={org} type='ORG' name={org.org_name} tabs={[{text: 'Overview', id: 'overview'}]}/>
         <Overview>
             <BaseInfo type='ORG' title={org.org_name} background={org.org_avatar_back} avatarTxt={org.org_avatar_txt}/>
             <div className="project-summery py-4 pb-5 border-bottom">

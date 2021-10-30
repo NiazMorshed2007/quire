@@ -3,7 +3,6 @@
   height: 90px;
   border-bottom: $border-silver;
   padding: 15px 18px 0 18px;
-
   .up {
     .left {
       i > svg {
@@ -74,6 +73,13 @@
       &::after {
         display: block;
       }
+    }
+    .sublist-wrapper {
+      border-left: $border-silver;
+    .add-sublist {
+      font-size: 12px;
+      border: none;
+    }
     }
   }
 }
