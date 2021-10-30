@@ -14,8 +14,8 @@ const MyModal: FC<Props> = ({children,changeRender }) => {
 useEffect(() => {
     TweenMax.to(contentRef.current, .6, {y: '0%', ease: Power2.easeOut})
 }, [])
-    return <div className={`modal-wrapper`}>
-        <div ref={contentRef} className="modal-content shadow">{children}</div>
+    return <div className='my-modal-wrapper'>
+        <div ref={contentRef} className="my-modal-content d-flex">{children}</div>
     </div>
 }
 

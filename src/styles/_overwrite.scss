@@ -5,6 +5,7 @@
 .bg-silver {
   background: $sideBarBack;
 }
+
 .uppercase {
   text-transform: uppercase;
 }
@@ -25,4 +26,25 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.ant-default-btn {
+  color: gray;
+  border-radius: 3px;
+  &:hover {
+    border-color: #8a8a8a;
+    color: #4b4b4b;
+  }
+}
+
+.ant-danger-btn {
+  @extend .ant-default-btn;
+  background: #ee4646;
+  color: white;
+  border-color: #f12425;
+  &:hover {
+    border-color: #f12425;
+    background: #e14c4c;
+    color: white;
+  }
 }

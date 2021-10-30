@@ -5,7 +5,7 @@ import {
     AiOutlineFile,
     AiOutlinePlus,
     AiOutlineSearch,
-    AiOutlineUser,
+    AiOutlineUser, BiClipboard,
     BiMessageDetail,
     BsChevronDown,
     BsCircle,
@@ -21,18 +21,20 @@ import {
     BsThreeDots,
     FiSettings,
     GoTrashcan,
-    GrDocumentCsv,
+    GrDocumentCsv, IoMdArrowDropdown,
     IoMdNotificationsOutline,
     RiFolderReceivedLine
 } from 'react-icons/all';
 import {NavLink, useHistory, useRouteMatch} from "react-router-dom";
 import {User} from "../context/user";
-import {Dropdown, Menu} from 'antd';
+import {Button, Dropdown, Menu} from 'antd';
 import {CurrentOrg} from "../context/currentOrg";
 import {Orgs} from "../context/orgs";
 import {IProject} from "../interfaces/ProjectInterface";
 import {ITabs} from "../interfaces/TabInterface";
 import MyModal from "./modal/Modal";
+import DeleteModal from "./modal/childs/DeleteModal";
+import SublistModal from "./modal/childs/SublistModal";
 
 const {SubMenu} = Menu;
 
@@ -43,7 +45,12 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const {currentOrg} = useContext(CurrentOrg);
     const {orgs, setOrgs} = useContext(Orgs);
     let [renderModal, setRenderModal] = useState<boolean>(false);
+    const [checked, setChecked] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
+    const [deleteModalType, setDeleteModalType] = useState<{ type: string, name: string, }>({
+        type: '',
+        name: '',
+    });
     const projects: IProject[] = org && org.projects;
     const sublists: ITabs[] = project && project.sublists;
     const handleAddSublist = (): void => {
@@ -56,12 +63,12 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         setOrgs([...orgs]);
     }
     const handleDelete = (): void => {
-        if (type === 'ORG') {
+        if (deleteModalType.type === 'organization') {
             const org_index: number = orgs.findIndex(({org_id}) => org_id === currentOrg);
             orgs.splice(org_index, 1);
             history.push('/u')
             setOrgs([...orgs]);
-        } else if (type === 'PRJ') {
+        } else if (deleteModalType.type === 'project') {
             const project_index: number = projects.findIndex(({project_name}) => project_name === name);
             projects.splice(project_index, 1);
             history.push(`/w/o/${currentOrg}/overview`);
@@ -69,8 +76,33 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         }
     }
     return <header className='main-header d-flex flex-column justify-content-between'>
-        {renderModal && <MyModal changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}>
-            <button onClick={handleAddSublist}>Delete</button>
+        {renderModal && <MyModal
+            changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}>
+            {modalType === 'delete' && <DeleteModal changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}
+            type={deleteModalType.type} name={deleteModalType.name}>
+                <label className='d-flex gap-1 align-items-center pt-2'>
+                    <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)}/>
+                    I am aware that I <strong>cannot undo</strong> this.
+                </label>
+                <hr/>
+                <p className="des">
+                    If you choose to upgrade your subscription plan, the deleted organization can be restored within 7 days.
+                </p>
+                <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
+                <Button className={`${checked &&  'ant-danger-btn'}`} onClick={handleDelete} disabled={!checked}>
+                    Delete
+                </Button>
+                    <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
+                        Cancel
+                    </Button>
+                </div>
+            </DeleteModal>}
+            {modalType === 'sublist' &&
+                <SublistModal setListContents={<>
+                <span><BiClipboard /><IoMdArrowDropdown /></span>
+                    <input type="text"/>
+                </>} />
+            }
         </MyModal>}
         <div className="up d-flex align-items-center justify-content-between">
             <div className="left d-flex gap-1 align-items-center ">
@@ -106,7 +138,11 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                                 Export
                             </Menu.Item>
                             <SubMenu key={8} icon={<BsThreeDots/>} title='More'>
-                                <Menu.Item onClick={handleDelete} icon={<GoTrashcan/>}
+                                <Menu.Item onClick={() => {
+                                    setRenderModal(true);
+                                    setModalType('delete');
+                                    setDeleteModalType({type: 'organization', name: org.org_name,})
+                                }} icon={<GoTrashcan/>}
                                            key={'delete'}>Delete...</Menu.Item>
                             </SubMenu>
                             <Menu.Divider/>
@@ -156,7 +192,14 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                                 <Menu.Item icon={<GrDocumentCsv/>} key={'csv'}>CSV</Menu.Item>
                             </SubMenu>
                             <SubMenu key={11} icon={<BsThreeDots/>} title='More'>
-                                <Menu.Item onClick={handleDelete} icon={<GoTrashcan/>}
+                                <Menu.Item onClick={() => {
+                                    setRenderModal(true);
+                                    setModalType('delete');
+                                    setDeleteModalType({
+                                        type: 'project',
+                                        name: project.project_name,
+                                    })
+                                }} icon={<GoTrashcan/>}
                                            key={'delete'}>Delete...</Menu.Item>
                             </SubMenu>
                             <Menu.Divider/>
@@ -197,9 +240,9 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                         <p className='m-0'>{list.text}</p>
                     </NavLink>
                 ))}
-                <div onClick={() => {setRenderModal(true);
-                    // setShowModal(true);
-                    // handleAddSublist();
+                <div onClick={() => {
+                    setRenderModal(true);
+                    setModalType('sublist');
                 }
                 }
                      className="add-sublist tab pointer border-left d-flex gap-1 align-items-center">

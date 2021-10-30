@@ -1,4 +1,4 @@
-.modal-wrapper {
+.my-modal-wrapper {
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -10,11 +10,28 @@
   @include flex(row);
   justify-content: center;
   padding: 30px 0;
-  .modal-content {
-    width: 450px;
-    height: 450px;
-    border-radius: 7px;
-    padding: 10px;
+  .my-modal-content {
+    height: max-content;
     transform: translateY(-100%);
+    &>div {
+      background: white;
+      padding: 20px 25px;
+      border-radius: 15px;
+    }
+    .delete-modal {
+      width: 450px;
+      height: 271px;
+      p, label {
+        font-size: 14px;
+      }
+      .des {
+        font-size: 14px;
+        color: $silver;
+      }
+    }
+    .sublist-modal {
+      width: 690px;
+      height: 560px;
+    }
   }
 }
