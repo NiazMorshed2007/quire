@@ -1,4 +1,4 @@
-import React, {FC, useContext} from "react";
+import React, {FC} from "react";
 import {useParams} from "react-router-dom";
 import {ITabs} from "../../interfaces/TabInterface";
 import {
@@ -13,7 +13,7 @@ import {
 } from "react-icons/all";
 import {Dropdown, Menu} from "antd";
 import {ITask} from "../../interfaces/TaskInterface";
-import {Orgs} from "../../context/orgs";
+import Tree from "../../components/Tree/Tree";
 
 interface Props {
     org: any
@@ -24,58 +24,45 @@ interface Props {
 
 const TasksPage: FC<Props> = ({org, project, tabs, sublists}) => {
     const {subListId}: any = useParams();
-    const {orgs, setOrgs} = useContext(Orgs);
     const sublist: any = sublists.find(({id}) => id === subListId);
     const listTab: any = tabs.find(({id}) => id === 'lists');
     const tasks: ITask[] = sublist ? sublist.tasks : listTab.tasks;
-    const handleAdd = (): void => {
-        const new_task: ITask = {
-            task_name: 'new' + Math.floor(Math.random()),
-            task_id: 'new' + Math.random(),
-        }
-        tasks.push(new_task);
-        setOrgs([...orgs]);
-    }
+
     return <div className='task-page overflow-auto custom-scrollbar position-relative'>
         <header className='d-flex align-items-center justify-content-between position-fixed'>
             <Dropdown overlay={(
                 <Menu>
-                    <Menu.Item icon={<FiPieChart />}>
+                    <Menu.Item icon={<FiPieChart/>}>
                         Active Tasks
                     </Menu.Item>
-                    <Menu.Item icon={<BsListTask />}>
+                    <Menu.Item icon={<BsListTask/>}>
                         All Tasks
                     </Menu.Item>
-                    <Menu.Item icon={<AiOutlineUser />}>
+                    <Menu.Item icon={<AiOutlineUser/>}>
                         My Tasks
                     </Menu.Item>
-                    <Menu.Item icon={<FiUsers />}>
+                    <Menu.Item icon={<FiUsers/>}>
                         Group by assigne
                     </Menu.Item>
-                    <Menu.Item icon={<BsCalendar3 />}>
+                    <Menu.Item icon={<BsCalendar3/>}>
                         Group by date
                     </Menu.Item>
-                    <Menu.Divider />
-                    <Menu.Item icon={<FiSettings />}>
+                    <Menu.Divider/>
+                    <Menu.Item icon={<FiSettings/>}>
                         Customize
                     </Menu.Item>
                 </Menu>
             )} trigger={['click']}>
-            <div className='filter pointer'>
-                <FiFilter />
-                <MdArrowDropDown />
-            </div>
+                <div className='filter pointer'>
+                    <FiFilter/>
+                    <MdArrowDropDown/>
+                </div>
             </Dropdown>
         </header>
         <div className="main-wrapper pt-5">
             <div className="inner-main">
-                    <button onClick={handleAdd} className='ant-primary-btn'>Create List</button>
-                {tasks.map((task) => (
-                    <li key={task.task_id}>
-                        {task.task_name}
-                    </li>
-                ))}
-             </div>
+                <Tree tasks={tasks} />
+            </div>
         </div>
     </div>
 }
