@@ -24,6 +24,11 @@ const Tree: FC<Props> = ({tasks}) => {
         }
         setTaskText('');
     }
+    const handleDelete = (id: string): void => {
+        const delete_index: number = tasks.findIndex(({task_id}) => task_id === id);
+        tasks.splice(delete_index, 1);
+        setOrgs([...orgs]);
+    }
     let addingRef = useClickOutside(() => {
         setShowAddingOptionInput(false);
     })
@@ -31,7 +36,7 @@ const Tree: FC<Props> = ({tasks}) => {
     return <div className="tree">
         <div className="tasks-wrapper pb-3 d-flex flex-column">
             {tasks.map((task, i) => (
-                <TreeSingleTask tasks={tasks} name={task.task_name} id={task.task_id} key={task.task_id + '-' + i}/>
+                <TreeSingleTask dltfunc={()=> handleDelete(task.task_id)} tasks={tasks} name={task.task_name} id={task.task_id} key={task.task_id + '-' + i}/>
             ))}
         </div>
         <div ref={addingRef} className="adding-option">

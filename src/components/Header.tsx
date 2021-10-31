@@ -38,6 +38,7 @@ import MyModal from "./modal/Modal";
 import DeleteModal from "./modal/childs/DeleteModal";
 import SublistModal from "./modal/childs/SublistModal";
 import {setId} from "../functions/SetId";
+import {useTransition, animated} from "react-spring";
 
 const {SubMenu} = Menu;
 
@@ -51,6 +52,11 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const [sublistText, setSubListText] = useState<string>('');
     const [checked, setChecked] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
+    const animateModal = useTransition(renderModal, {
+        from: {opacity: 0, y: '-100%'},
+        enter: {opacity: 1, y: '0%'},
+        leave: {opacity: 0, y: '-100%'}
+    });
     const [deleteModalType, setDeleteModalType] = useState<{ type: string, name: string, }>({
         type: '',
         name: '',
@@ -83,43 +89,48 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         }
     }
     return <header className='main-header d-flex flex-column justify-content-between'>
-        {renderModal && <MyModal
-            changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}>
-            {modalType === 'delete' && <DeleteModal changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}
-            type={deleteModalType.type} name={deleteModalType.name}>
-                <label className='d-flex gap-1 align-items-center pt-2'>
-                    <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)}/>
-                    I am aware that I <strong>cannot undo</strong> this.
-                </label>
-                <hr/>
-                <p className="des">
-                    If you choose to upgrade your subscription plan, the deleted organization can be restored within 7 days.
-                </p>
-                <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
-                <Button className={`${checked &&  'ant-danger-btn'}`} onClick={handleDelete} disabled={!checked}>
-                    Delete
-                </Button>
-                    <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
-                        Cancel
-                    </Button>
-                </div>
-            </DeleteModal>}
-            {modalType === 'sublist' &&
-                <SublistModal buttons={<>
-                    <Button onClick={() => {
-                        handleAddSublist();
-                    }} className={`${sublistText !== '' &&  'ant-primary-btn'}`} disabled={sublistText === ''}>
-                        Create
-                    </Button>
-                    <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
-                        Cancel
-                    </Button>
-                </>} setListContents={<>
-                <span><BiClipboard /><IoMdArrowDropdown /></span>
-                    <input value={sublistText} onChange={(e) => setSubListText(e.target.value)} type="text"/>
-                </>} />
-            }
-        </MyModal>}
+        {/*modal start*/}
+        {animateModal((style, item) =>
+            item &&
+            <MyModal useStyle={style} render={renderModal}
+                             changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}>
+                    {modalType === 'delete' && <DeleteModal changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}
+                                                            type={deleteModalType.type} name={deleteModalType.name}>
+                        <label className='d-flex gap-1 align-items-center pt-2'>
+                            <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)}/>
+                            I am aware that I <strong>cannot undo</strong> this.
+                        </label>
+                        <hr/>
+                        <p className="des">
+                            If you choose to upgrade your subscription plan, the deleted organization can be restored within 7 days.
+                        </p>
+                        <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
+                            <Button className={`${checked &&  'ant-danger-btn'}`} onClick={handleDelete} disabled={!checked}>
+                                Delete
+                            </Button>
+                            <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
+                                Cancel
+                            </Button>
+                        </div>
+                    </DeleteModal>}
+                    {modalType === 'sublist' &&
+                    <SublistModal buttons={<>
+                        <Button onClick={() => {
+                            handleAddSublist();
+                        }} className={`${sublistText !== '' &&  'ant-primary-btn'}`} disabled={sublistText === ''}>
+                            Create
+                        </Button>
+                        <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
+                            Cancel
+                        </Button>
+                    </>} setListContents={<>
+                        <span><BiClipboard /><IoMdArrowDropdown /></span>
+                        <input value={sublistText} onChange={(e) => setSubListText(e.target.value)} type="text"/>
+                    </>} />
+                    }
+                </MyModal>
+        )}
+        {/*modal items end*/}
         <div className="up d-flex align-items-center justify-content-between">
             <div className="left d-flex gap-1 align-items-center ">
                 <h5 className='name m-0'>{name}</h5>

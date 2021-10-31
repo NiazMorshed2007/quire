@@ -22,6 +22,25 @@
             border-color: #F0F3F3FF;
             &:hover {
               background: $sideBarBack;
+              .before-list, .after-list {
+                visibility: visible;
+              }
+            }
+            #common_in_before_n_after {
+              top: 50%;
+              visibility: hidden;
+            }
+            .before-list {
+              @extend #common_in_before_n_after;
+              transform: translate(-100%, -50%);
+              left: 0;
+              padding-right: 6px;
+            }
+            .after-list {
+              @extend #common_in_before_n_after;
+              right: 0;
+              padding-left: 6px;
+              transform: translate(100%, -50%);
             }
           }
         }
