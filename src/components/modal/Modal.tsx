@@ -1,6 +1,6 @@
-import React, {FC, useContext, useEffect, useRef} from 'react';
+import React, {FC, useEffect, useRef} from 'react';
 import useClickOutside from "../../hooks/useClickOutside";
-import {TweenMax, Power2} from 'gsap';
+import {Power2, TweenMax} from 'gsap';
 
 interface Props {
     changeRender: any

@@ -1,10 +1,11 @@
-import React, {FC, JSXElementConstructor} from 'react';
+import React, {FC} from 'react';
 
 interface Props {
     setListContents: any
+    buttons: any
 }
 
-const SublistModal: FC<Props> = ({setListContents}) => {
+const SublistModal: FC<Props> = ({setListContents, buttons}) => {
     return <div className='sublist-modal shadow'>
         <h4>Create Sublist</h4>
         <div className='d-flex align-items-center justify-content-between'>
@@ -17,6 +18,9 @@ const SublistModal: FC<Props> = ({setListContents}) => {
             <label>
 
             </label>
+        </div>
+        <div className="btn-wrapper">
+        {buttons}
         </div>
     </div>
 }

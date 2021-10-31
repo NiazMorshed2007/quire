@@ -37,3 +37,33 @@
   border: none;
   border-bottom: $border-silver;
 }
+
+
+@mixin customScrollBar {
+  &:hover {
+    &::-webkit-scrollbar-thumb {
+      opacity: 1;
+      visibility: visible;
+    }
+    &::-webkit-scrollbar-track {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgb(230, 230, 230);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgb(185, 185, 185);
+    border-radius: 18px;
+    opacity: 0;
+    visibility: hidden;
+  }
+}

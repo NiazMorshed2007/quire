@@ -48,3 +48,19 @@
     color: white;
   }
 }
+
+.ant-primary-btn {
+  @extend .ant-default-btn;
+  background: $brandClr;
+  color: white;
+  border-color: $brandClr;
+  &:hover {
+    border-color: $brandClr;
+    background: $brandClr;
+    color: white;
+  }
+}
+
+.custom-scrollbar {
+  @include customScrollBar;
+}

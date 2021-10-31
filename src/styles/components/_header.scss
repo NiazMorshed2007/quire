@@ -3,17 +3,20 @@
   height: 90px;
   border-bottom: $border-silver;
   padding: 15px 18px 0 18px;
+
   .up {
     .left {
-      i > svg {
+      svg {
         cursor: pointer;
         font-size: 12px;
         color: $silver;
+        margin-top: 5px;
       }
 
       .name {
         font-size: 18px;
       }
+
       .ant-dropdown {
         svg {
           font-size: 25px;
@@ -24,10 +27,12 @@
     .right {
       border-left: $border-silver;
       padding-left: 15px;
+
       i > svg {
         cursor: pointer;
         font-size: 22px;
       }
+
       .img-wrapper {
         cursor: pointer;
         width: 32px;
@@ -42,15 +47,17 @@
       }
     }
   }
+
   .down {
     .tab {
       transform: translateY(1px);
       border: none;
-      border-bottom: $border-silver;
+      //border-bottom: $border-silver;
       border-top-right-radius: 4px;
       border-top-left-radius: 4px;
       padding: 5px 10px;
       position: relative;
+
       &::after {
         content: '';
         position: absolute;
@@ -63,23 +70,28 @@
         background: $brandClr;
         display: none;
       }
-      p{
+
+      p {
         font-size: 14px;
       }
     }
+
     .active-tab {
       border: $border-silver;
       border-bottom: none;
+      background: white;
       &::after {
         display: block;
       }
     }
+
     .sublist-wrapper {
       border-left: $border-silver;
-    .add-sublist {
-      font-size: 12px;
-      border: none;
-    }
+      height: 70%;
+      .add-sublist {
+        font-size: 12px;
+        border: none;
+      }
     }
   }
 }

@@ -26,7 +26,6 @@ interface Props {
 const SidebarMenu: FC<Props> = ({expand, setExpand, expandSubMenu, setExpandSubMenu, setActiveMenu}) => {
     const history = useHistory();
     const {currentOrg} = useContext(CurrentOrg);
-    console.log(currentOrg);
     const {isDarkMode, setIsDarkMode}: any = useContext(IsDarkMode);
     const firstItems = [{
         class: 'workspace',

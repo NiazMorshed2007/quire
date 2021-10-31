@@ -5,7 +5,8 @@ import {
     AiOutlineFile,
     AiOutlinePlus,
     AiOutlineSearch,
-    AiOutlineUser, BiClipboard,
+    AiOutlineUser,
+    BiClipboard,
     BiMessageDetail,
     BsChevronDown,
     BsCircle,
@@ -21,7 +22,8 @@ import {
     BsThreeDots,
     FiSettings,
     GoTrashcan,
-    GrDocumentCsv, IoMdArrowDropdown,
+    GrDocumentCsv,
+    IoMdArrowDropdown,
     IoMdNotificationsOutline,
     RiFolderReceivedLine
 } from 'react-icons/all';
@@ -35,6 +37,7 @@ import {ITabs} from "../interfaces/TabInterface";
 import MyModal from "./modal/Modal";
 import DeleteModal from "./modal/childs/DeleteModal";
 import SublistModal from "./modal/childs/SublistModal";
+import {setId} from "../functions/SetId";
 
 const {SubMenu} = Menu;
 
@@ -45,6 +48,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const {currentOrg} = useContext(CurrentOrg);
     const {orgs, setOrgs} = useContext(Orgs);
     let [renderModal, setRenderModal] = useState<boolean>(false);
+    const [sublistText, setSubListText] = useState<string>('');
     const [checked, setChecked] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
     const [deleteModalType, setDeleteModalType] = useState<{ type: string, name: string, }>({
@@ -55,12 +59,15 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const sublists: ITabs[] = project && project.sublists;
     const handleAddSublist = (): void => {
         const newSubList: ITabs = {
-            text: 'New',
-            id: 'new',
+            text: sublistText,
+            id: setId(sublistText),
             tasks: []
         }
         sublists.push(newSubList);
         setOrgs([...orgs]);
+        history.push(`${url}/tasks/${setId(sublistText)}`);
+        setSubListText('');
+        setRenderModal(false);
     }
     const handleDelete = (): void => {
         if (deleteModalType.type === 'organization') {
@@ -98,9 +105,18 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                 </div>
             </DeleteModal>}
             {modalType === 'sublist' &&
-                <SublistModal setListContents={<>
+                <SublistModal buttons={<>
+                    <Button onClick={() => {
+                        handleAddSublist();
+                    }} className={`${sublistText !== '' &&  'ant-primary-btn'}`} disabled={sublistText === ''}>
+                        Create
+                    </Button>
+                    <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
+                        Cancel
+                    </Button>
+                </>} setListContents={<>
                 <span><BiClipboard /><IoMdArrowDropdown /></span>
-                    <input type="text"/>
+                    <input value={sublistText} onChange={(e) => setSubListText(e.target.value)} type="text"/>
                 </>} />
             }
         </MyModal>}
@@ -225,18 +241,19 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                 </div>
             </div>
         </div>
-        <div className="down d-flex gap-1">
+        <div className="down d-flex align-items-center gap-1">
+
             {tabs.map((tab) => (
                 <NavLink key={tab.id} activeClassName='active-tab'
-                         className='text-decoration-none tab text-black bg-white' to={`${url}/${tab.id}`}>
+                         className='text-decoration-none tab text-black' to={`${url}/${tab.id}`}>
                     <p className='m-0'>{tab.text}</p>
                 </NavLink>
             ))}
             {type === 'PRJ' &&
-            <div className='sublist-wrapper d-flex px-2 gap-2'>
+            <div className='sublist-wrapper align-items-center d-flex px-2 gap-2'>
                 {sublists.map((list) => (
                     <NavLink key={list.id} activeClassName='active-tab'
-                             className='text-decoration-none tab text-black bg-white' to={`${url}/${list.id}`}>
+                             className='text-decoration-none tab text-black' to={`${url}/tasks/${list.id}`}>
                         <p className='m-0'>{list.text}</p>
                     </NavLink>
                 ))}
