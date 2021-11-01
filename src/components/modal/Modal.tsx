@@ -1,19 +1,24 @@
-import React, {FC} from 'react';
-import useClickOutside from "../../hooks/useClickOutside";
+import React, {Dispatch, FC} from 'react';
 import {animated} from "react-spring";
 
 interface Props {
-    changeRender: any
+    changeRender: Dispatch<boolean>
     render: boolean,
     useStyle: any
 }
 
-const MyModal: FC<Props> = ({children,changeRender, render , useStyle}) => {
-     let contentRef = useClickOutside(() => {
-        changeRender(false);
-    })
+const MyModal: FC<Props> = ({children, changeRender, render, useStyle}) => {
+
+    const handleModal = (e: Event): void => {
+        if((e.target as Element).className === 'my-modal-wrapper') {
+            changeRender(false);
+        }
+    }
+
+    window.addEventListener('click', handleModal);
+
     return <div className='my-modal-wrapper'>
-        <animated.div style={useStyle} ref={contentRef} className="my-modal-content d-flex">{children}</animated.div>
+        <animated.div style={useStyle} className="my-modal-content d-flex">{children}</animated.div>
     </div>
 }
 

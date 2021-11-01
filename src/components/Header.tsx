@@ -3,11 +3,10 @@ import {IHeader} from "../interfaces/HeaderInterface";
 import {
     AiOutlineAppstore,
     AiOutlineFile,
-    AiOutlinePlus,
+    AiOutlinePlus, AiOutlinePushpin,
     AiOutlineSearch,
     AiOutlineUser,
-    BiClipboard,
-    BiMessageDetail,
+    BiMessageDetail, BsArchive,
     BsChevronDown,
     BsCircle,
     BsCreditCard2Front,
@@ -19,13 +18,14 @@ import {
     BsPlusCircleFill,
     BsPrinter,
     BsTag,
-    BsThreeDots,
+    BsThreeDots, BsTrash,
     FiSettings,
     GoTrashcan,
     GrDocumentCsv,
     IoMdArrowDropdown,
     IoMdNotificationsOutline,
-    RiFolderReceivedLine
+    RiFolderReceivedLine,
+    VscListSelection
 } from 'react-icons/all';
 import {NavLink, useHistory, useRouteMatch} from "react-router-dom";
 import {User} from "../context/user";
@@ -38,7 +38,7 @@ import MyModal from "./modal/Modal";
 import DeleteModal from "./modal/childs/DeleteModal";
 import SublistModal from "./modal/childs/SublistModal";
 import {setId} from "../functions/SetId";
-import {useTransition, animated} from "react-spring";
+import {useTransition} from "react-spring";
 
 const {SubMenu} = Menu;
 
@@ -124,7 +124,13 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                             Cancel
                         </Button>
                     </>} setListContents={<>
-                        <span><BiClipboard /><IoMdArrowDropdown /></span>
+                        <span className='customization d-flex gap-1 align-items-center'><VscListSelection />
+                        <Dropdown trigger={['click']} overlay={(<Menu>
+                            <Menu.Item>afd</Menu.Item>
+                        </Menu>)}>
+                            <IoMdArrowDropdown />
+                        </Dropdown>
+                        </span>
                         <input value={sublistText} onChange={(e) => setSubListText(e.target.value)} type="text"/>
                     </>} />
                     }
@@ -256,7 +262,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
 
             {tabs.map((tab) => (
                 <NavLink key={tab.id} activeClassName='active-tab'
-                         className='text-decoration-none tab text-black' to={`${url}/${tab.id}`}>
+                         className='text-decoration-none tab' to={`${url}/${tab.id}`}>
                     <p className='m-0'>{tab.text}</p>
                 </NavLink>
             ))}
@@ -264,8 +270,31 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             <div className='sublist-wrapper align-items-center d-flex px-2 gap-2'>
                 {sublists.map((list) => (
                     <NavLink key={list.id} activeClassName='active-tab'
-                             className='text-decoration-none tab text-black' to={`${url}/tasks/${list.id}`}>
+                             className='text-decoration-none tab position-relative' to={`${url}/tasks/${list.id}`}>
+                        {list.icon}
                         <p className='m-0'>{list.text}</p>
+                        <Dropdown trigger={['click']} overlay={(
+                            <Menu>
+                                <Menu.Item icon={<BsPencil />}>
+                                    Edit
+                                </Menu.Item>
+                                <Menu.Item icon={<AiOutlinePushpin />}>
+                                    Unpin
+                                </Menu.Item>
+                                <Menu.Item disabled icon={<AiOutlinePushpin />}>
+                                    Unpin tabs to the right
+                                </Menu.Item>
+                                <Menu.Divider />
+                                <Menu.Item icon={<BsArchive />}>
+                                    Archive
+                                </Menu.Item>
+                                <Menu.Item icon={<BsTrash />}>
+                                    Delete
+                                </Menu.Item>
+                            </Menu>
+                        )}>
+                        <IoMdArrowDropdown />
+                        </Dropdown>
                     </NavLink>
                 ))}
                 <div onClick={() => {

@@ -1,7 +1,15 @@
 import React, {FC} from 'react';
 import {ITask} from "../../interfaces/TaskInterface";
 import {Dropdown, Menu} from "antd";
-import {AiOutlinePlus, BsArrowUp, BsCircle, RiPlayListAddLine} from "react-icons/all";
+import {
+    AiOutlinePlus,
+    AiOutlineUser,
+    BsArrowUp,
+    BsCalendar4Week,
+    BsCircle,
+    BsTag,
+    RiPlayListAddLine
+} from "react-icons/all";
 
 interface TaskProps {
     tasks: ITask[]
@@ -18,7 +26,16 @@ const TreeSingleTask: FC<TaskProps> = ({name, id, tasks, dltfunc}) => {
             <Menu.Item onClick={dltfunc}>Delete</Menu.Item>
         </Menu>)} trigger={['contextMenu']}>
             <div className='single-task pointer px-3 position-relative'>
-                {name}
+                <div className="main-single-task d-flex align-items-center justify-content-between">
+                    <div className="task-name">
+                        <p className='m-0'>{name}</p>
+                    </div>
+                    <div className="others d-flex align-items-center gap-5 px-2">
+                        <BsTag />
+                        <BsCalendar4Week />
+                        <AiOutlineUser />
+                    </div>
+                </div>
                 <div className="before-list d-flex gap-1 position-absolute">
                     <BsArrowUp />
                     <BsCircle />

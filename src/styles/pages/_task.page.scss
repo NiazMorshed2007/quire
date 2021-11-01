@@ -20,10 +20,26 @@
             padding: 6px;
             border-bottom: $border-silver;
             border-color: #F0F3F3FF;
+            svg {
+              color: $silver;
+            }
             &:hover {
               background: $sideBarBack;
-              .before-list, .after-list {
+              .before-list, .after-list, {
                 visibility: visible;
+              }
+              .main-single-task {
+                .others{
+                  visibility: visible;
+                  svg {
+                    font-size: 17px;
+                  }
+                }
+              }
+            }
+            .main-single-task {
+              .others {
+                visibility: hidden;
               }
             }
             #common_in_before_n_after {

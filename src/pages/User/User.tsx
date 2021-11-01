@@ -5,7 +5,7 @@ import {Route} from "react-router-dom";
 import Overview from "../overview/Overview";
 import BaseInfo from "../../components/BaseInfo";
 
-const UserSpace: FC = ({children}) => {
+const UserSpace: FC = () => {
     const {user}: any = useContext(User);
     return <>
     <Header type='USER' name={user.user.displayName} tabs={[{text: 'My Tasks', id: 'my_tasks'},{text: 'Overview', id:'overview'}]} />
