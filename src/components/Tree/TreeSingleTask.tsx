@@ -1,5 +1,4 @@
 import React, {FC} from 'react';
-import {ITask} from "../../interfaces/TaskInterface";
 import {Dropdown, Menu} from "antd";
 import {
     AiOutlinePlus,
@@ -12,14 +11,11 @@ import {
 } from "react-icons/all";
 
 interface TaskProps {
-    tasks: ITask[]
     name: string,
-    id: string,
     dltfunc:() => void
 }
 
-const TreeSingleTask: FC<TaskProps> = ({name, id, tasks, dltfunc}) => {
-    // const {orgs, setOrgs} = useContext(Orgs);
+const TreeSingleTask: FC<TaskProps> = ({name, dltfunc}) => {
     return <>
         <Dropdown overlay={(<Menu>
             <Menu.Item>kadsgf</Menu.Item>

@@ -52,6 +52,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const [sublistText, setSubListText] = useState<string>('');
     const [checked, setChecked] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
+    const [sublistId, setSublistId] = useState<string>('');
     const animateModal = useTransition(renderModal, {
         from: {opacity: 0, y: '-100%'},
         enter: {opacity: 1, y: '0%'},
@@ -86,8 +87,15 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             projects.splice(project_index, 1);
             history.push(`/w/o/${currentOrg}/overview`);
             setOrgs([...orgs]);
+        } else if (deleteModalType.type === 'sublist') {
+            const sublist_index: number = sublists.findIndex(({id}) => id === sublistId);
+            sublists.splice(sublist_index, 1);
+            history.push(`${url}/lists`);
+            setOrgs([...orgs]);
         }
+        setRenderModal(false);
     }
+
     return <header className='main-header d-flex flex-column justify-content-between'>
         {/*modal start*/}
         {animateModal((style, item) =>
@@ -105,7 +113,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                             If you choose to upgrade your subscription plan, the deleted organization can be restored within 7 days.
                         </p>
                         <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
-                            <Button className={`${checked &&  'ant-danger-btn'}`} onClick={handleDelete} disabled={!checked}>
+                            <Button className={`${checked &&  'ant-danger-btn'}`} onClick={() => handleDelete()} disabled={!checked}>
                                 Delete
                             </Button>
                             <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
@@ -241,6 +249,23 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                             </Menu.Item>
                         </>
                         }
+                        {type === 'USER' &&
+                        <>
+                        <Menu.Item key={'edit'} icon={<BsPencil />}>
+                            Edit name and description
+                        </Menu.Item>
+                            <Menu.Item key={'full-sc'} icon={<BsFullscreen />}>
+                                Enter full screen
+                            </Menu.Item>
+                            <Menu.Item key='print' icon={<BsPrinter />}>
+                                Print
+                            </Menu.Item>
+                            <Menu.Divider />
+                            <Menu.Item key='settings' icon={<FiSettings />}>
+                                Account settings
+                            </Menu.Item>
+                        </>
+                        }
                     </Menu>
                 )} trigger={['click']}>
                     <BsChevronDown/>
@@ -288,7 +313,15 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                                 <Menu.Item icon={<BsArchive />}>
                                     Archive
                                 </Menu.Item>
-                                <Menu.Item icon={<BsTrash />}>
+                                <Menu.Item onClick={() => {
+                                    setRenderModal(true);
+                                    setModalType('delete');
+                                    setDeleteModalType({
+                                        type: 'sublist',
+                                        name: list.text,
+                                    })
+                                    setSublistId(list.id);
+                                }} icon={<BsTrash />}>
                                     Delete
                                 </Menu.Item>
                             </Menu>

@@ -35,7 +35,7 @@ const Project: FC = () => {
                 </Overview>
             </Route>
             <Route exact path={["/w/p/:orgId/:projectId/lists", "/w/p/:orgId/:projectId/tasks/:subListId"]}>
-                <TasksPage org={org} project={project} tabs={tabs} sublists={sublists} />
+                <TasksPage type='PRJ' tabs={tabs} sublists={sublists} />
             </Route>
         </Route>
     </>

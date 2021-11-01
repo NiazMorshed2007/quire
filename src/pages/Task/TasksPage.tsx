@@ -16,17 +16,16 @@ import {ITask} from "../../interfaces/TaskInterface";
 import Tree from "../../components/Tree/Tree";
 
 interface Props {
-    org: any
-    project: any
-    tabs: ITabs[],
-    sublists: ITabs[]
+    type: string
+    tabs?: ITabs[],
+    sublists?: ITabs[],
 }
 
-const TasksPage: FC<Props> = ({org, project, tabs, sublists}) => {
+const TasksPage: FC<Props> = ({tabs, sublists, type}) => {
     const {subListId}: any = useParams();
-    const sublist: any = sublists.find(({id}) => id === subListId);
-    const listTab: any = tabs.find(({id}) => id === 'lists');
-    const tasks: ITask[] = sublist ? sublist.tasks : listTab.tasks;
+    const sublist: any = sublists && sublists.find(({id}) => id === subListId);
+    const listTab: any = tabs && tabs.find(({id}) => id === 'lists');
+    const tasks: ITask[] = sublist ? sublist.tasks : listTab && listTab.tasks;
 
     return <div className='task-page overflow-auto custom-scrollbar position-relative'>
         <header className='d-flex align-items-center justify-content-between position-fixed'>
@@ -61,7 +60,7 @@ const TasksPage: FC<Props> = ({org, project, tabs, sublists}) => {
         </header>
         <div className="main-wrapper pt-5">
             <div className="inner-main">
-                <Tree tasks={tasks} />
+                <Tree type={type} tasks={tasks && tasks} />
             </div>
         </div>
     </div>

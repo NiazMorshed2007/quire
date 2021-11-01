@@ -13,6 +13,8 @@ import ErrorPage from "./pages/404/Error";
 import Project from "./pages/project/Project";
 import Create from "./pages/create/Create";
 import {CurrentOrg} from "./context/currentOrg";
+import {ITask} from "./interfaces/TaskInterface";
+import {MyTasks} from "./context/myTask";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -35,16 +37,25 @@ const App: FC = () => {
             return []
         }
     }
+    const getMyTasks = (): [] => {
+        if(localStorage.getItem('my_tasks')) {
+            return JSON.parse(localStorage.getItem('my_tasks') as string);
+        } else {
+            return []
+        }
+    }
     const [logged, setLogged] = useState<boolean>(loggedData());
     const [isDarkMode, setIsDarkMode] = useState(appearanceData());
     const [user, setUser] = useState<any>(getUser());
     const [orgs, setOrgs] = useState<IOrg[]>(getOrgs);
+    const [myTasks, setMyTasks] = useState<ITask[]>(getMyTasks);
     const [currentOrg, setCurrentOrg] = useState<string>(orgs.length > 0 ? orgs[0].org_id : '');
     useEffect(() => {
         if (logged) {
             localStorage.setItem("orgs", JSON.stringify(orgs));
+            localStorage.setItem('my_tasks', JSON.stringify(myTasks));
         }
-    }, [orgs, logged]);
+    }, [orgs, logged, myTasks]);
     return <>
         <Router>
             <Route path='/' exact>
@@ -58,6 +69,7 @@ const App: FC = () => {
                 <User.Provider value={{user, setUser}}>
                     <IsDarkMode.Provider value={{isDarkMode, setIsDarkMode}}>
                         <Orgs.Provider value={{orgs, setOrgs}}>
+                            <MyTasks.Provider value={{myTasks, setMyTasks}}>
                                 <CurrentOrg.Provider value={{currentOrg, setCurrentOrg}}>
                                     <div className="app vh-100 vw-100 overflow-hidden">
                                         <Route path='/login'>
@@ -72,7 +84,7 @@ const App: FC = () => {
                                                 <SideBar/>
                                                 <div className="main d-flex w-100 flex-column">
                                                     <Route path='/u'>
-                                                        <UserSpace/>
+                                                        <UserSpace />
                                                     </Route>
                                                     <Route path='/w/o/:orgId'>
                                                         <Organization/>
@@ -92,6 +104,7 @@ const App: FC = () => {
                                         }
                                     </div>
                                 </CurrentOrg.Provider>
+                            </MyTasks.Provider>
                         </Orgs.Provider>
                     </IsDarkMode.Provider>
                 </User.Provider>

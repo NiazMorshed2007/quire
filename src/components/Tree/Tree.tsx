@@ -4,14 +4,17 @@ import useClickOutside from "../../hooks/useClickOutside";
 import {ITask} from "../../interfaces/TaskInterface";
 import {setId} from "../../functions/SetId";
 import {Orgs} from "../../context/orgs";
+import {MyTasks} from "../../context/myTask";
 
 interface Props {
-    tasks: ITask[]
+    tasks: ITask[],
+    type: string
 }
 
-const Tree: FC<Props> = ({tasks}) => {
+const Tree: FC<Props> = ({tasks, type}) => {
     const {orgs, setOrgs} = useContext(Orgs);
     const [taskText, setTaskText] = useState<string>('');
+    const {myTasks, setMyTasks} = useContext(MyTasks);
     const handleAdd = (e: FormEvent): void => {
         e.preventDefault();
         if (taskText !== '') {
@@ -19,15 +22,26 @@ const Tree: FC<Props> = ({tasks}) => {
                 task_name: taskText,
                 task_id: setId(taskText),
             }
-            tasks.push(new_task);
-            setOrgs([...orgs]);
+            if (type === 'PRJ') {
+                tasks.push(new_task);
+                setOrgs([...orgs]);
+            } else if (type === 'USER') {
+                myTasks.push(new_task);
+                setMyTasks([...myTasks]);
+            }
         }
         setTaskText('');
     }
     const handleDelete = (id: string): void => {
-        const delete_index: number = tasks.findIndex(({task_id}) => task_id === id);
-        tasks.splice(delete_index, 1);
-        setOrgs([...orgs]);
+        const delete_index: number = tasks ? tasks.findIndex(({task_id}) => task_id === id) : myTasks && myTasks.findIndex(({task_id}) => task_id === id);
+        if (type === 'PRJ') {
+            tasks.splice(delete_index, 1);
+            setOrgs([...orgs]);
+        } else if (type === 'USER') {
+            myTasks.splice(delete_index, 1);
+            setMyTasks([...myTasks]);
+        }
+
     }
     let addingRef = useClickOutside(() => {
         setShowAddingOptionInput(false);
@@ -35,9 +49,20 @@ const Tree: FC<Props> = ({tasks}) => {
     const [showAddingOptionInput, setShowAddingOptionInput] = useState<boolean>(false);
     return <div className="tree">
         <div className="tasks-wrapper pb-3 d-flex flex-column">
-            {tasks.map((task, i) => (
-                <TreeSingleTask dltfunc={()=> handleDelete(task.task_id)} tasks={tasks} name={task.task_name} id={task.task_id} key={task.task_id + '-' + i}/>
-            ))}
+            {type === 'PRJ' ?
+                <>
+                    {tasks.map((task, i) => (
+                        <TreeSingleTask dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                                        key={task.task_id + '-' + i}/>
+                    ))}
+                </> :
+                <>
+                    {myTasks.map((task, i) => (
+                        <TreeSingleTask dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                                        key={task.task_id + '-' + i}/>
+                    ))}
+                </>
+            }
         </div>
         <div ref={addingRef} className="adding-option">
             {showAddingOptionInput ?
