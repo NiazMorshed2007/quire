@@ -185,7 +185,9 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                     </Button>
                 </>} setListContents={<>
                         <span className='customization d-flex gap-1 align-items-center'>
+                           <i style={{color: `${sublistColor !== 'white' && sublistColor}`}}>
                             {sublistIconsArr[subListIcon]}
+                           </i>
                             <Dropdown trigger={['click']} overlay={(<Menu className='sublist-info-dropdown'>
                                 <ul className='d-flex items-wrapper'>
                                     {sublistIconsArr.map((icon, i) => (
@@ -359,12 +361,14 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                 </NavLink>
             ))}
             {type === 'PRJ' &&
-            <div className='sublist-wrapper align-items-center d-flex px-2 gap-2'>
+            <div className='sublist-wrapper align-items-center d-flex px-2 gap-1'>
                 {sublists.map((list) => (
-                    <NavLink style={{backgroundColor: `${list.color} 50%`}} key={list.id} activeClassName='active-sublist'
-                             className='text-decoration-none d-flex align-items-center gap-1 sublist position-relative'
+                    <NavLink key={list.id} activeClassName='active-sublist'
+                             className='text-decoration-none sublist position-relative'
                              to={`${url}/tasks/${list.id}`}>
-                        <i className='sublist-icon'>
+                        <div style={{backgroundColor: `${list.color}22`}} className="wrap d-flex align-items-center gap-1 position-relative">
+                            <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}} className="bottom-bar position-absolute"></div>
+                        <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
                             {sublistIconsArr[list.iconIndex]}
                         </i>
                         <p className='m-0'>{list.text}</p>
@@ -400,6 +404,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                                 <IoMdArrowDropdown/>
                             </i>
                         </Dropdown>
+                        </div>
                     </NavLink>
                 ))}
                 <div onClick={() => {
@@ -407,9 +412,10 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                     setModalType('sublist');
                 }
                 }
-                     className="add-sublist tab pointer border-left d-flex gap-1 align-items-center">
+                     style={{borderLeft: `${sublists.length > 1 && '1px solid silver'}`}}
+                     className={`add-sublist tab pointer border-left d-flex gap-1 align-items-center`}>
                     <BsPlusCircleFill className='text-silver'/>
-                    <span>Add sublist</span>
+                    <span className={`${sublists.length < 1 && 'show'}`}>Add sublist</span>
                 </div>
             </div>
             }
