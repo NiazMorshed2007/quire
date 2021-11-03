@@ -4,5 +4,5 @@ export interface ITabs {
     text: string,
     id: string,
     tasks: ITask[],
-    icon?: any
+    iconIndex?: any
 }

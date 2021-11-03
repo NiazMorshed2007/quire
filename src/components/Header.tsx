@@ -2,31 +2,58 @@ import React, {FC, useContext, useState} from 'react';
 import {IHeader} from "../interfaces/HeaderInterface";
 import {
     AiOutlineAppstore,
+    AiOutlineDislike,
     AiOutlineFile,
+    AiOutlineHighlight,
+    AiOutlineHome,
+    AiOutlineLike,
     AiOutlinePlus,
     AiOutlinePushpin,
     AiOutlineSearch,
+    AiOutlineThunderbolt,
     AiOutlineUser,
     BiMessageDetail,
+    BiMoviePlay,
+    BsAlarm,
     BsArchive,
+    BsBug,
+    BsBuilding, BsBullseye,
     BsChevronDown,
     BsCircle,
     BsCreditCard2Front,
+    BsEmojiFrown,
+    BsEmojiNeutral,
+    BsEmojiSmile,
     BsEye,
     BsFullscreen,
     BsHouse,
     BsJournalBookmark,
     BsPencil,
+    BsPeople,
+    BsPiggyBank,
     BsPlusCircleFill,
     BsPrinter,
     BsTag,
     BsThreeDots,
     BsTrash,
+    FaGraduationCap,
+    FaUmbrellaBeach,
+    FiDatabase,
     FiSettings,
+    GiFamilyTree, GiHamburger,
     GoTrashcan,
     GrDocumentCsv,
+    HiOutlineLightBulb,
+    IoBagRemoveOutline,
+    IoEarthOutline,
+    IoLeafOutline,
     IoMdArrowDropdown,
     IoMdNotificationsOutline,
+    IoMdPaperPlane,
+    IoMusicalNotesOutline,
+    IoNewspaperOutline,
+    IoRocketOutline,
+    IoTrophyOutline, MdFullscreen,
     RiFolderReceivedLine,
     VscCalendar,
     VscLibrary,
@@ -65,8 +92,12 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         enter: {opacity: 1, y: '0%'},
         leave: {opacity: 0, y: '-100%'}
     });
-    const sublistIconsArr = [<VscListSelection />, <VscSymbolKeyword />, <VscLibrary />, <VscCalendar />, ]
-    console.log(sublistIconsArr[0])
+    const sublistIconsArr = [<VscListSelection/>, <VscSymbolKeyword/>, <VscLibrary/>, <VscCalendar/>, <BsAlarm/>,
+        <IoBagRemoveOutline/>, <IoRocketOutline/>, <BsBug/>, <BsPeople/>, <HiOutlineLightBulb/>, <IoLeafOutline/>,
+        <BiMoviePlay/>, <GiFamilyTree/>, <AiOutlineThunderbolt/>, <BsPiggyBank/>, <FaGraduationCap/>, <IoMdPaperPlane/>,
+        <IoEarthOutline/>, <IoMusicalNotesOutline/>, <BsPencil/>, <FaUmbrellaBeach/>, <IoNewspaperOutline/>,
+        <AiOutlineHome/>, <BsBuilding/>, <FiDatabase/>, <AiOutlineHighlight/>, <GiHamburger />, <IoTrophyOutline/>, <AiOutlineLike/>,
+        <AiOutlineDislike/>, <BsEmojiSmile />, <BsEmojiFrown />, <BsEmojiNeutral />, <BsBullseye />, <MdFullscreen />]
     const [deleteModalType, setDeleteModalType] = useState<{ type: string, name: string, }>({
         type: '',
         name: '',
@@ -77,7 +108,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         const newSubList: ITabs = {
             text: sublistText,
             id: setId(sublistText),
-            // icon:  sublistIconsArr[0],
+            iconIndex: subListIcon,
             tasks: []
         }
         sublists.push(newSubList);
@@ -111,53 +142,59 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         {animateModal((style, item) =>
             item &&
             <MyModal useStyle={style} render={renderModal}
-                             changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}>
-                    {modalType === 'delete' && <DeleteModal changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}
-                                                            type={deleteModalType.type} name={deleteModalType.name}>
-                        <label className='d-flex gap-1 align-items-center pt-2'>
-                            <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)}/>
-                            I am aware that I <strong>cannot undo</strong> this.
-                        </label>
-                        <hr/>
-                        <p className="des">
-                            If you choose to upgrade your subscription plan, the deleted organization can be restored within 7 days.
-                        </p>
-                        <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
-                            <Button className={`${checked &&  'ant-danger-btn'}`} onClick={() => handleDelete()} disabled={!checked}>
-                                Delete
-                            </Button>
-                            <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
-                                Cancel
-                            </Button>
-                        </div>
-                    </DeleteModal>}
-                    {modalType === 'sublist' &&
-                    <SublistModal buttons={<>
-                        <Button onClick={() => {
-                            handleAddSublist();
-                        }} className={`${sublistText !== '' &&  'ant-primary-btn'}`} disabled={sublistText === ''}>
-                            Create
+                     changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}>
+                {modalType === 'delete' && <DeleteModal
+                    changeRender={(renderModal: boolean | ((prevState: boolean) => boolean)) => setRenderModal(renderModal)}
+                    type={deleteModalType.type} name={deleteModalType.name}>
+                    <label className='d-flex gap-1 align-items-center pt-2'>
+                        <input type="checkbox" checked={checked} onChange={() => setChecked(!checked)}/>
+                        I am aware that I <strong>cannot undo</strong> this.
+                    </label>
+                    <hr/>
+                    <p className="des">
+                        If you choose to upgrade your subscription plan, the deleted organization can be restored within
+                        7 days.
+                    </p>
+                    <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
+                        <Button className={`${checked && 'ant-danger-btn'}`} onClick={() => handleDelete()}
+                                disabled={!checked}>
+                            Delete
                         </Button>
                         <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
                             Cancel
                         </Button>
-                    </>} setListContents={<>
+                    </div>
+                </DeleteModal>}
+                {modalType === 'sublist' &&
+                <SublistModal buttons={<>
+                    <Button onClick={() => {
+                        handleAddSublist();
+                    }} className={`${sublistText !== '' && 'ant-primary-btn'}`} disabled={sublistText === ''}>
+                        Create
+                    </Button>
+                    <Button onClick={() => setRenderModal(false)} className='ant-default-btn'>
+                        Cancel
+                    </Button>
+                </>} setListContents={<>
                         <span className='customization d-flex gap-1 align-items-center'>
                             {sublistIconsArr[subListIcon]}
-                        <Dropdown trigger={['click']} overlay={(<Menu>
-                            <Menu.Item>
-                                {sublistIconsArr.map((icon, i) => (
-                                    <i onClick={() => setSublistIcon(i)} key={i}>{icon}</i>
-                                ))}
-                            </Menu.Item>
-                        </Menu>)}>
-                            <IoMdArrowDropdown />
+                            <Dropdown trigger={['click']} overlay={(<Menu className='sublist-info-dropdown'>
+                                <ul className='d-flex icons-wrapper'>
+                                    {sublistIconsArr.map((icon, i) => (
+                                <Menu.Item onClick={() => setSublistIcon(i)} key={i} className={`d-flex ${subListIcon === i && 'active-icon'} justify-content-around dropdown-icons`}>
+                                        <i>{icon}</i>
+                                </Menu.Item>
+                                    ))}
+                                </ul>
+                                <Menu.Divider />
+                            </Menu>)}>
+                            <IoMdArrowDropdown/>
                         </Dropdown>
                         </span>
-                        <input value={sublistText} onChange={(e) => setSubListText(e.target.value)} type="text"/>
-                    </>} />
-                    }
-                </MyModal>
+                    <input value={sublistText} onChange={(e) => setSubListText(e.target.value)} type="text"/>
+                </>}/>
+                }
+            </MyModal>
         )}
         {/*modal items end*/}
         <div className="up d-flex align-items-center justify-content-between">
@@ -266,17 +303,17 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                         }
                         {type === 'USER' &&
                         <>
-                        <Menu.Item key={'edit'} icon={<BsPencil />}>
-                            Edit name and description
-                        </Menu.Item>
-                            <Menu.Item key={'full-sc'} icon={<BsFullscreen />}>
+                            <Menu.Item key={'edit'} icon={<BsPencil/>}>
+                                Edit name and description
+                            </Menu.Item>
+                            <Menu.Item key={'full-sc'} icon={<BsFullscreen/>}>
                                 Enter full screen
                             </Menu.Item>
-                            <Menu.Item key='print' icon={<BsPrinter />}>
+                            <Menu.Item key='print' icon={<BsPrinter/>}>
                                 Print
                             </Menu.Item>
-                            <Menu.Divider />
-                            <Menu.Item key='settings' icon={<FiSettings />}>
+                            <Menu.Divider/>
+                            <Menu.Item key='settings' icon={<FiSettings/>}>
                                 Account settings
                             </Menu.Item>
                         </>
@@ -310,22 +347,25 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             <div className='sublist-wrapper align-items-center d-flex px-2 gap-2'>
                 {sublists.map((list) => (
                     <NavLink key={list.id} activeClassName='active-tab'
-                             className='text-decoration-none tab position-relative' to={`${url}/tasks/${list.id}`}>
-                        {list.icon}
+                             className='text-decoration-none d-flex align-items-center gap-1 tab position-relative'
+                             to={`${url}/tasks/${list.id}`}>
+                        <i className='sublist-icon'>
+                            {sublistIconsArr[list.iconIndex]}
+                        </i>
                         <p className='m-0'>{list.text}</p>
                         <Dropdown trigger={['click']} overlay={(
                             <Menu>
-                                <Menu.Item icon={<BsPencil />}>
+                                <Menu.Item icon={<BsPencil/>}>
                                     Edit
                                 </Menu.Item>
-                                <Menu.Item icon={<AiOutlinePushpin />}>
+                                <Menu.Item icon={<AiOutlinePushpin/>}>
                                     Unpin
                                 </Menu.Item>
-                                <Menu.Item disabled icon={<AiOutlinePushpin />}>
+                                <Menu.Item disabled icon={<AiOutlinePushpin/>}>
                                     Unpin tabs to the right
                                 </Menu.Item>
-                                <Menu.Divider />
-                                <Menu.Item icon={<BsArchive />}>
+                                <Menu.Divider/>
+                                <Menu.Item icon={<BsArchive/>}>
                                     Archive
                                 </Menu.Item>
                                 <Menu.Item onClick={() => {
@@ -336,12 +376,14 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                                         name: list.text,
                                     })
                                     setSublistId(list.id);
-                                }} icon={<BsTrash />}>
+                                }} icon={<BsTrash/>}>
                                     Delete
                                 </Menu.Item>
                             </Menu>
                         )}>
-                        <IoMdArrowDropdown />
+                            <i className="drop-down-icon">
+                                <IoMdArrowDropdown/>
+                            </i>
                         </Dropdown>
                     </NavLink>
                 ))}

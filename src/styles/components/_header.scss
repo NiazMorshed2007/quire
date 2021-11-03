@@ -57,14 +57,17 @@
       padding: 7px 16px;
       position: relative;
       color: $silver;
-      svg {
-        display: none;
-        opacity: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 0;
-        position: absolute;
+      .drop-down-icon {
+        svg {
+          display: none;
+          opacity: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0;
+          position: absolute;
+        }
       }
+
       &::after {
         content: '';
         position: absolute;
@@ -88,14 +91,18 @@
       border-bottom: none;
       background: white;
       color: black;
+      .drop-down-icon {
         svg {
           display: block;
         }
+      }
+
       &:hover {
         svg {
           opacity: 1;
         }
       }
+
       &::after {
         display: block;
       }
@@ -104,15 +111,10 @@
     .sublist-wrapper {
       border-left: $border-silver;
       height: 70%;
+
       .add-sublist {
         font-size: 12px;
         border: none;
-        svg {
-          position: relative;
-          display: block;
-          opacity: 1;
-          transform: translateY(0%);
-        }
       }
     }
   }
