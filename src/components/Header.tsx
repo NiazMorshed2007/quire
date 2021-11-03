@@ -3,10 +3,12 @@ import {IHeader} from "../interfaces/HeaderInterface";
 import {
     AiOutlineAppstore,
     AiOutlineFile,
-    AiOutlinePlus, AiOutlinePushpin,
+    AiOutlinePlus,
+    AiOutlinePushpin,
     AiOutlineSearch,
     AiOutlineUser,
-    BiMessageDetail, BsArchive,
+    BiMessageDetail,
+    BsArchive,
     BsChevronDown,
     BsCircle,
     BsCreditCard2Front,
@@ -18,14 +20,18 @@ import {
     BsPlusCircleFill,
     BsPrinter,
     BsTag,
-    BsThreeDots, BsTrash,
+    BsThreeDots,
+    BsTrash,
     FiSettings,
     GoTrashcan,
     GrDocumentCsv,
     IoMdArrowDropdown,
     IoMdNotificationsOutline,
     RiFolderReceivedLine,
-    VscListSelection
+    VscCalendar,
+    VscLibrary,
+    VscListSelection,
+    VscSymbolKeyword
 } from 'react-icons/all';
 import {NavLink, useHistory, useRouteMatch} from "react-router-dom";
 import {User} from "../context/user";
@@ -50,6 +56,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const {orgs, setOrgs} = useContext(Orgs);
     let [renderModal, setRenderModal] = useState<boolean>(false);
     const [sublistText, setSubListText] = useState<string>('');
+    const [subListIcon, setSublistIcon] = useState<number>(0);
     const [checked, setChecked] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
     const [sublistId, setSublistId] = useState<string>('');
@@ -58,6 +65,8 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         enter: {opacity: 1, y: '0%'},
         leave: {opacity: 0, y: '-100%'}
     });
+    const sublistIconsArr = [<VscListSelection />, <VscSymbolKeyword />, <VscLibrary />, <VscCalendar />, ]
+    console.log(sublistIconsArr[0])
     const [deleteModalType, setDeleteModalType] = useState<{ type: string, name: string, }>({
         type: '',
         name: '',
@@ -68,6 +77,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         const newSubList: ITabs = {
             text: sublistText,
             id: setId(sublistText),
+            // icon:  sublistIconsArr[0],
             tasks: []
         }
         sublists.push(newSubList);
@@ -132,9 +142,14 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                             Cancel
                         </Button>
                     </>} setListContents={<>
-                        <span className='customization d-flex gap-1 align-items-center'><VscListSelection />
+                        <span className='customization d-flex gap-1 align-items-center'>
+                            {sublistIconsArr[subListIcon]}
                         <Dropdown trigger={['click']} overlay={(<Menu>
-                            <Menu.Item>afd</Menu.Item>
+                            <Menu.Item>
+                                {sublistIconsArr.map((icon, i) => (
+                                    <i onClick={() => setSublistIcon(i)} key={i}>{icon}</i>
+                                ))}
+                            </Menu.Item>
                         </Menu>)}>
                             <IoMdArrowDropdown />
                         </Dropdown>

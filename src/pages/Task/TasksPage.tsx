@@ -13,7 +13,7 @@ import {
 } from "react-icons/all";
 import {Dropdown, Menu} from "antd";
 import {ITask} from "../../interfaces/TaskInterface";
-import Tree from "../../components/Tree/Tree";
+import Tree from "../Tree/Tree";
 
 interface Props {
     type: string
