@@ -17,7 +17,8 @@ import {
     BsAlarm,
     BsArchive,
     BsBug,
-    BsBuilding, BsBullseye,
+    BsBuilding,
+    BsBullseye,
     BsChevronDown,
     BsCircle,
     BsCreditCard2Front,
@@ -40,7 +41,8 @@ import {
     FaUmbrellaBeach,
     FiDatabase,
     FiSettings,
-    GiFamilyTree, GiHamburger,
+    GiFamilyTree,
+    GiHamburger,
     GoTrashcan,
     GrDocumentCsv,
     HiOutlineLightBulb,
@@ -53,7 +55,8 @@ import {
     IoMusicalNotesOutline,
     IoNewspaperOutline,
     IoRocketOutline,
-    IoTrophyOutline, MdFullscreen,
+    IoTrophyOutline,
+    MdFullscreen,
     RiFolderReceivedLine,
     VscCalendar,
     VscLibrary,
@@ -66,7 +69,6 @@ import {Button, Dropdown, Menu} from 'antd';
 import {CurrentOrg} from "../context/currentOrg";
 import {Orgs} from "../context/orgs";
 import {IProject} from "../interfaces/ProjectInterface";
-import {ITabs} from "../interfaces/TabInterface";
 import MyModal from "./modal/Modal";
 import DeleteModal from "./modal/childs/DeleteModal";
 import SublistModal from "./modal/childs/SublistModal";
@@ -359,8 +361,8 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             {type === 'PRJ' &&
             <div className='sublist-wrapper align-items-center d-flex px-2 gap-2'>
                 {sublists.map((list) => (
-                    <NavLink style={{background: list.color}} key={list.id} activeClassName='active-tab'
-                             className='text-decoration-none d-flex align-items-center gap-1 tab position-relative'
+                    <NavLink style={{backgroundColor: `${list.color} 50%`}} key={list.id} activeClassName='active-sublist'
+                             className='text-decoration-none d-flex align-items-center gap-1 sublist position-relative'
                              to={`${url}/tasks/${list.id}`}>
                         <i className='sublist-icon'>
                             {sublistIconsArr[list.iconIndex]}
@@ -368,20 +370,20 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                         <p className='m-0'>{list.text}</p>
                         <Dropdown trigger={['click']} overlay={(
                             <Menu>
-                                <Menu.Item icon={<BsPencil/>}>
+                                <Menu.Item key={1} icon={<BsPencil/>}>
                                     Edit
                                 </Menu.Item>
-                                <Menu.Item icon={<AiOutlinePushpin/>}>
+                                <Menu.Item key={2} icon={<AiOutlinePushpin/>}>
                                     Unpin
                                 </Menu.Item>
-                                <Menu.Item disabled icon={<AiOutlinePushpin/>}>
+                                <Menu.Item key={3} disabled icon={<AiOutlinePushpin/>}>
                                     Unpin tabs to the right
                                 </Menu.Item>
                                 <Menu.Divider/>
-                                <Menu.Item icon={<BsArchive/>}>
+                                <Menu.Item key={4} icon={<BsArchive/>}>
                                     Archive
                                 </Menu.Item>
-                                <Menu.Item onClick={() => {
+                                <Menu.Item key={5} onClick={() => {
                                     setRenderModal(true);
                                     setModalType('delete');
                                     setDeleteModalType({
