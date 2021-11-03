@@ -72,8 +72,12 @@ import DeleteModal from "./modal/childs/DeleteModal";
 import SublistModal from "./modal/childs/SublistModal";
 import {setId} from "../functions/SetId";
 import {useTransition} from "react-spring";
+import {colorpalettes} from "../functions/colorpalets";
+import {ISubilsts} from "../interfaces/SublistsInterface";
 
 const {SubMenu} = Menu;
+colorpalettes.push('white');
+
 
 const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     const {url} = useRouteMatch();
@@ -84,6 +88,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
     let [renderModal, setRenderModal] = useState<boolean>(false);
     const [sublistText, setSubListText] = useState<string>('');
     const [subListIcon, setSublistIcon] = useState<number>(0);
+    const [sublistColor, setSublistColor] = useState<string>("white");
     const [checked, setChecked] = useState<boolean>(false);
     const [modalType, setModalType] = useState<string>('');
     const [sublistId, setSublistId] = useState<string>('');
@@ -103,13 +108,14 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         name: '',
     });
     const projects: IProject[] = org && org.projects;
-    const sublists: ITabs[] = project && project.sublists;
+    const sublists: ISubilsts[] = project && project.sublists;
     const handleAddSublist = (): void => {
-        const newSubList: ITabs = {
+        const newSubList: ISubilsts = {
             text: sublistText,
             id: setId(sublistText),
             iconIndex: subListIcon,
-            tasks: []
+            tasks: [],
+            color: sublistColor,
         }
         sublists.push(newSubList);
         setOrgs([...orgs]);
@@ -179,14 +185,21 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                         <span className='customization d-flex gap-1 align-items-center'>
                             {sublistIconsArr[subListIcon]}
                             <Dropdown trigger={['click']} overlay={(<Menu className='sublist-info-dropdown'>
-                                <ul className='d-flex icons-wrapper'>
+                                <ul className='d-flex items-wrapper'>
                                     {sublistIconsArr.map((icon, i) => (
-                                <Menu.Item onClick={() => setSublistIcon(i)} key={i} className={`d-flex ${subListIcon === i && 'active-icon'} justify-content-around dropdown-icons`}>
+                                <Menu.Item onClick={() => setSublistIcon(i)} key={i} className={`${subListIcon === i && 'active-icon'}`}>
                                         <i>{icon}</i>
                                 </Menu.Item>
                                     ))}
                                 </ul>
                                 <Menu.Divider />
+                                <ul className='d-flex items-wrapper'>
+                                    {colorpalettes.map((color) => (
+                                        <Menu.Item onClick={() => setSublistColor(color)} className='color-li' key={color}>
+                                            <div style={{background: color, border: `${color === 'white' && '1px solid silver'}`}} className='color'></div>
+                                        </Menu.Item>
+                                    ))}
+                                </ul>
                             </Menu>)}>
                             <IoMdArrowDropdown/>
                         </Dropdown>
@@ -346,7 +359,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             {type === 'PRJ' &&
             <div className='sublist-wrapper align-items-center d-flex px-2 gap-2'>
                 {sublists.map((list) => (
-                    <NavLink key={list.id} activeClassName='active-tab'
+                    <NavLink style={{background: list.color}} key={list.id} activeClassName='active-tab'
                              className='text-decoration-none d-flex align-items-center gap-1 tab position-relative'
                              to={`${url}/tasks/${list.id}`}>
                         <i className='sublist-icon'>

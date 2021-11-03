@@ -78,18 +78,29 @@
 
 
 .sublist-info-dropdown {
-  width: 198px;
-  .icons-wrapper {
+  width: 170px;
+  padding: 5px;
+  .items-wrapper {
+    justify-content: space-around;
     flex-flow: row wrap;
     padding: 2px 4px;
     li {
       border-radius: 3px;
+      padding: 2px 6px;
     }
     .active-icon {
       background: $brandClr;
       svg{
       color: white;
       }
+    }
+    .color-li {
+     padding: 2px;
+    .color {
+      width: 15px;
+      height: 15px;
+      border-radius: 3px;
+    }
     }
   }
 }

@@ -1,8 +1,9 @@
 import {ITask} from "./TaskInterface";
 
-export interface ITabs {
+export interface ISubilsts {
     text: string,
     id: string,
     tasks: ITask[],
-    iconIndex?: any,
+    iconIndex: number,
+    color: string
 }

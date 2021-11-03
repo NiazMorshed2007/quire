@@ -1,3 +1,5 @@
+import { colorpalettes} from "./colorpalets";
+
 export const AvatarBackgrounds: string[] = [
     "#f8bb32",
     "#775182",
@@ -9,5 +11,6 @@ export const AvatarBackgrounds: string[] = [
     "#eb5e60",
     "#62b6cb",
     "#586055",
-    "#a4123f"
+    "#a4123f",
 ];
+AvatarBackgrounds.push.apply(AvatarBackgrounds, colorpalettes);
