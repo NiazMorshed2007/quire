@@ -1,4 +1,4 @@
-import React, {FC, useContext} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import Header from "../../components/Header";
 import {User} from "../../context/user";
 import {Route} from "react-router-dom";
@@ -9,6 +9,9 @@ import TasksPage from "../Task/TasksPage";
 
 const UserSpace: FC = () => {
     const {user}: any = useContext(User);
+    useEffect(() => {
+        document.title = `${user.user.displayName} | Quire`;
+    }, [user])
     return <>
     <Header type='USER' name={user.user.displayName} tabs={[{text: 'My Tasks', id: 'my_tasks', tasks: []},{text: 'Overview', id:'overview'}]} />
         <Route path='/u/overview'>

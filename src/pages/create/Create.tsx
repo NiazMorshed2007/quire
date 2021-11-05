@@ -1,4 +1,4 @@
-import React, {FC, FormEvent, useContext, useState} from 'react';
+import React, {FC, FormEvent, useContext, useEffect, useState} from 'react';
 import {MdClear} from 'react-icons/all';
 import {useHistory, useLocation} from "react-router-dom";
 import {Orgs} from "../../context/orgs";
@@ -17,7 +17,7 @@ const Create: FC = () => {
     const {orgs, setOrgs} = useContext(Orgs);
     const params = new URLSearchParams(location.search);
     const orgId = params.get('org_id');
-    const type = params.get('type');
+    const type: any = params.get('type');
     const org: any = orgs.find(({org_id}) => org_id === orgId);
     const [whichOrg, setWhichOrg] = useState<string>(org && org.org_name);
     const handleSubmit = (e: FormEvent):void => {
@@ -48,6 +48,14 @@ const Create: FC = () => {
     //    always
         setName('');
     }
+
+    useEffect(() => {
+        if(type === 'org') {
+            document.title = 'Create Organization | Quire'
+        } else {
+            document.title = 'Create Project | Quire'
+        }
+    }, [type])
     return <div className='create d-flex flex-column w-100 h-100'>
         <header className='p-4 border-bottom d-flex align-items-center justify-content-end'>
             <i onClick={() => history.goBack()} className='pointer'>
