@@ -17,6 +17,7 @@ const Organization: FC = () => {
     const org: any = orgs.find(({org_id}) => org_id === orgId);
     const projects: IProject[] = org && org.projects;
     useEffect(() => {
+        document.title = `${org.org_name} | Quire`;
         setCurrentOrg(org.org_id);
         //    eslint-disable-next-line
     }, [org])

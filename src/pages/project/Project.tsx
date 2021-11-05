@@ -23,6 +23,7 @@ const Project: FC = () => {
     const sublists: ITabs[] = project.sublists;
     //fetch org_id for create project from sidebar
     useEffect(() => {
+        document.title = `${project.project_name} | Quire`;
         setCurrentOrg(org.org_id);
     //    eslint-disable-next-line
     }, [project])
