@@ -61,7 +61,7 @@ const App: FC = () => {
             <Route path='/' exact>
                 <Redirect to='/u'/>
             </Route>
-            <Route path='/u'>
+            <Route exact path='/u'>
                 <Redirect to='/u/overview'/>
             </Route>
             {!logged && <Redirect to='/login'/>}

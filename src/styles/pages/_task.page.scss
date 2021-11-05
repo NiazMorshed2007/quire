@@ -1,6 +1,38 @@
 .task-page {
   margin: 10px 5% 20px 3%;
 
+  header {
+    width: 80%;
+    margin-right: 15%;
+
+    .views-wrapper {
+      a {
+        border-radius: 14px;
+        overflow: hidden;
+        cursor: pointer;
+        i {
+          svg {
+            width: 38px;
+            height: 38px;
+            &:hover {
+              #back {
+                fill: rgba($brandClr, .3);
+              }
+            }
+
+            .board-icon-part {
+              stroke: #79ab16;
+            }
+
+            #board-back {
+              transition: all .2s ease-in-out;
+            }
+          }
+        }
+      }
+    }
+  }
+
   .main-wrapper {
     padding: 0 160px 0 120px;
 
@@ -20,38 +52,47 @@
             padding: 6px;
             border-bottom: $border-silver;
             border-color: #F0F3F3FF;
+
             svg {
               color: $silver;
             }
+
             &:hover {
               background: $sideBarBack;
+
               .before-list, .after-list, {
                 visibility: visible;
               }
+
               .main-single-task {
-                .others{
+                .others {
                   visibility: visible;
+
                   svg {
                     font-size: 17px;
                   }
                 }
               }
             }
+
             .main-single-task {
               .others {
                 visibility: hidden;
               }
             }
+
             #common_in_before_n_after {
               top: 50%;
               visibility: hidden;
             }
+
             .before-list {
               @extend #common_in_before_n_after;
               transform: translate(-100%, -50%);
               left: 0;
               padding-right: 6px;
             }
+
             .after-list {
               @extend #common_in_before_n_after;
               right: 0;
@@ -60,11 +101,13 @@
             }
           }
         }
+
         .adding-option {
           p {
             font-size: 13.5px;
             border-bottom: $border-silver;
             border-color: #F0F3F3FF;
+
             &:hover {
               color: #464646;
             }
@@ -74,6 +117,7 @@
             height: 35px;
             padding: 0 25px;
             @extend #common_back;
+
             input {
               width: 97%;
               outline: none;

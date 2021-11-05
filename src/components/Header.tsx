@@ -356,7 +356,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
 
             {tabs.map((tab) => (
                 <NavLink key={tab.id} activeClassName='active-tab'
-                         className='text-decoration-none tab' to={`${url}/${tab.id}`}>
+                         className='text-decoration-none tab' to={`${tab.id !== 'overview' ? url + '/' + tab.id + '?view=tree' : url + '/' + tab.id}`}>
                     <p className='m-0'>{tab.text}</p>
                 </NavLink>
             ))}
@@ -365,7 +365,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                 {sublists.map((list) => (
                     <NavLink key={list.id} activeClassName='active-sublist'
                              className='text-decoration-none sublist position-relative'
-                             to={`${url}/tasks/${list.id}`}>
+                             to={`${url}/tasks/${list.id}?view=tree`}>
                         <div style={{backgroundColor: `${list.color}22`}} className="wrap d-flex align-items-center gap-1 position-relative">
                             <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}} className="bottom-bar position-absolute"></div>
                         <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
