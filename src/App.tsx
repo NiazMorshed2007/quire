@@ -3,18 +3,19 @@ import Login from "./pages/Login/Login";
 import {IsLogged} from "./context/isLogged";
 import {IsDarkMode} from "./context/isDarkMode";
 import {User} from './context/user';
-import {BrowserRouter as Router, Redirect, Route} from "react-router-dom";
+import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
 import UserSpace from "./pages/User/User";
 import {Orgs} from "./context/orgs";
 import {IOrg} from "./interfaces/OrgInterface";
 import Organization from "./pages/Organization/Organization";
 import SideBar from "./components/sidebar/SideBar";
-import ErrorPage from "./pages/404/Error";
+import ErrorPage from "./pages/error/Error";
 import Project from "./pages/project/Project";
 import Create from "./pages/create/Create";
 import {CurrentOrg} from "./context/currentOrg";
 import {ITask} from "./interfaces/TaskInterface";
 import {MyTasks} from "./context/myTask";
+import GlobalError from "./pages/error/GlobalError";
 
 const App: FC = () => {
     const loggedData = (): boolean => {
@@ -38,7 +39,7 @@ const App: FC = () => {
         }
     }
     const getMyTasks = (): [] => {
-        if(localStorage.getItem('my_tasks')) {
+        if (localStorage.getItem('my_tasks')) {
             return JSON.parse(localStorage.getItem('my_tasks') as string);
         } else {
             return []
@@ -72,36 +73,49 @@ const App: FC = () => {
                             <MyTasks.Provider value={{myTasks, setMyTasks}}>
                                 <CurrentOrg.Provider value={{currentOrg, setCurrentOrg}}>
                                     <div className="app vh-100 vw-100 overflow-hidden">
-                                        <Route path='/login'>
-                                            <Login/>
-                                        </Route>
-                                        {logged &&
-                                        <Route path='/'>
-                                            <div
-                                                className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${isDarkMode && 'expand-dark-mode'}`}>{''}</div>
-                                            <div
-                                                className={`user-work-wrapper d-flex w-100 h-100 position-relative ${isDarkMode && 'text-white'}`}>
-                                                <SideBar/>
-                                                <div className="main d-flex w-100 flex-column">
-                                                    <Route path='/u'>
-                                                        <UserSpace />
-                                                    </Route>
-                                                    <Route path='/w/o/:orgId'>
-                                                        <Organization/>
-                                                    </Route>
-                                                    <Route path='/w/p/:orgId/:projectId'>
-                                                        <Project/>
-                                                    </Route>
-                                                    <Route path='/c'>
-                                                        <Create/>
-                                                    </Route>
-                                                    <Route path='/error'>
-                                                        <ErrorPage/>
-                                                    </Route>
-                                                </div>
-                                            </div>
-                                        </Route>
-                                        }
+                                        <Switch>
+                                            <Route path='/login'>
+                                                <Login/>
+                                            </Route>
+                                            <Route path={["/u", "/w"]}>
+                                                {logged &&
+                                                <>
+                                                    <div
+                                                        className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${isDarkMode && 'expand-dark-mode'}`}>{''}</div>
+                                                    <div
+                                                        className={`user-work-wrapper d-flex w-100 h-100 position-relative ${isDarkMode && 'text-white'}`}>
+                                                        <SideBar/>
+                                                        <div className="main d-flex w-100 flex-column">
+                                                            <Route path='/u'>
+                                                                <UserSpace/>
+                                                            </Route>
+                                                            <Switch>
+                                                                <Route path='/w/o/:orgId'>
+                                                                    <Organization/>
+                                                                </Route>
+                                                                <Route path='/w/p/:orgId/:projectId'>
+                                                                    <Project/>
+                                                                </Route>
+                                                                <Route path='/w/*'>
+                                                                    <ErrorPage/>
+                                                                </Route>
+                                                            </Switch>
+                                                            <Route path='/c'>
+                                                                <Create/>
+                                                            </Route>
+                                                            <Route path='/error'>
+                                                                <ErrorPage/>
+                                                            </Route>
+                                                        </div>
+                                                    </div>
+                                                </>
+                                                }
+                                            </Route>
+
+                                            <Route path={'*'}>
+                                                <GlobalError/>
+                                            </Route>
+                                        </Switch>
                                     </div>
                                 </CurrentOrg.Provider>
                             </MyTasks.Provider>

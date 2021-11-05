@@ -1,5 +1,5 @@
 import React, {FC, useContext, useEffect} from 'react';
-import {useHistory, useParams} from "react-router-dom";
+import {Redirect, useHistory, useParams} from "react-router-dom";
 import {Orgs} from "../../context/orgs";
 import Header from "../../components/Header";
 import Overview from "../overview/Overview";
@@ -17,10 +17,13 @@ const Organization: FC = () => {
     const org: any = orgs.find(({org_id}) => org_id === orgId);
     const projects: IProject[] = org && org.projects;
     useEffect(() => {
-        document.title = `${org.org_name} | Quire`;
-        setCurrentOrg(org.org_id);
+        document.title = `${org && org.org_name} | Quire`;
+        setCurrentOrg(org && org.org_id);
         //    eslint-disable-next-line
     }, [org])
+    if(typeof org !== 'object') {
+       return <Redirect to={'/error'} />
+    }
     return <div className='org'>
         <Header org={org} type='ORG' name={org.org_name} tabs={[{text: 'Overview', id: 'overview'}]}/>
         <Overview>

@@ -1,4 +1,4 @@
-import { colorpalettes} from "./colorpalets";
+import { colorpalettes} from "./colorpalettes";
 
 export const AvatarBackgrounds: string[] = [
     "#f8bb32",

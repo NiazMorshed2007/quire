@@ -63,9 +63,9 @@ import {
     VscListSelection,
     VscSymbolKeyword
 } from 'react-icons/all';
-import {NavLink, useHistory, useRouteMatch} from "react-router-dom";
+import {useHistory, useRouteMatch} from "react-router-dom";
 import {User} from "../context/user";
-import {Button, Dropdown, Menu} from 'antd';
+import {Button, Dropdown, Menu, Tabs} from 'antd';
 import {CurrentOrg} from "../context/currentOrg";
 import {Orgs} from "../context/orgs";
 import {IProject} from "../interfaces/ProjectInterface";
@@ -74,10 +74,11 @@ import DeleteModal from "./modal/childs/DeleteModal";
 import SublistModal from "./modal/childs/SublistModal";
 import {setId} from "../functions/SetId";
 import {useTransition} from "react-spring";
-import {colorpalettes} from "../functions/colorpalets";
+import {colorpalettes} from "../functions/colorpalettes";
 import {ISubilsts} from "../interfaces/SublistsInterface";
 
 const {SubMenu} = Menu;
+const {TabPane} = Tabs;
 colorpalettes.push('white');
 
 
@@ -103,8 +104,9 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         <IoBagRemoveOutline/>, <IoRocketOutline/>, <BsBug/>, <BsPeople/>, <HiOutlineLightBulb/>, <IoLeafOutline/>,
         <BiMoviePlay/>, <GiFamilyTree/>, <AiOutlineThunderbolt/>, <BsPiggyBank/>, <FaGraduationCap/>, <IoMdPaperPlane/>,
         <IoEarthOutline/>, <IoMusicalNotesOutline/>, <BsPencil/>, <FaUmbrellaBeach/>, <IoNewspaperOutline/>,
-        <AiOutlineHome/>, <BsBuilding/>, <FiDatabase/>, <AiOutlineHighlight/>, <GiHamburger />, <IoTrophyOutline/>, <AiOutlineLike/>,
-        <AiOutlineDislike/>, <BsEmojiSmile />, <BsEmojiFrown />, <BsEmojiNeutral />, <BsBullseye />, <MdFullscreen />]
+        <AiOutlineHome/>, <BsBuilding/>, <FiDatabase/>, <AiOutlineHighlight/>, <GiHamburger/>, <IoTrophyOutline/>,
+        <AiOutlineLike/>,
+        <AiOutlineDislike/>, <BsEmojiSmile/>, <BsEmojiFrown/>, <BsEmojiNeutral/>, <BsBullseye/>, <MdFullscreen/>]
     const [deleteModalType, setDeleteModalType] = useState<{ type: string, name: string, }>({
         type: '',
         name: '',
@@ -191,16 +193,21 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                             <Dropdown trigger={['click']} overlay={(<Menu className='sublist-info-dropdown'>
                                 <ul className='d-flex items-wrapper'>
                                     {sublistIconsArr.map((icon, i) => (
-                                <Menu.Item onClick={() => setSublistIcon(i)} key={i} className={`${subListIcon === i && 'active-icon'}`}>
-                                        <i>{icon}</i>
-                                </Menu.Item>
+                                        <Menu.Item onClick={() => setSublistIcon(i)} key={i}
+                                                   className={`${subListIcon === i && 'active-icon'}`}>
+                                            <i>{icon}</i>
+                                        </Menu.Item>
                                     ))}
                                 </ul>
-                                <Menu.Divider />
+                                <Menu.Divider/>
                                 <ul className='d-flex items-wrapper'>
                                     {colorpalettes.map((color) => (
-                                        <Menu.Item onClick={() => setSublistColor(color)} className='color-li' key={color}>
-                                            <div style={{background: color, border: `${color === 'white' && '1px solid silver'}`}} className='color'></div>
+                                        <Menu.Item onClick={() => setSublistColor(color)} className='color-li'
+                                                   key={color}>
+                                            <div style={{
+                                                background: color,
+                                                border: `${color === 'white' && '1px solid silver'}`
+                                            }} className='color'></div>
                                         </Menu.Item>
                                     ))}
                                 </ul>
@@ -354,69 +361,205 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
         </div>
         <div className="down d-flex align-items-center gap-1">
 
-            {tabs.map((tab) => (
-                <NavLink key={tab.id} activeClassName='active-tab'
-                         className='text-decoration-none tab' to={`${tab.id !== 'overview' ? url + '/' + tab.id + '?view=tree' : url + '/' + tab.id}`}>
-                    <p className='m-0'>{tab.text}</p>
-                </NavLink>
-            ))}
-            {type === 'PRJ' &&
-            <div className='sublist-wrapper align-items-center d-flex px-2 gap-1'>
-                {sublists.map((list) => (
-                    <NavLink key={list.id} activeClassName='active-sublist'
-                             className='text-decoration-none sublist position-relative'
-                             to={`${url}/tasks/${list.id}?view=tree`}>
-                        <div style={{backgroundColor: `${list.color}22`}} className="wrap d-flex align-items-center gap-1 position-relative">
-                            <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}} className="bottom-bar position-absolute"></div>
-                        <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
-                            {sublistIconsArr[list.iconIndex]}
-                        </i>
-                        <p className='m-0'>{list.text}</p>
-                        <Dropdown trigger={['click']} overlay={(
-                            <Menu>
-                                <Menu.Item key={1} icon={<BsPencil/>}>
-                                    Edit
-                                </Menu.Item>
-                                <Menu.Item key={2} icon={<AiOutlinePushpin/>}>
-                                    Unpin
-                                </Menu.Item>
-                                <Menu.Item key={3} disabled icon={<AiOutlinePushpin/>}>
-                                    Unpin tabs to the right
-                                </Menu.Item>
-                                <Menu.Divider/>
-                                <Menu.Item key={4} icon={<BsArchive/>}>
-                                    Archive
-                                </Menu.Item>
-                                <Menu.Item key={5} onClick={() => {
-                                    setRenderModal(true);
-                                    setModalType('delete');
-                                    setDeleteModalType({
-                                        type: 'sublist',
-                                        name: list.text,
-                                    })
-                                    setSublistId(list.id);
-                                }} icon={<BsTrash/>}>
-                                    Delete
-                                </Menu.Item>
-                            </Menu>
-                        )}>
-                            <i className="drop-down-icon">
-                                <IoMdArrowDropdown/>
-                            </i>
-                        </Dropdown>
-                        </div>
-                    </NavLink>
+
+            <Tabs defaultActiveKey={history.location.pathname + history.location.search} onChange={key => {history.push(`${key}`);}}>
+
+                {tabs.map((tab) => (
+                    <TabPane tab={(
+                        <p className='m-0'>{tab.text}</p>
+                    )} key={`${tab.id !== 'overview' ? url + '/' + tab.id + '?view=tree' : url + '/' + tab.id}`}
+                             className='text-decoration-none tab'/>
                 ))}
-                <div onClick={() => {
-                    setRenderModal(true);
-                    setModalType('sublist');
+
+                {type === 'PRJ' &&
+                // <div className='sublist-wrapper align-items-center d-flex px-2 gap-1'>
+                <>
+                    {sublists.map((list) => (
+
+                        <TabPane tab={(
+                            <div style={{backgroundColor: `${list.color}22`}}
+                                 className="wrap d-flex align-items-center gap-1 position-relative">
+                                <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}}
+                                     className="bottom-bar position-absolute"></div>
+                                <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
+                                    {sublistIconsArr[list.iconIndex]}
+                                </i>
+                                <p className='m-0'>{list.text}</p>
+                                <Dropdown trigger={['click']} overlay={(
+                                    <Menu>
+                                        <Menu.Item key={1} icon={<BsPencil/>}>
+                                            Edit
+                                        </Menu.Item>
+                                        <Menu.Item key={2} icon={<AiOutlinePushpin/>}>
+                                            Unpin
+                                        </Menu.Item>
+                                        <Menu.Item key={3} disabled icon={<AiOutlinePushpin/>}>
+                                            Unpin tabs to the right
+                                        </Menu.Item>
+                                        <Menu.Divider/>
+                                        <Menu.Item key={4} icon={<BsArchive/>}>
+                                            Archive
+                                        </Menu.Item>
+                                        <Menu.Item key={5} onClick={() => {
+                                            setRenderModal(true);
+                                            setModalType('delete');
+                                            setDeleteModalType({
+                                                type: 'sublist',
+                                                name: list.text,
+                                            })
+                                            setSublistId(list.id);
+                                        }} icon={<BsTrash/>}>
+                                            Delete
+                                        </Menu.Item>
+                                    </Menu>
+                                )}>
+                                    <i className="drop-down-icon">
+                                        <IoMdArrowDropdown/>
+                                    </i>
+                                </Dropdown>
+                            </div>
+                        )} key={`${url}/tasks/${list.id}?view=tree`}
+                                 className='text-decoration-none sublist position-relative'
+                        />
+
+
+
+
+
+
+
+
+                        // <NavLink key={list.id} activeClassName='active-sublist'
+                        //          className='text-decoration-none sublist position-relative'
+                        //          to={`${url}/tasks/${list.id}?view=tree`}>
+                        //     <div style={{backgroundColor: `${list.color}22`}} className="wrap d-flex align-items-center gap-1 position-relative">
+                        //         <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}} className="bottom-bar position-absolute"></div>
+                        //         <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
+                        //             {sublistIconsArr[list.iconIndex]}
+                        //         </i>
+                        //         <p className='m-0'>{list.text}</p>
+                        //         <Dropdown trigger={['click']} overlay={(
+                        //             <Menu>
+                        //                 <Menu.Item key={1} icon={<BsPencil/>}>
+                        //                     Edit
+                        //                 </Menu.Item>
+                        //                 <Menu.Item key={2} icon={<AiOutlinePushpin/>}>
+                        //                     Unpin
+                        //                 </Menu.Item>
+                        //                 <Menu.Item key={3} disabled icon={<AiOutlinePushpin/>}>
+                        //                     Unpin tabs to the right
+                        //                 </Menu.Item>
+                        //                 <Menu.Divider/>
+                        //                 <Menu.Item key={4} icon={<BsArchive/>}>
+                        //                     Archive
+                        //                 </Menu.Item>
+                        //                 <Menu.Item key={5} onClick={() => {
+                        //                     setRenderModal(true);
+                        //                     setModalType('delete');
+                        //                     setDeleteModalType({
+                        //                         type: 'sublist',
+                        //                         name: list.text,
+                        //                     })
+                        //                     setSublistId(list.id);
+                        //                 }} icon={<BsTrash/>}>
+                        //                     Delete
+                        //                 </Menu.Item>
+                        //             </Menu>
+                        //         )}>
+                        //             <i className="drop-down-icon">
+                        //                 <IoMdArrowDropdown/>
+                        //             </i>
+                        //         </Dropdown>
+                        //     </div>
+                        // </NavLink>
+                    ))}
+                </>
+                    // </div>
                 }
-                }
-                     style={{borderLeft: `${sublists.length > 1 && '1px solid silver'}`}}
-                     className={`add-sublist tab pointer border-left d-flex gap-1 align-items-center`}>
-                    <BsPlusCircleFill className='text-silver'/>
-                    <span className={`${sublists.length < 1 && 'show'}`}>Add sublist</span>
-                </div>
+
+                {/*                <TabPane tab="Tab 1" key="1">*/}
+                {/*                </TabPane>*/}
+                {/*                <TabPane tab="Tab 2" key="2">*/}
+                {/*                </TabPane>*/}
+                {/*                <TabPane tab="Tab 3" key="3">*/}
+                {/*3                </TabPane>*/}
+            </Tabs>
+
+
+            {/*{tabs.map((tab) => (*/}
+            {/*    <NavLink key={tab.id} activeClassName='active-tab'*/}
+            {/*             className='text-decoration-none tab' to={`${tab.id !== 'overview' ? url + '/' + tab.id + '?view=tree' : url + '/' + tab.id}`}>*/}
+            {/*        <p className='m-0'>{tab.text}</p>*/}
+            {/*    </NavLink>*/}
+            {/*))}*/}
+            {/*{type === 'PRJ' &&*/}
+            {/*<div className='sublist-wrapper align-items-center d-flex px-2 gap-1'>*/}
+            {/*    {sublists.map((list) => (*/}
+            {/*        <NavLink key={list.id} activeClassName='active-sublist'*/}
+            {/*                 className='text-decoration-none sublist position-relative'*/}
+            {/*                 to={`${url}/tasks/${list.id}?view=tree`}>*/}
+            {/*            <div style={{backgroundColor: `${list.color}22`}} className="wrap d-flex align-items-center gap-1 position-relative">*/}
+            {/*                <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}} className="bottom-bar position-absolute"></div>*/}
+            {/*            <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>*/}
+            {/*                {sublistIconsArr[list.iconIndex]}*/}
+            {/*            </i>*/}
+            {/*            <p className='m-0'>{list.text}</p>*/}
+            {/*            <Dropdown trigger={['click']} overlay={(*/}
+            {/*                <Menu>*/}
+            {/*                    <Menu.Item key={1} icon={<BsPencil/>}>*/}
+            {/*                        Edit*/}
+            {/*                    </Menu.Item>*/}
+            {/*                    <Menu.Item key={2} icon={<AiOutlinePushpin/>}>*/}
+            {/*                        Unpin*/}
+            {/*                    </Menu.Item>*/}
+            {/*                    <Menu.Item key={3} disabled icon={<AiOutlinePushpin/>}>*/}
+            {/*                        Unpin tabs to the right*/}
+            {/*                    </Menu.Item>*/}
+            {/*                    <Menu.Divider/>*/}
+            {/*                    <Menu.Item key={4} icon={<BsArchive/>}>*/}
+            {/*                        Archive*/}
+            {/*                    </Menu.Item>*/}
+            {/*                    <Menu.Item key={5} onClick={() => {*/}
+            {/*                        setRenderModal(true);*/}
+            {/*                        setModalType('delete');*/}
+            {/*                        setDeleteModalType({*/}
+            {/*                            type: 'sublist',*/}
+            {/*                            name: list.text,*/}
+            {/*                        })*/}
+            {/*                        setSublistId(list.id);*/}
+            {/*                    }} icon={<BsTrash/>}>*/}
+            {/*                        Delete*/}
+            {/*                    </Menu.Item>*/}
+            {/*                </Menu>*/}
+            {/*            )}>*/}
+            {/*                <i className="drop-down-icon">*/}
+            {/*                    <IoMdArrowDropdown/>*/}
+            {/*                </i>*/}
+            {/*            </Dropdown>*/}
+            {/*            </div>*/}
+            {/*        </NavLink>*/}
+            {/*    ))}*/}
+            {/*    <div onClick={() => {*/}
+            {/*        setRenderModal(true);*/}
+            {/*        setModalType('sublist');*/}
+            {/*    }*/}
+            {/*    }*/}
+            {/*         style={{borderLeft: `${sublists.length > 1 && '1px solid silver'}`}}*/}
+            {/*         className={`add-sublist tab pointer border-left d-flex gap-1 align-items-center`}>*/}
+            {/*        <BsPlusCircleFill className='text-silver'/>*/}
+            {/*        <span className={`${sublists.length < 1 && 'show'}`}>Add sublist</span>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
+            {type === 'PRJ' &&
+            <div onClick={() => {
+                setRenderModal(true);
+                setModalType('sublist');
+            }
+            }
+                 style={{borderLeft: `${sublists.length > 1 && '1px solid silver'}`}}
+                 className={`add-sublist tab pointer border-left d-flex gap-1 align-items-center`}>
+                <BsPlusCircleFill className='text-silver'/>
+                <span className={`${sublists.length < 1 && 'show'}`}>Add sublist</span>
             </div>
             }
         </div>
