@@ -1,4 +1,3 @@
-import {ITabs} from "./TabInterface";
 import {ITask} from "./TaskInterface";
 
 export interface IHeader {

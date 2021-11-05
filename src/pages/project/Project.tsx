@@ -15,18 +15,18 @@ const Project: FC = () => {
     const {setCurrentOrg} = useContext(CurrentOrg);
     const org: any = orgs.find(({org_id}) => org_id === orgId);
     const projects: IProject[] = org && org.projects;
-    const project: any = projects.find(({project_id}) => project_id === projectId);
+    const project: any = projects && projects.find(({project_id}) => project_id === projectId);
     const tabs: ITabs[] = project && project.tabs;
     const sublists: ITabs[] = project && project.sublists;
     //fetch org_id for create project from sidebar
     useEffect(() => {
         document.title = `${project && project.project_name} | Quire`;
-        setCurrentOrg(org.org_id);
+        setCurrentOrg(org && org.org_id);
     //    eslint-disable-next-line
     }, [project])
 
     if(typeof project !== 'object') {
-        return <Redirect to='/error' />
+        return <Redirect to='/w/error' />
     }
     return <>
         <Route path='/w/p/:orgId/:projectId'>

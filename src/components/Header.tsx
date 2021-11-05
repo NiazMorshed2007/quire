@@ -379,8 +379,6 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                         <TabPane tab={(
                             <div style={{backgroundColor: `${list.color}22`}}
                                  className="wrap d-flex align-items-center gap-1 position-relative">
-                                <div style={{background: `${list.color === 'white' ? '#79ab16' : list.color}`}}
-                                     className="bottom-bar position-absolute"></div>
                                 <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
                                     {sublistIconsArr[list.iconIndex]}
                                 </i>

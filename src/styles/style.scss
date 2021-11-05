@@ -1,10 +1,10 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import '~antd/dist/antd.css';
-@import 'ant';
 @import "fonts";
 @import 'color';
 @import 'variables';
 @import './mixins/mixin';
+@import 'ant';
 @import 'overwrite';
 @import './components/header';
 @import './components/modal';
@@ -16,6 +16,7 @@
 @import './pages/organization';
 @import './pages/task.page';
 @import './pages/create';
+@import './pages/global.error';
 
 body{
   padding: 0;

@@ -22,7 +22,7 @@ const Organization: FC = () => {
         //    eslint-disable-next-line
     }, [org])
     if(typeof org !== 'object') {
-       return <Redirect to={'/error'} />
+       return <Redirect to={'/w/error'} />
     }
     return <div className='org'>
         <Header org={org} type='ORG' name={org.org_name} tabs={[{text: 'Overview', id: 'overview'}]}/>

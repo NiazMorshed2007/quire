@@ -60,97 +60,10 @@
 
   .down {
     .tab {
-      transform: translateY(4px);
-      border: none;
-      border-top-right-radius: 4px;
-      border-top-left-radius: 4px;
-      padding: 7px 16px;
-      position: relative;
+      padding: 7px;
       color: $silver;
-
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80%;
-        height: 2px;
-        border-radius: 2px;
-        background: $brandClr;
-        display: none;
-      }
-
       p {
         font-size: 14px;
-      }
-    }
-
-    .active-tab {
-      border: $border-silver;
-      border-bottom: none;
-      background: white;
-      color: black;
-
-      &:hover {
-        svg {
-          opacity: 1;
-        }
-      }
-
-      &::after {
-        display: block;
-      }
-    }
-
-    .sublist-wrapper {
-      border-left: $border-silver;
-      height: 70%;
-
-      .sublist {
-        @extend .tab;
-        padding: 5px 5px;
-        transform: translateY(.6px);
-        .wrap {
-          width: max-content;
-          padding: 2px 8px;
-          border-radius: 3px;
-          position: relative;
-          .bottom-bar {
-            width: 80%;
-            height: 2px;
-            border-radius: 2px;
-            bottom: -3px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: none;
-          }
-
-          .drop-down-icon {
-            svg {
-              display: none;
-              opacity: 0;
-            }
-          }
-        }
-      }
-
-      .active-sublist {
-        border: $border-silver;
-        border-bottom: none;
-        color: black;
-        background: white;
-        .wrap {
-          .bottom-bar {
-            display: block;
-          }
-          .drop-down-icon {
-            svg {
-              display: block;
-              opacity: 1;
-            }
-          }
-        }
       }
     }
 
