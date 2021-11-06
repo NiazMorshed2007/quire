@@ -16,8 +16,31 @@ import {CurrentOrg} from "./context/currentOrg";
 import {ITask} from "./interfaces/TaskInterface";
 import {MyTasks} from "./context/myTask";
 import GlobalError from "./pages/error/GlobalError";
+import {firebase} from "./firebase/firebase";
 
 const App: FC = () => {
+
+
+    const [test, setTest] = useState<any>([]);
+
+    const users = firebase.firestore().collection('users');
+
+    const getUsers = (): void => {
+        users.onSnapshot((query) => {
+            const data: firebase.firestore.DocumentData[] = [];
+            query.forEach((doc) => {
+                data.push(doc.data())
+            });
+            setTest([data])
+        })
+    }
+
+    useEffect(() => {
+        getUsers();
+        console.log(test);
+    }, [])
+
+
     const loggedData = (): boolean => {
         return !!localStorage.getItem('logged');
     }
