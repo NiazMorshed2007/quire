@@ -11,6 +11,8 @@ import {Acroname} from "../../functions/Acroname";
 import {setRandomAvatarBack} from "../../functions/SetRandomAvatarBack";
 
 const Login: FC = () => {
+    const users = firebase.firestore().collection('users');
+
     const {logged, setLogged}: any = useContext(IsLogged);
     const {setUser}: any = useContext(User);
     const {orgs, setOrgs} = useContext(Orgs);
@@ -19,7 +21,27 @@ const Login: FC = () => {
         const google_provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(google_provider)
             .then((re) => {
+                 users.doc(re.user?.uid).set({
+                     name: re.user?.displayName,
+                     uid: re.user?.uid,
+                     orgs: [{
+                         org_name: re.user?.displayName + "'s Organization",
+                         org_id: setId(re.user?.displayName + "'s_organization"),
+                         org_avatar_txt: Acroname(re.user?.displayName),
+                         org_avatar_back: setRandomAvatarBack(),
+                         projects: [{
+                             project_name: re.user?.displayName + "'s Project",
+                             project_id: setId(re.user?.displayName + "'s_project"),
+                             project_avatar_txt: Acroname(re.user?.displayName),
+                             project_avatar_back: setRandomAvatarBack(),
+                             tabs: [{text: 'Lists', id: 'lists', tasks: []}],
+                             sublists: []
+                         }]}],
+                 }).then(r => {
+                     console.log(r)
+                 })
                 localStorage.setItem('logged', 'true');
+                 localStorage.setItem('uid', JSON.stringify(re.user?.uid));
                 localStorage.setItem('user', JSON.stringify(re));
                 setUser(JSON.parse(localStorage.getItem('user') as string));
                 setLogged(true);

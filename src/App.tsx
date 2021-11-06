@@ -21,7 +21,8 @@ import {firebase} from "./firebase/firebase";
 const App: FC = () => {
 
 
-    const [test, setTest] = useState<any>([]);
+
+    const [test, setTest] = useState<firebase.firestore.DocumentData[]>([]);
 
     const users = firebase.firestore().collection('users');
 
@@ -31,13 +32,13 @@ const App: FC = () => {
             query.forEach((doc) => {
                 data.push(doc.data())
             });
-            setTest([data])
+            setTest(data)
+            console.log(test);
         })
     }
 
     useEffect(() => {
         getUsers();
-        console.log(test);
     }, [])
 
 
