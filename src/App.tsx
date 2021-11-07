@@ -18,28 +18,9 @@ import {MyTasks} from "./context/myTask";
 import GlobalError from "./pages/error/GlobalError";
 import {firebase} from "./firebase/firebase";
 
+const db = firebase.firestore();
+
 const App: FC = () => {
-
-
-
-    const [test, setTest] = useState<firebase.firestore.DocumentData[]>([]);
-
-    const users = firebase.firestore().collection('users');
-
-    const getUsers = (): void => {
-        users.onSnapshot((query) => {
-            const data: firebase.firestore.DocumentData[] = [];
-            query.forEach((doc) => {
-                data.push(doc.data())
-            });
-            setTest(data)
-            console.log(test);
-        })
-    }
-
-    useEffect(() => {
-        getUsers();
-    }, [])
 
 
     const loggedData = (): boolean => {
@@ -56,6 +37,11 @@ const App: FC = () => {
         }
     }
     const getOrgs = (): [] => {
+        // if(test) {
+        //     return test.orgs;
+        // } else {
+        //     return []
+        // }
         if (localStorage.getItem('orgs')) {
             return JSON.parse(localStorage.getItem('orgs') as string);
         } else {
@@ -72,7 +58,8 @@ const App: FC = () => {
     const [logged, setLogged] = useState<boolean>(loggedData());
     const [isDarkMode, setIsDarkMode] = useState(appearanceData());
     const [user, setUser] = useState<any>(getUser());
-    const [orgs, setOrgs] = useState<IOrg[]>(getOrgs);
+    const [orgs, setOrgs] = useState<IOrg[]>(getOrgs());
+    console.log(orgs);
     const [myTasks, setMyTasks] = useState<ITask[]>(getMyTasks);
     const [currentOrg, setCurrentOrg] = useState<string>(orgs.length > 0 ? orgs[0].org_id : '');
     useEffect(() => {
@@ -81,6 +68,7 @@ const App: FC = () => {
             localStorage.setItem('my_tasks', JSON.stringify(myTasks));
         }
     }, [orgs, logged, myTasks]);
+
     return <>
         <Router>
             <Route path='/' exact>
@@ -101,7 +89,7 @@ const App: FC = () => {
                                             <Route path='/login'>
                                                 <Login/>
                                             </Route>
-                                            <Route path={["/u", "/w"]}>
+                                            <Route path={["/u", "/w", '/c']}>
                                                 {logged &&
                                                 <>
                                                     <div
