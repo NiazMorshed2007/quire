@@ -36,12 +36,14 @@ const Tree: FC<Props> = ({tasks, type}) => {
 
     const handleCompleted = (index: string): void => {
         if(type === 'PRJ') {
+            // eslint-disable-next-line array-callback-return
             tasks.filter((task) => {
                 if (task.task_id === index) {
                     task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
                 }
             });
         } else if(type === 'USER') {
+            // eslint-disable-next-line array-callback-return
             myTasks.filter((task) => {
                 if (task.task_id === index) {
                     task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
