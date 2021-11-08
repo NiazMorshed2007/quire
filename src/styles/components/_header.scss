@@ -1,9 +1,7 @@
 .main-header {
   width: 100%;
   height: 90px;
-  border-bottom: $border-silver;
-  padding: 15px 18px 0 18px;
-
+  padding: 15px 18px 0 0;
   &:hover {
     .down {
       .add-sublist {
@@ -15,6 +13,7 @@
   }
 
   .up {
+    padding-left: 24px;
     .left {
       svg {
         cursor: pointer;
@@ -65,6 +64,41 @@
       p {
         font-size: 14px;
       }
+      }
+    .sublist {
+      padding: 4px 6px;
+      border-radius: 4px;
+      height: 28px;
+      transform: translateY(-1px);
+      .dropdown-icon {
+        display: none;
+        color: $silver;
+        &:hover {
+          color: black;
+        }
+      }
+    }
+
+    .ant-tabs-tab-active {
+      color: black;
+      .tab {
+        color: black;
+      }
+      .dropdown-icon {
+        display: block;
+      }
+    }
+    .ant-tabs-nav-wrap {
+      padding-left: 10px;
+    }
+      .ant-tabs-nav {
+        margin-top: 7px;
+    }
+    .disabled-tab {
+      cursor: auto;
+      .ant-divider-vertical {
+        height: 1.6em;
+      }
     }
 
     .add-sublist {
@@ -72,7 +106,6 @@
       border: none;
       height: 80%;
       border-radius: 0;
-      transform: translateY(-1%);
       svg {
         color: #6b6b6b;
       }

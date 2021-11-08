@@ -1,5 +1,5 @@
 import React, {FC, useContext, useEffect} from 'react';
-import {Redirect, Route, useParams} from "react-router-dom";
+import {Redirect, Route, Switch, useParams} from "react-router-dom";
 import Overview from "../overview/Overview";
 import BaseInfo from "../../components/BaseInfo";
 import {Orgs} from "../../context/orgs";
@@ -31,14 +31,19 @@ const Project: FC = () => {
     return <>
         <Route path='/w/p/:orgId/:projectId'>
             <Header project={project} org={org} type='PRJ' name={project.project_name} tabs={[...tabs, {text: 'Overview', id: 'overview'}]} />
+            <Switch>
             <Route exact path='/w/p/:orgId/:projectId/overview'>
                 <Overview>
                     <BaseInfo type={'PRJ'} title={project.project_name} path={org.org_id} parent_name={org.org_name} avatarTxt={project.project_avatar_txt} background={project.project_avatar_back}/>
                 </Overview>
             </Route>
-            <Route exact path={["/w/p/:orgId/:projectId/lists", "/w/p/:orgId/:projectId/tasks/:subListId"]}>
+            <Route exact path={["/w/p/:orgId/:projectId/lists", "/w/p/:orgId/:projectId/sublist/:subListId"]}>
                 <TasksPage type='PRJ' tabs={tabs} sublists={sublists} />
             </Route>
+                <Route path='*'>
+                    <Redirect to='/error' />
+                </Route>
+            </Switch>
         </Route>
     </>
 }
