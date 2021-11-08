@@ -52,7 +52,6 @@
             padding: 6px;
             border-bottom: $border-silver;
             border-color: #F0F3F3FF;
-
             svg {
               color: $silver;
             }
@@ -61,7 +60,9 @@
               background: $sideBarBack;
 
               .before-list, .after-list, {
+                &>*{
                 visibility: visible;
+                }
               }
 
               .main-single-task {
@@ -76,6 +77,10 @@
             }
 
             .main-single-task {
+              del {
+                color: $silver;
+              }
+              font-size: 15px;
               .others {
                 visibility: hidden;
               }
@@ -83,7 +88,9 @@
 
             #common_in_before_n_after {
               top: 50%;
+              &>*{
               visibility: hidden;
+              }
             }
 
             .before-list {
@@ -98,6 +105,13 @@
               right: 0;
               padding-left: 6px;
               transform: translate(100%, -50%);
+            }
+          }
+          .completed-task {
+            .before-list {
+              .completed-icon {
+                visibility: visible;
+              }
             }
           }
         }

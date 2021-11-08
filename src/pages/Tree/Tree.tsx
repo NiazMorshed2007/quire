@@ -21,6 +21,7 @@ const Tree: FC<Props> = ({tasks, type}) => {
             const new_task: ITask = {
                 task_name: taskText,
                 task_id: setId(taskText),
+                status: 'todo'
             }
             if (type === 'PRJ') {
                 tasks.push(new_task);
@@ -32,6 +33,25 @@ const Tree: FC<Props> = ({tasks, type}) => {
         }
         setTaskText('');
     }
+
+    const handleCompleted = (index: string): void => {
+        if(type === 'PRJ') {
+            tasks.filter((task) => {
+                if (task.task_id === index) {
+                    task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
+                }
+            });
+        } else if(type === 'USER') {
+            myTasks.filter((task) => {
+                if (task.task_id === index) {
+                    task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
+
+                }
+            });
+        }
+        setOrgs([...orgs]);
+    }
+
     const handleDelete = (id: string): void => {
         const delete_index: number = tasks ? tasks.findIndex(({task_id}) => task_id === id) : myTasks && myTasks.findIndex(({task_id}) => task_id === id);
         if (type === 'PRJ') {
@@ -52,13 +72,17 @@ const Tree: FC<Props> = ({tasks, type}) => {
             {type === 'PRJ' ?
                 <>
                     {tasks.map((task, i) => (
-                        <TreeSingleTask dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                        <TreeSingleTask completedFunc={() => handleCompleted(task.task_id)}
+                                        dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                                        status={task.status}
                                         key={task.task_id + '-' + i}/>
                     ))}
                 </> :
                 <>
                     {myTasks.map((task, i) => (
-                        <TreeSingleTask dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                        <TreeSingleTask completedFunc={() => handleCompleted(task.task_id)}
+                                        dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                                        status={task.status}
                                         key={task.task_id + '-' + i}/>
                     ))}
                 </>

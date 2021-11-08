@@ -376,13 +376,10 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                              key={`${url}/${tab.id}${tab.id !== 'overview' ? '?view=tree' : ''}`}
                              className={`text-decoration-none`}/>
                 ))}
-                <TabPane disabled className='disabled-tab' tab={<Divider type='vertical'></Divider>}>
-
-                </TabPane>
                 {type === 'PRJ' &&
                 <>
+                <TabPane disabled className='disabled-tab' tab={<Divider type='vertical' />} />
                     {sublists.map((list) => (
-
                         <TabPane tab={(
                             <div style={{backgroundColor: `${list.color}33`}}
                                  className={`wrap sublist tab d-flex align-items-center gap-1 position-relative`}>
