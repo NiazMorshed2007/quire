@@ -120,6 +120,10 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             id: setId(sublistText),
             iconIndex: subListIcon,
             tasks: [],
+            statuses: [{name: 'To-Do', id: 'todo'}, {
+                name: 'In-Progress',
+                id: 'in-progress'
+            }, {name: 'Completed', id: 'completed'}],
             color: sublistColor,
         }
         sublists.push(newSubList);
@@ -205,9 +209,9 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                                 </ul>
                                 <Menu.Divider/>
                                 <ul className='d-flex items-wrapper'>
-                                    {colorpalettes.map((color) => (
+                                    {colorpalettes.map((color,i) => (
                                         <Menu.Item onClick={() => setSublistColor(color)} className='color-li'
-                                                   key={color}>
+                                                   key={color + '_' + i}>
                                             <div style={{
                                                 background: color,
                                                 border: `${color === 'white' && '1px solid silver'}`
@@ -229,8 +233,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
             <div className="left d-flex gap-1 align-items-center ">
                 <h5 className='name m-0'>{name}</h5>
                 <Dropdown className='pointer d-flex align-items-center' overlay={(
-
-                    <Menu className='ant-menu'>
+                    <Menu>
                         {type === 'ORG' &&
                         <>
                             <Menu.Item key={1} icon={<BsPencil/>}>
@@ -381,7 +384,7 @@ const Header: FC<IHeader> = ({name, tabs, type, org, project}) => {
                 <TabPane disabled className='disabled-tab' tab={<Divider type='vertical' />} />
                     {sublists.map((list) => (
                         <TabPane tab={(
-                            <div style={{backgroundColor: `${list.color}33`}}
+                            <div style={{backgroundColor: `${list.color}23`}}
                                  className={`wrap sublist tab d-flex align-items-center gap-1 position-relative`}>
                                 <i style={{color: `${list.color !== 'white' && list.color}`}} className='sublist-icon'>
                                     {sublistIconsArr[list.iconIndex]}

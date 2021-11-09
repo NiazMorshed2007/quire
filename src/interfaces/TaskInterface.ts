@@ -1,5 +1,6 @@
 export interface ITask {
     task_name: string,
     task_id: string,
-    status: string
+    status: string,
+    priority: string,
 }

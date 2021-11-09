@@ -38,7 +38,7 @@ const Create: FC = () => {
                 project_id: setId(name),
                 project_avatar_txt: Acroname(name),
                 project_avatar_back: setRandomAvatarBack(),
-                tabs: [{text: 'Lists', id: 'lists', tasks: []}],
+                tabs: [{text: 'Lists', id: 'lists', tasks: [], statuses: [{name: 'To-Do', id: 'todo'}, {name: 'In-Progress', id: 'in-progress'}, {name: 'Completed', id:'completed'}]}],
                 sublists: []
             }
             pushHere.projects.push(project);

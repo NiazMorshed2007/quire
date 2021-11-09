@@ -33,15 +33,15 @@ const TasksPage: FC<Props> = ({tabs, sublists, type}) => {
     const currentView: any = params.get('view');
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  const redirectFunc = () => {
-      if(currentView === 'tree') {
-            return <Redirect to={`/u`} />
-      }
-  }
-
-  useEffect(() => {
-      redirectFunc();
-  }, [redirectFunc])
+  // const redirectFunc = () => {
+  //     if(currentView === 'tree') {
+  //           return <Redirect to={`/u`} />
+  //     }
+  // }
+  //
+  // useEffect(() => {
+  //     redirectFunc();
+  // }, [redirectFunc])
 
     return <div className='task-page overflow-auto custom-scrollbar position-relative'>
         <header className='d-flex align-items-center justify-content-between position-fixed'>
@@ -103,7 +103,6 @@ const TasksPage: FC<Props> = ({tabs, sublists, type}) => {
                         </svg>
                     </i>
                 </NavLink>
-                <i></i>
             </div>
         </header>
         <div className="main-wrapper pt-5">

@@ -21,27 +21,28 @@ const Login: FC = () => {
         const google_provider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(google_provider)
             .then((re) => {
-                 users.doc(re.user?.uid).set({
-                     name: re.user?.displayName,
-                     uid: re.user?.uid,
-                     orgs: [{
-                         org_name: re.user?.displayName + "'s Organization",
-                         org_id: setId(re.user?.displayName + "'s_organization"),
-                         org_avatar_txt: Acroname(re.user?.displayName),
-                         org_avatar_back: setRandomAvatarBack(),
-                         projects: [{
-                             project_name: re.user?.displayName + "'s Project",
-                             project_id: setId(re.user?.displayName + "'s_project"),
-                             project_avatar_txt: Acroname(re.user?.displayName),
-                             project_avatar_back: setRandomAvatarBack(),
-                             tabs: [{text: 'Lists', id: 'lists', tasks: []}],
-                             sublists: []
-                         }]}],
-                 }).then(r => {
-                     console.log(r)
-                 })
+                users.doc(re.user?.uid).set({
+                    name: re.user?.displayName,
+                    uid: re.user?.uid,
+                    orgs: [{
+                        org_name: re.user?.displayName + "'s Organization",
+                        org_id: setId(re.user?.displayName + "'s_organization"),
+                        org_avatar_txt: Acroname(re.user?.displayName),
+                        org_avatar_back: setRandomAvatarBack(),
+                        projects: [{
+                            project_name: re.user?.displayName + "'s Project",
+                            project_id: setId(re.user?.displayName + "'s_project"),
+                            project_avatar_txt: Acroname(re.user?.displayName),
+                            project_avatar_back: setRandomAvatarBack(),
+                            tabs: [{text: 'Lists', id: 'lists', tasks: []}],
+                            sublists: []
+                        }]
+                    }],
+                }).then(r => {
+                    console.log(r)
+                })
                 localStorage.setItem('logged', 'true');
-                 localStorage.setItem('uid', JSON.stringify(re.user?.uid));
+                localStorage.setItem('uid', JSON.stringify(re.user?.uid));
                 localStorage.setItem('user', JSON.stringify(re));
                 setUser(JSON.parse(localStorage.getItem('user') as string));
                 setLogged(true);
@@ -56,7 +57,15 @@ const Login: FC = () => {
                         project_id: setId(user.user.displayName + "'s_project"),
                         project_avatar_txt: Acroname(user.user.displayName),
                         project_avatar_back: setRandomAvatarBack(),
-                        tabs: [{text: 'Lists', id: 'lists', tasks: []}],
+                        tabs: [{
+                            text: 'Lists',
+                            id: 'lists',
+                            tasks: [],
+                            statuses: [{name: 'To-Do', id: 'todo'}, {
+                                name: 'In-Progress',
+                                id: 'in-progress'
+                            }, {name: 'Completed', id: 'completed'}]
+                        }],
                         sublists: []
                     }]
                 }, ...orgs]);

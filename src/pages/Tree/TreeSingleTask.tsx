@@ -1,11 +1,13 @@
-import React, {FC, useState} from 'react';
+import React, {Dispatch, FC, ReactElement, useState} from 'react';
 import {Dropdown, Menu} from "antd";
 import {
     AiOutlinePlus,
     AiOutlineUser,
+    BsArrowDown,
     BsArrowUp,
     BsCalendar4Week,
-    BsCircle, BsFillCheckCircleFill,
+    BsCircle,
+    BsFillCheckCircleFill,
     BsTag,
     RiPlayListAddLine
 } from "react-icons/all";
@@ -14,12 +16,30 @@ interface TaskProps {
     name: string,
     dltfunc: () => void
     completedFunc: () => void
+    handlePriority: () => void,
+    setPriority: Dispatch<string>
     status: string
 }
 
 const TreeSingleTask: FC<TaskProps> = (props) => {
     const {name, dltfunc, completedFunc, status} = props;
     const [completedIc, setCompletedIc] = useState<boolean>(false);
+    const prioriyItems: { name: string, icon: ReactElement, color?: string }[] = [{
+        name: 'Urgent',
+        icon: <BsArrowUp/>,
+        color: "red"
+    },{
+        name: 'High',
+        icon: <BsArrowUp/>,
+        color: "orange"
+    },{
+        name: 'None',
+        icon: <BsArrowUp/>,
+    },{
+        name: 'Low',
+        icon: <BsArrowDown/>,
+        color: "#1ac3e3"
+    }]
     return <>
         <Dropdown overlay={(<Menu>
             <Menu.Item>kadsgf</Menu.Item>
@@ -30,7 +50,7 @@ const TreeSingleTask: FC<TaskProps> = (props) => {
                     <div className="task-name">
                         {status === 'completed' ?
                             <del>{name}</del> :
-                        <p className='m-0'>{name}</p>
+                            <p className='m-0'>{name}</p>
                         }
                     </div>
                     <div className="others d-flex align-items-center gap-5 px-2">
@@ -47,9 +67,24 @@ const TreeSingleTask: FC<TaskProps> = (props) => {
                             <>{completedIc ? <BsFillCheckCircleFill style={{color: '#79ab16'}}/> : <BsCircle/>}</>
                         }
                     </i>
-                    <i className='priority'>
-                        <BsArrowUp/>
-                    </i>
+                    <Dropdown trigger={['click']} overlay={(<Menu className='priority-dropdown'>
+                        <Menu.Item key='urgent' icon={<BsArrowUp style={{color: 'red'}}/>}>
+                            Urgent
+                        </Menu.Item>
+                        <Menu.Item key='high' icon={<BsArrowUp style={{color: 'orange'}}/>}>
+                            High
+                        </Menu.Item>
+                        <Menu.Item key='none' icon={<BsArrowUp/>}>
+                            None
+                        </Menu.Item>
+                        <Menu.Item key='low' icon={<BsArrowDown style={{color: '#1ac3e3'}}/>}>
+                            Low
+                        </Menu.Item>
+                    </Menu>)}>
+                        <i className='priority'>
+                            <BsArrowUp/>
+                        </i>
+                    </Dropdown>
                 </div>
                 <div className="after-list d-flex gap-1 position-absolute">
                     <RiPlayListAddLine/>

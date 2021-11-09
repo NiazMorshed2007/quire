@@ -15,13 +15,15 @@ const Tree: FC<Props> = ({tasks, type}) => {
     const {orgs, setOrgs} = useContext(Orgs);
     const [taskText, setTaskText] = useState<string>('');
     const {myTasks, setMyTasks} = useContext(MyTasks);
+    const [priority, setPriority] = useState<string>('');
     const handleAdd = (e: FormEvent): void => {
         e.preventDefault();
         if (taskText !== '') {
             const new_task: ITask = {
                 task_name: taskText,
                 task_id: setId(taskText),
-                status: 'todo'
+                status: 'todo',
+                priority: 'none'
             }
             if (type === 'PRJ') {
                 tasks.push(new_task);
@@ -34,15 +36,34 @@ const Tree: FC<Props> = ({tasks, type}) => {
         setTaskText('');
     }
 
+    const handlePriority = (index: string): void => {
+        if (type === 'PRJ') {
+            // eslint-disable-next-line array-callback-return
+            tasks.filter((task) => {
+                if (task.task_id === index) {
+                    task.priority = priority;
+                }
+            });
+        } else if (type === 'USER') {
+            // eslint-disable-next-line array-callback-return
+            myTasks.filter((task) => {
+                if (task.task_id === index) {
+                    task.priority = priority
+                }
+            });
+        }
+        setOrgs([...orgs]);
+    }
+
     const handleCompleted = (index: string): void => {
-        if(type === 'PRJ') {
+        if (type === 'PRJ') {
             // eslint-disable-next-line array-callback-return
             tasks.filter((task) => {
                 if (task.task_id === index) {
                     task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
                 }
             });
-        } else if(type === 'USER') {
+        } else if (type === 'USER') {
             // eslint-disable-next-line array-callback-return
             myTasks.filter((task) => {
                 if (task.task_id === index) {
@@ -75,14 +96,18 @@ const Tree: FC<Props> = ({tasks, type}) => {
                 <>
                     {tasks.map((task, i) => (
                         <TreeSingleTask completedFunc={() => handleCompleted(task.task_id)}
+                                        handlePriority={() => handlePriority(task.task_id)}
                                         dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
                                         status={task.status}
+                                        setPriority={setPriority}
                                         key={task.task_id + '-' + i}/>
                     ))}
                 </> :
                 <>
                     {myTasks.map((task, i) => (
                         <TreeSingleTask completedFunc={() => handleCompleted(task.task_id)}
+                                        handlePriority={() => handlePriority(task.task_id)}
+                                        setPriority={setPriority}
                                         dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
                                         status={task.status}
                                         key={task.task_id + '-' + i}/>
