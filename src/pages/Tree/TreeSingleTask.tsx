@@ -1,4 +1,4 @@
-import React, {Dispatch, FC, ReactElement, useState} from 'react';
+import React, {Dispatch, FC, useState} from 'react';
 import {Dropdown, Menu} from "antd";
 import {
     AiOutlinePlus,
@@ -11,6 +11,7 @@ import {
     BsTag,
     RiPlayListAddLine
 } from "react-icons/all";
+import {IconType} from "react-icons";
 
 interface TaskProps {
     name: string,
@@ -18,26 +19,28 @@ interface TaskProps {
     completedFunc: () => void
     handlePriority: () => void,
     setPriority: Dispatch<string>
-    status: string
+    status: string,
+    priority: string,
 }
 
 const TreeSingleTask: FC<TaskProps> = (props) => {
-    const {name, dltfunc, completedFunc, status} = props;
+    const {name, dltfunc, completedFunc, handlePriority, status, priority, setPriority} = props;
     const [completedIc, setCompletedIc] = useState<boolean>(false);
-    const prioriyItems: { name: string, icon: ReactElement, color?: string }[] = [{
+    const prioriyItems: { name: string, icon: IconType, color: string }[] = [{
         name: 'Urgent',
-        icon: <BsArrowUp/>,
+        icon: BsArrowUp,
         color: "red"
     },{
         name: 'High',
-        icon: <BsArrowUp/>,
+        icon: BsArrowUp,
         color: "orange"
     },{
         name: 'None',
-        icon: <BsArrowUp/>,
+        icon: BsArrowUp,
+        color: 'silver'
     },{
         name: 'Low',
-        icon: <BsArrowDown/>,
+        icon: BsArrowDown,
         color: "#1ac3e3"
     }]
     return <>
@@ -68,21 +71,27 @@ const TreeSingleTask: FC<TaskProps> = (props) => {
                         }
                     </i>
                     <Dropdown trigger={['click']} overlay={(<Menu className='priority-dropdown'>
-                        <Menu.Item key='urgent' icon={<BsArrowUp style={{color: 'red'}}/>}>
-                            Urgent
-                        </Menu.Item>
-                        <Menu.Item key='high' icon={<BsArrowUp style={{color: 'orange'}}/>}>
-                            High
-                        </Menu.Item>
-                        <Menu.Item key='none' icon={<BsArrowUp/>}>
-                            None
-                        </Menu.Item>
-                        <Menu.Item key='low' icon={<BsArrowDown style={{color: '#1ac3e3'}}/>}>
-                            Low
-                        </Menu.Item>
+                        {prioriyItems.map((item) => (
+                            <Menu.Item onClick={() => {
+                                setPriority(item.name.toLowerCase());
+                                handlePriority();
+                            }} key={item.name.toLowerCase()} icon={(<item.icon style={{color: item.color}}/>)}>
+                                {item.name}
+                            </Menu.Item>
+                        ))}
                     </Menu>)}>
                         <i className='priority'>
-                            <BsArrowUp/>
+                            {/*{prioriyItems.find((item) => {*/}
+                            {/*    if(item.name.toLowerCase() === priority) {*/}
+                            {/*        return (*/}
+                            {/*            <item.icon key={item.name.toLowerCase()} style={{color: item.color}} />*/}
+                            {/*        )*/}
+                            {/*    }*/}
+                            {/*})}*/}
+                            {priority === 'urgent' && <BsArrowUp style={{color: prioriyItems[0].color}} />}
+                            {priority === 'high' && <BsArrowUp style={{color: prioriyItems[1].color}} />}
+                            {priority === 'none' && <BsArrowUp style={{color: prioriyItems[2].color}} />}
+                            {priority === 'low' && <BsArrowDown style={{color: prioriyItems[3].color}} />}
                         </i>
                     </Dropdown>
                 </div>

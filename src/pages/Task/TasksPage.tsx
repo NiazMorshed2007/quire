@@ -1,5 +1,5 @@
-import React, {FC, useEffect} from "react";
-import {NavLink, Redirect, useLocation, useParams, useRouteMatch} from "react-router-dom";
+import React, {FC} from "react";
+import {NavLink, useLocation, useParams, useRouteMatch} from "react-router-dom";
 import {ITabs} from "../../interfaces/TabInterface";
 import {
     AiOutlineUser,

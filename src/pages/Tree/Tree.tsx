@@ -15,7 +15,7 @@ const Tree: FC<Props> = ({tasks, type}) => {
     const {orgs, setOrgs} = useContext(Orgs);
     const [taskText, setTaskText] = useState<string>('');
     const {myTasks, setMyTasks} = useContext(MyTasks);
-    const [priority, setPriority] = useState<string>('');
+    const [priority, setPriority] = useState<string>('none');
     const handleAdd = (e: FormEvent): void => {
         e.preventDefault();
         if (taskText !== '') {
@@ -53,6 +53,8 @@ const Tree: FC<Props> = ({tasks, type}) => {
             });
         }
         setOrgs([...orgs]);
+        console.log(orgs)
+        console.log('xdgdfzg')
     }
 
     const handleCompleted = (index: string): void => {
@@ -95,22 +97,26 @@ const Tree: FC<Props> = ({tasks, type}) => {
             {type === 'PRJ' ?
                 <>
                     {tasks.map((task, i) => (
-                        <TreeSingleTask completedFunc={() => handleCompleted(task.task_id)}
-                                        handlePriority={() => handlePriority(task.task_id)}
-                                        dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
-                                        status={task.status}
-                                        setPriority={setPriority}
-                                        key={task.task_id + '-' + i}/>
+                        <TreeSingleTask
+                            completedFunc={() => handleCompleted(task.task_id)}
+                            handlePriority={() => handlePriority(task.task_id)}
+                            dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                            status={task.status}
+                            setPriority={setPriority}
+                            priority={task.priority}
+                            key={task.task_id + '-' + i}/>
                     ))}
                 </> :
                 <>
                     {myTasks.map((task, i) => (
-                        <TreeSingleTask completedFunc={() => handleCompleted(task.task_id)}
-                                        handlePriority={() => handlePriority(task.task_id)}
-                                        setPriority={setPriority}
-                                        dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
-                                        status={task.status}
-                                        key={task.task_id + '-' + i}/>
+                        <TreeSingleTask
+                            completedFunc={() => handleCompleted(task.task_id)}
+                            handlePriority={() => handlePriority(task.task_id)}
+                            setPriority={setPriority}
+                            dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                            status={task.status}
+                            priority={task.priority}
+                            key={task.task_id + '-' + i}/>
                     ))}
                 </>
             }
