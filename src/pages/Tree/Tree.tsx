@@ -5,6 +5,9 @@ import {ITask} from "../../interfaces/TaskInterface";
 import {setId} from "../../functions/SetId";
 import {Orgs} from "../../context/orgs";
 import {MyTasks} from "../../context/myTask";
+import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd";
+
+// import {DragDropContext} from "react-beautiful-dnd";
 
 interface Props {
     tasks: ITask[],
@@ -15,6 +18,7 @@ const Tree: FC<Props> = ({tasks, type}) => {
     const {orgs, setOrgs} = useContext(Orgs);
     const [taskText, setTaskText] = useState<string>('');
     const {myTasks, setMyTasks} = useContext(MyTasks);
+    const globalTask = type === 'PRJ' ? tasks : myTasks;
     const [priority, setPriority] = useState<string>('none');
     const handleAdd = (e: FormEvent): void => {
         e.preventDefault();
@@ -41,6 +45,7 @@ const Tree: FC<Props> = ({tasks, type}) => {
             // eslint-disable-next-line array-callback-return
             tasks.filter((task) => {
                 if (task.task_id === index) {
+                    console.log(priority);
                     task.priority = priority;
                 }
             });
@@ -53,8 +58,6 @@ const Tree: FC<Props> = ({tasks, type}) => {
             });
         }
         setOrgs([...orgs]);
-        console.log(orgs)
-        console.log('xdgdfzg')
     }
 
     const handleCompleted = (index: string): void => {
@@ -70,7 +73,6 @@ const Tree: FC<Props> = ({tasks, type}) => {
             myTasks.filter((task) => {
                 if (task.task_id === index) {
                     task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
-
                 }
             });
         }
@@ -93,34 +95,46 @@ const Tree: FC<Props> = ({tasks, type}) => {
     })
     const [showAddingOptionInput, setShowAddingOptionInput] = useState<boolean>(false);
     return <div className="tree">
-        <div className="tasks-wrapper pb-3 d-flex flex-column">
-            {type === 'PRJ' ?
-                <>
-                    {tasks.map((task, i) => (
-                        <TreeSingleTask
-                            completedFunc={() => handleCompleted(task.task_id)}
-                            handlePriority={() => handlePriority(task.task_id)}
-                            dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
-                            status={task.status}
-                            setPriority={setPriority}
-                            priority={task.priority}
-                            key={task.task_id + '-' + i}/>
-                    ))}
-                </> :
-                <>
-                    {myTasks.map((task, i) => (
-                        <TreeSingleTask
-                            completedFunc={() => handleCompleted(task.task_id)}
-                            handlePriority={() => handlePriority(task.task_id)}
-                            setPriority={setPriority}
-                            dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
-                            status={task.status}
-                            priority={task.priority}
-                            key={task.task_id + '-' + i}/>
-                    ))}
-                </>
+        <DragDropContext onDragEnd={(...param) => {
+            const srcI: number = param[0].source.index;
+            const desI: any = param[0].destination?.index;
+            if (type === 'PRJ') {
+                tasks.splice(desI, 0, tasks.splice(srcI, 1)[0]);
+                setOrgs([...orgs]);
+            } else if (type === 'USER') {
+                myTasks.splice(desI, 0, myTasks.splice(srcI, 1)[0]);
+                setOrgs([...orgs]);
             }
-        </div>
+        }
+        }>
+            <Droppable droppableId={'droppable-1'}>
+                {provided => (
+                    <div ref={provided.innerRef}
+                         className="tasks-wrapper pb-3 d-flex flex-column" {...provided.droppableProps}>
+                        {globalTask.map((task, i) => (
+                            <Draggable key={task.task_id + '-' + i} draggableId={'draggable-' + task.task_id} index={i}>
+                                {(provided) => (
+                                    <div
+                                        ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                        <TreeSingleTask
+                                            completedFunc={() => handleCompleted(task.task_id)}
+                                            handlePriority={() => handlePriority(task.task_id)}
+                                            dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
+                                            status={task.status}
+                                            setPriority={setPriority}
+                                            priority={task.priority}
+                                            key={task.task_id + '-' + i}
+                                        >
+                                        </TreeSingleTask>
+                                    </div>
+                                )}
+                            </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
+        </DragDropContext>
         <div ref={addingRef} className="adding-option">
             {showAddingOptionInput ?
                 <form onSubmit={handleAdd} className='w-100'>

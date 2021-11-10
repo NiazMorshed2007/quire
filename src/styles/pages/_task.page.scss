@@ -48,6 +48,7 @@
       .tree {
         .tasks-wrapper {
           .single-task {
+            user-select: none;
             width: 100%;
             padding: 6px;
             border-bottom: $border-silver;
@@ -98,6 +99,9 @@
               transform: translate(-100%, -50%);
               left: 0;
               padding-right: 6px;
+              .has-priority {
+                visibility: visible;
+              }
             }
 
             .after-list {
@@ -112,6 +116,7 @@
               .completed-icon {
                 visibility: visible;
               }
+
             }
           }
         }

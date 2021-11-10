@@ -80,14 +80,7 @@ const TreeSingleTask: FC<TaskProps> = (props) => {
                             </Menu.Item>
                         ))}
                     </Menu>)}>
-                        <i className='priority'>
-                            {/*{prioriyItems.find((item) => {*/}
-                            {/*    if(item.name.toLowerCase() === priority) {*/}
-                            {/*        return (*/}
-                            {/*            <item.icon key={item.name.toLowerCase()} style={{color: item.color}} />*/}
-                            {/*        )*/}
-                            {/*    }*/}
-                            {/*})}*/}
+                        <i className={`priority ${priority !== 'none' && 'has-priority'}`}>
                             {priority === 'urgent' && <BsArrowUp style={{color: prioriyItems[0].color}} />}
                             {priority === 'high' && <BsArrowUp style={{color: prioriyItems[1].color}} />}
                             {priority === 'none' && <BsArrowUp style={{color: prioriyItems[2].color}} />}

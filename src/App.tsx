@@ -59,7 +59,7 @@ const App: FC = () => {
     const [isDarkMode, setIsDarkMode] = useState(appearanceData());
     const [user, setUser] = useState<any>(getUser());
     const [orgs, setOrgs] = useState<IOrg[]>(getOrgs());
-    console.log(orgs);
+    // console.log(orgs);
     const [myTasks, setMyTasks] = useState<ITask[]>(getMyTasks);
     const [currentOrg, setCurrentOrg] = useState<string>(orgs.length > 0 ? orgs[0].org_id : '');
     useEffect(() => {
