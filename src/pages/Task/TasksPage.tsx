@@ -108,7 +108,7 @@ const TasksPage: FC<Props> = ({tabs, sublists, type}) => {
         <div className="main-wrapper pt-5">
             <div className="inner-main">
                 {currentView === 'tree' && <Tree type={type} tasks={tasks && tasks}/>}
-                {currentView === 'board' && <Board/>}
+                {currentView === 'board' && <Board tasks={tasks && tasks} type={type} statuses={sublist ? sublist.statuses : listTab.statuses}/>}
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 .task-page {
-  margin: 10px 5% 20px 3%;
-
+  margin: 10px 0 4px 3%;
+  height: 100%;
   header {
     width: 80%;
     margin-right: 15%;
@@ -34,8 +34,6 @@
   }
 
   .main-wrapper {
-    padding: 0 160px 0 120px;
-
     #common_back {
       background: rgba($brandClr, .16);
       border: none;
@@ -46,6 +44,8 @@
 
     .inner-main {
       .tree {
+        margin-right: 5%;
+        padding: 0 160px 0 120px;
         .tasks-wrapper {
           .single-task {
             user-select: none;
@@ -154,6 +154,19 @@
                 font-style: italic;
               }
             }
+          }
+        }
+      }
+
+
+
+
+
+      //board start
+      .board {
+        .statuses-wrapper {
+          .single-status {
+
           }
         }
       }

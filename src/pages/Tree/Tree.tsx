@@ -26,8 +26,8 @@ const Tree: FC<Props> = ({tasks, type}) => {
             const new_task: ITask = {
                 task_name: taskText,
                 task_id: setId(taskText),
-                status: 'todo',
-                priority: 'none'
+                task_status: 'todo',
+                task_priority: 'none'
             }
             if (type === 'PRJ') {
                 tasks.push(new_task);
@@ -46,14 +46,14 @@ const Tree: FC<Props> = ({tasks, type}) => {
             tasks.filter((task) => {
                 if (task.task_id === index) {
                     console.log(priority);
-                    task.priority = priority;
+                    task.task_priority = priority;
                 }
             });
         } else if (type === 'USER') {
             // eslint-disable-next-line array-callback-return
             myTasks.filter((task) => {
                 if (task.task_id === index) {
-                    task.priority = priority
+                    task.task_priority = priority
                 }
             });
         }
@@ -65,14 +65,14 @@ const Tree: FC<Props> = ({tasks, type}) => {
             // eslint-disable-next-line array-callback-return
             tasks.filter((task) => {
                 if (task.task_id === index) {
-                    task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
+                    task.task_status === 'completed' ? task.task_status = 'todo' : task.task_status = 'completed'
                 }
             });
         } else if (type === 'USER') {
             // eslint-disable-next-line array-callback-return
             myTasks.filter((task) => {
                 if (task.task_id === index) {
-                    task.status === 'completed' ? task.status = 'todo' : task.status = 'completed'
+                    task.task_status === 'completed' ? task.task_status = 'todo' : task.task_status = 'completed'
                 }
             });
         }
@@ -120,9 +120,9 @@ const Tree: FC<Props> = ({tasks, type}) => {
                                             completedFunc={() => handleCompleted(task.task_id)}
                                             handlePriority={() => handlePriority(task.task_id)}
                                             dltfunc={() => handleDelete(task.task_id)} name={task.task_name}
-                                            status={task.status}
+                                            status={task.task_status}
                                             setPriority={setPriority}
-                                            priority={task.priority}
+                                            priority={task.task_priority}
                                             key={task.task_id + '-' + i}
                                         >
                                         </TreeSingleTask>

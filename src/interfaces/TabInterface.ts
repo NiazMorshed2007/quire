@@ -1,9 +1,10 @@
 import {ITask} from "./TaskInterface";
+import {IStatuses} from "./statusesInterface";
 
 export interface ITabs {
     text: string,
     id: string,
     tasks: ITask[],
-    statuses: {name: string, id: string,}[],
+    statuses?: IStatuses[],
     iconIndex?: any,
 }
