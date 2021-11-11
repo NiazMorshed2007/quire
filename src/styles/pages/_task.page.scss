@@ -164,9 +164,37 @@
 
       //board start
       .board {
+        user-select: none;
         .statuses-wrapper {
           .single-status {
-
+            width: 350px;
+            height: 461px;
+            border-radius: 6px;
+            overflow: hidden;
+            &:hover {
+              box-shadow: 0 0 0 0 silver;
+            }
+            .status-head {
+              padding: 15px 12px;
+              .status-list-length {
+                padding: 3px;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #e8e8e8;
+              }
+            }
+            .status-lists-wrapper {
+              height: calc(100% - 56px);
+              padding: 10px 7px;
+              .status-inner-lists {
+                .single-list {
+                  padding: 10px;
+                  border-radius: 4px;
+                  height: 85px;
+                }
+              }
+            }
           }
         }
       }
