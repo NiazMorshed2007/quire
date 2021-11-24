@@ -1,105 +1,128 @@
-import React, {FC, useContext} from 'react';
-import logo from '../../assets/logo.png';
-import {FcGoogle} from 'react-icons/fc';
-import {IsLogged} from "../../context/isLogged";
-import {firebase} from '../../firebase/firebase';
-import {Redirect, useHistory} from "react-router-dom";
-import {User} from '../../context/user';
-import {Orgs} from "../../context/orgs";
-import {setId} from "../../functions/SetId";
-import {Acroname} from "../../functions/Acroname";
-import {setRandomAvatarBack} from "../../functions/SetRandomAvatarBack";
+import React, { FC, useContext } from "react";
+import logo from "../../assets/logo.png";
+import { FcGoogle } from "react-icons/fc";
+import { IsLogged } from "../../context/isLogged";
+import { firebase } from "../../firebase/firebase";
+import { Redirect, useHistory } from "react-router-dom";
+import { User } from "../../context/user";
+import { Orgs } from "../../context/orgs";
+import { setId } from "../../functions/SetId";
+import { Acroname } from "../../functions/Acroname";
+import { setRandomAvatarBack } from "../../functions/SetRandomAvatarBack";
 
 const Login: FC = () => {
-    const users = firebase.firestore().collection('users');
+  const users = firebase.firestore().collection("users");
 
-    const {logged, setLogged}: any = useContext(IsLogged);
-    const {setUser}: any = useContext(User);
-    const {orgs, setOrgs} = useContext(Orgs);
-    const history = useHistory();
-    const authenticate = (): void => {
-        const google_provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(google_provider)
-            .then((re) => {
-                users.doc(re.user?.uid).set({
-                    name: re.user?.displayName,
-                    uid: re.user?.uid,
-                    orgs: [{
-                        org_name: re.user?.displayName + "'s Organization",
-                        org_id: setId(re.user?.displayName + "'s_organization"),
-                        org_avatar_txt: Acroname(re.user?.displayName),
-                        org_avatar_back: setRandomAvatarBack(),
-                        projects: [{
-                            project_name: re.user?.displayName + "'s Project",
-                            project_id: setId(re.user?.displayName + "'s_project"),
-                            project_avatar_txt: Acroname(re.user?.displayName),
-                            project_avatar_back: setRandomAvatarBack(),
-                            tabs: [{text: 'Lists', id: 'lists', tasks: []}],
-                            sublists: []
-                        }]
-                    }],
-                }).then(r => {
-                    console.log(r)
-                })
-                localStorage.setItem('logged', 'true');
-                localStorage.setItem('uid', JSON.stringify(re.user?.uid));
-                localStorage.setItem('user', JSON.stringify(re));
-                setUser(JSON.parse(localStorage.getItem('user') as string));
-                setLogged(true);
-                const user = JSON.parse(localStorage.getItem('user') as string);
-                setOrgs([{
-                    org_name: user.user.displayName + "'s Organization",
-                    org_id: setId(user.user.displayName + "'s_organization"),
-                    org_avatar_txt: Acroname(user.user.displayName),
-                    org_avatar_back: setRandomAvatarBack(),
-                    projects: [{
-                        project_name: user.user.displayName + "'s Project",
-                        project_id: setId(user.user.displayName + "'s_project"),
-                        project_avatar_txt: Acroname(user.user.displayName),
-                        project_avatar_back: setRandomAvatarBack(),
-                        tabs: [{
-                            text: 'Lists',
-                            id: 'lists',
-                            tasks: [],
-                            statuses: [{name: 'To-Do', id: 'todo'}, {
-                                name: 'In-Progress',
-                                id: 'in-progress'
-                            }, {name: 'Completed', id: 'completed'}]
-                        }],
-                        sublists: []
-                    }]
-                }, ...orgs]);
-                localStorage.setItem('orgs', JSON.stringify(orgs));
-                history.push('/u/overview');
-            }).catch((err) => {
-            console.log(err);
-        })
-    }
-    if (logged) {
-        return <Redirect to='/u'/>
-    }
-    return <div className='login-page vw-100 vh-100 overflow-hidden position-relative'>
-        <div className="header position-absolute top-0">
-            <div className="logo-wrapper">
-                <img className='fitimage' src={logo} alt=""/>
-            </div>
+  const { logged, setLogged }: any = useContext(IsLogged);
+  const { setUser }: any = useContext(User);
+  const { orgs, setOrgs } = useContext(Orgs);
+  const history = useHistory();
+  const authenticate = (): void => {
+    const google_provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(google_provider)
+      .then((re) => {
+        users
+          .doc(re.user?.uid)
+          .set({
+            name: re.user?.displayName,
+            uid: re.user?.uid,
+            orgs: [
+              {
+                org_name: re.user?.displayName + "'s Organization",
+                org_id: setId(re.user?.displayName + "'s_organization"),
+                org_avatar_txt: Acroname(re.user?.displayName),
+                org_avatar_back: setRandomAvatarBack(),
+                projects: [
+                  {
+                    project_name: re.user?.displayName + "'s Project",
+                    project_id: setId(re.user?.displayName + "'s_project"),
+                    project_avatar_txt: Acroname(re.user?.displayName),
+                    project_avatar_back: setRandomAvatarBack(),
+                    tabs: [{ text: "Lists", id: "lists", tasks: [] }],
+                    sublists: [],
+                  },
+                ],
+              },
+            ],
+          })
+          .then((r) => {
+            console.log(r);
+          });
+        localStorage.setItem("logged", "true");
+        localStorage.setItem("uid", JSON.stringify(re.user?.uid));
+        localStorage.setItem("user", JSON.stringify(re));
+        setUser(JSON.parse(localStorage.getItem("user") as string));
+        setLogged(true);
+        const user = JSON.parse(localStorage.getItem("user") as string);
+        setOrgs([
+          {
+            org_name: user.user.displayName + "'s Organization",
+            org_id: setId(user.user.displayName + "'s_organization"),
+            org_avatar_txt: Acroname(user.user.displayName),
+            org_avatar_back: setRandomAvatarBack(),
+            projects: [
+              {
+                project_name: user.user.displayName + "'s Project",
+                project_id: setId(user.user.displayName + "'s_project"),
+                project_avatar_txt: Acroname(user.user.displayName),
+                project_avatar_back: setRandomAvatarBack(),
+                tabs: [
+                  {
+                    text: "Lists",
+                    id: "lists",
+                    tasks: [],
+                    statuses: [
+                      { name: "To-Do", id: "todo" },
+                      {
+                        name: "In-Progress",
+                        id: "in-progress",
+                      },
+                      { name: "Completed", id: "completed" },
+                    ],
+                  },
+                ],
+                sublists: [],
+              },
+            ],
+          },
+          ...orgs,
+        ]);
+        localStorage.setItem("orgs", JSON.stringify(orgs));
+        history.push("/u/overview");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  if (logged) {
+    return <Redirect to="/u" />;
+  }
+  return (
+    <div className="login-page vw-100 vh-100 overflow-hidden position-relative">
+      <div className="header position-absolute top-0">
+        <div className="logo-wrapper">
+          <img className="fitimage" src={logo} alt="" />
         </div>
-        <div className="main w-100 h-100 d-flex flex-column align-items-center justify-content-center">
-            <h2>Sign in to Quire</h2>
-            <h5 className='text-silver'>Unfold Your Ideas</h5>
-            <div
-                onClick={authenticate}
-                className="login-button pointer d-flex gap-3 px-3 mt-3 shadow-sm align-items-center justify-content-between"
-            >
-                <i className="h-100 d-flex align-items-center justify-content-center">
-                    <FcGoogle/>
-                </i>
-                <div className="h-100 w-100 d-flex align-items-center justify-content-center">
-                    <p className="m-0">Sign in with Google</p>
-                </div>
-            </div>
+      </div>
+      <div className="main w-100 h-100 d-flex flex-column align-items-center justify-content-center">
+        <h2>Sign in to Quire</h2>
+        <h5 className="text-silver">Unfold Your Ideas</h5>
+        <div
+          onClick={authenticate}
+          className="login-button pointer d-flex gap-3 px-3 mt-3 shadow-sm align-items-center justify-content-between"
+        >
+          <i className="h-100 d-flex align-items-center justify-content-center">
+            <FcGoogle />
+          </i>
+          <div className="h-100 w-100 d-flex align-items-center justify-content-center">
+            <p className="m-0">Sign in with Google</p>
+          </div>
         </div>
+      </div>
     </div>
-}
+  );
+};
 
 export default Login;
