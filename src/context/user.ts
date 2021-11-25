@@ -1,8 +1,8 @@
-import {createContext} from "react";
+import {createContext, Dispatch} from "react";
 
 interface GlobalUser {
     user: [],
-    setUser: (user: []) => void
+    setUser: Dispatch<[]>
 }
 
 export const User = createContext<GlobalUser>({user: [], setUser: () => {}});

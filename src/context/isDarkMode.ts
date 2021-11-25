@@ -1,8 +1,8 @@
-import {createContext} from "react";
+import {createContext, Dispatch} from "react";
 
 interface GlobalAppearance {
     isDarkMode: boolean,
-    setIsDarkMode: (set: boolean) => void
+    setIsDarkMode: Dispatch<boolean>
 }
 
 export const IsDarkMode = createContext<GlobalAppearance>({isDarkMode: false, setIsDarkMode: () => {}});

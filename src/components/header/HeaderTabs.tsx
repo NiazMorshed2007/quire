@@ -1,5 +1,5 @@
 import { Divider, Dropdown, Menu, Tabs } from "antd";
-import React, { Dispatch, FC } from "react";
+import React, { Dispatch, FC, useContext, useState } from "react";
 import {
   AiOutlineDislike,
   AiOutlineHighlight,
@@ -43,13 +43,14 @@ import {
   VscSymbolKeyword,
 } from "react-icons/all";
 import { useHistory, useRouteMatch } from "react-router";
+import { Orgs } from "../../context/orgs";
 import { ISubilsts } from "../../interfaces/SublistsInterface";
 import { ITask } from "../../interfaces/TaskInterface";
 
 const { TabPane } = Tabs;
 
 interface IHeaderTabs {
-  type: string;
+  type: "ORG" | "PRJ" | "USER";
   activeKey: string;
   setActiveKey: Dispatch<string>;
   tabs: { text: string; id: string; tasks?: ITask[] }[];
@@ -60,6 +61,8 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
   const { type, activeKey, setActiveKey, tabs, sublists } = props;
   const history = useHistory();
   const { url } = useRouteMatch();
+  const { orgs, setOrgs } = useContext(Orgs);
+  const [sublistId, setSublistId] = useState<string>("");
   const sublistIconsArr = [
     <VscListSelection />,
     <VscSymbolKeyword />,
@@ -97,6 +100,15 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
     <BsBullseye />,
     <MdFullscreen />,
   ];
+  const handleDeleteSublist = (): void => {
+    const sublist_index: number = sublists.findIndex(
+      ({ id }) => id === sublistId
+    );
+    sublists.splice(sublist_index, 1);
+    history.push(`${url}/lists?view=tree`);
+    setActiveKey(`${url}/lists?view=tree`);
+    setOrgs([...orgs]);
+  };
   return (
     <>
       <Tabs
@@ -163,7 +175,11 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
                           <Menu.Item key={4} icon={<BsArchive />}>
                             Archive
                           </Menu.Item>
-                          <Menu.Item key={5} icon={<BsTrash />}>
+                          <Menu.Item
+                            key={5}
+                            onClick={() => setSublistId(list.id)}
+                            icon={<BsTrash />}
+                          >
                             Delete
                           </Menu.Item>
                         </Menu>

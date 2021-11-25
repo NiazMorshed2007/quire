@@ -1,6 +1,6 @@
 export interface IbaseInfo {
     img?: string
-    type: string
+    type: 'ORG' | 'PRJ' | 'USER'
     title: string
     parent_name?: string
     path?: string

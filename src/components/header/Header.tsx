@@ -13,8 +13,6 @@ import { ISubilsts } from "../../interfaces/SublistsInterface";
 import DropdownFirst from "./DropdownFirst";
 import HeaderTabs from "./HeaderTabs";
 
-const { SubMenu } = Menu;
-const { TabPane } = Tabs;
 colorpalettes.push("white");
 
 const Header: FC<IHeader> = ({ name, tabs, type, org, project }) => {
@@ -26,8 +24,7 @@ const Header: FC<IHeader> = ({ name, tabs, type, org, project }) => {
   const [sublistText, setSubListText] = useState<string>("");
   const [subListIcon, setSublistIcon] = useState<number>(0);
   const [sublistColor, setSublistColor] = useState<string>("white");
-  const [checked, setChecked] = useState<boolean>(false);
-  const [sublistId, setSublistId] = useState<string>("");
+  // const [checked, setChecked] = useState<boolean>(false);
   const projects: IProject[] = org && org.projects;
   const sublists: ISubilsts[] = project && project.sublists;
   const [activeKey, setActiveKey] = useState<string>(
@@ -55,38 +52,19 @@ const Header: FC<IHeader> = ({ name, tabs, type, org, project }) => {
     setActiveKey(`${url}/sublist/${setId(sublistText)}?view=tree`);
     setSubListText("");
   };
-  //   const handleDelete = (): void => {
-  //     if (deleteModalType.type === "organization") {
-  //       const org_index: number = orgs.findIndex(
-  //         ({ org_id }) => org_id === currentOrg
-  //       );
-  //       orgs.splice(org_index, 1);
-  //       history.push("/u");
-  //       setOrgs([...orgs]);
-  //     } else if (deleteModalType.type === "project") {
-  //       const project_index: number = projects.findIndex(
-  //         ({ project_name }) => project_name === name
-  //       );
-  //       projects.splice(project_index, 1);
-  //       history.push(`/w/o/${currentOrg}/overview`);
-  //       setOrgs([...orgs]);
-  //     } else if (deleteModalType.type === "sublist") {
-  //       const sublist_index: number = sublists.findIndex(
-  //         ({ id }) => id === sublistId
-  //       );
-  //       sublists.splice(sublist_index, 1);
-  //       history.push(`${url}/lists?view=tree`);
-  //       setActiveKey(`${url}/lists?view=tree`);
-  //       setOrgs([...orgs]);
-  //     }
-  //   };
 
   return (
     <header className="main-header d-flex flex-column justify-content-between">
       <div className="up d-flex align-items-center justify-content-between">
         <div className="left d-flex gap-1 align-items-center ">
           <h5 className="name m-0">{name}</h5>
-          <DropdownFirst type={type} currentOrg={currentOrg} org={org} />
+          <DropdownFirst
+            projects={projects}
+            name={name}
+            type={type}
+            currentOrg={currentOrg}
+            org={org}
+          />
         </div>
         <div className="right d-flex align-items-center gap-3">
           <i>

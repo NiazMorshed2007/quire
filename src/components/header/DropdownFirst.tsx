@@ -1,6 +1,6 @@
-import { Menu, Dropdown } from "antd";
-import React, { FC } from "react";
-import { useHistory } from "react-router";
+import { Menu, Dropdown, Divider } from "antd";
+import React, { Dispatch, FC, useContext, useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router";
 import {
   BsPencil,
   AiOutlineUser,
@@ -24,18 +24,48 @@ import {
   BsChevronDown,
 } from "react-icons/all";
 import { IOrg } from "../../interfaces/OrgInterface";
+import CustomModal from "../modal/CustomModal";
+import { ModalContext } from "../../context/ModalContext";
+import { Orgs } from "../../context/orgs";
+import { IProject } from "../../interfaces/ProjectInterface";
+import { ISubilsts } from "../../interfaces/SublistsInterface";
 
 interface Props {
-  type: string;
+  type: "ORG" | "PRJ" | "USER";
   currentOrg: string;
   org: IOrg;
+  name: string;
+  projects: IProject[];
 }
 
 const { SubMenu } = Menu;
 
 const DropdownFirst: FC<Props> = (props) => {
-  const { type, currentOrg, org } = props;
+  const { type, currentOrg, org, projects, name } = props;
+  const { renderModal, setRenderModal } = useContext(ModalContext);
   const history = useHistory();
+  const { orgs, setOrgs } = useContext(Orgs);
+  const [deleteModalType, setDeleteModalType] = useState<
+    "organization" | "project"
+  >("project");
+
+  const handleDelete = (): void => {
+    if (deleteModalType === "organization") {
+      const org_index: number = orgs.findIndex(
+        ({ org_id }) => org_id === currentOrg
+      );
+      orgs.splice(org_index, 1);
+      history.push("/u");
+      setOrgs([...orgs]);
+    } else if (deleteModalType === "project") {
+      const project_index: number = projects.findIndex(
+        ({ project_name }) => project_name === name
+      );
+      projects.splice(project_index, 1);
+      history.push(`/w/o/${currentOrg}/overview`);
+      setOrgs([...orgs]);
+    }
+  };
   return (
     <>
       <Dropdown
@@ -75,7 +105,14 @@ const DropdownFirst: FC<Props> = (props) => {
                   Export
                 </Menu.Item>
                 <SubMenu key={8} icon={<BsThreeDots />} title="More">
-                  <Menu.Item icon={<GoTrashcan />} key={"delete"}>
+                  <Menu.Item
+                    icon={<GoTrashcan />}
+                    onClick={() => {
+                      setDeleteModalType("organization");
+                      setRenderModal(true);
+                    }}
+                    key={"delete"}
+                  >
                     Delete...
                   </Menu.Item>
                 </SubMenu>
@@ -135,7 +172,14 @@ const DropdownFirst: FC<Props> = (props) => {
                   </Menu.Item>
                 </SubMenu>
                 <SubMenu key={11} icon={<BsThreeDots />} title="More">
-                  <Menu.Item icon={<GoTrashcan />} key={"delete"}>
+                  <Menu.Item
+                    icon={<GoTrashcan />}
+                    onClick={() => {
+                      setDeleteModalType("project");
+                      setRenderModal(true);
+                    }}
+                    key={"delete"}
+                  >
                     Delete...
                   </Menu.Item>
                 </SubMenu>
@@ -168,6 +212,21 @@ const DropdownFirst: FC<Props> = (props) => {
       >
         <BsChevronDown />
       </Dropdown>
+      {renderModal && (
+        <CustomModal
+          layer="white"
+          content={
+            <>
+              <div className="modal-content delete-modal shadow">
+                <h2>
+                  Delete {deleteModalType === "project" && "Project"}
+                  {deleteModalType === "organization" && "Organization"}
+                </h2>
+              </div>
+            </>
+          }
+        />
+      )}
     </>
   );
 };

@@ -22,6 +22,7 @@ import { ITask } from "./interfaces/TaskInterface";
 import { MyTasks } from "./context/myTask";
 import GlobalError from "./pages/error/GlobalError";
 import { firebase } from "./firebase/firebase";
+import { ModalContext } from "./context/ModalContext";
 
 const db = firebase.firestore();
 
@@ -62,6 +63,7 @@ const App: FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(appearanceData());
   const [user, setUser] = useState<any>(getUser());
   const [orgs, setOrgs] = useState<IOrg[]>(getOrgs());
+  const [renderModal, setRenderModal] = useState<boolean>(false);
   // console.log(orgs);
   const [myTasks, setMyTasks] = useState<ITask[]>(getMyTasks);
   const [currentOrg, setCurrentOrg] = useState<string>(
@@ -85,68 +87,70 @@ const App: FC = () => {
         </Route>
         {!logged && <Redirect to="/login" />}
         <IsLogged.Provider value={{ logged, setLogged }}>
-          <User.Provider value={{ user, setUser }}>
-            <IsDarkMode.Provider value={{ isDarkMode, setIsDarkMode }}>
-              <Orgs.Provider value={{ orgs, setOrgs }}>
-                <MyTasks.Provider value={{ myTasks, setMyTasks }}>
-                  <CurrentOrg.Provider value={{ currentOrg, setCurrentOrg }}>
-                    <div className="app vh-100 vw-100 overflow-hidden">
-                      <Switch>
-                        <Route path="/login">
-                          <Login />
-                        </Route>
-                        <Route path={["/u", "/w", "/c"]}>
-                          {logged && (
-                            <>
-                              <div
-                                className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${
-                                  isDarkMode && "expand-dark-mode"
-                                }`}
-                              ></div>
-                              <div
-                                className={`user-work-wrapper d-flex w-100 h-100 position-relative ${
-                                  isDarkMode && "text-white"
-                                }`}
-                              >
-                                <SideBar />
-                                <div className="main d-flex w-100 flex-column">
-                                  <Route path="/u">
-                                    <UserSpace />
-                                  </Route>
-                                  <Switch>
-                                    <Route path="/w/o/:orgId">
-                                      <Organization />
+          <ModalContext.Provider value={{ renderModal, setRenderModal }}>
+            <User.Provider value={{ user, setUser }}>
+              <IsDarkMode.Provider value={{ isDarkMode, setIsDarkMode }}>
+                <Orgs.Provider value={{ orgs, setOrgs }}>
+                  <MyTasks.Provider value={{ myTasks, setMyTasks }}>
+                    <CurrentOrg.Provider value={{ currentOrg, setCurrentOrg }}>
+                      <div className="app vh-100 vw-100 overflow-hidden">
+                        <Switch>
+                          <Route path="/login">
+                            <Login />
+                          </Route>
+                          <Route path={["/u", "/w", "/c"]}>
+                            {logged && (
+                              <>
+                                <div
+                                  className={`dark-mode-layer position-absolute vh-100 vw-100 bg-dark ${
+                                    isDarkMode && "expand-dark-mode"
+                                  }`}
+                                ></div>
+                                <div
+                                  className={`user-work-wrapper d-flex w-100 h-100 position-relative ${
+                                    isDarkMode && "text-white"
+                                  }`}
+                                >
+                                  <SideBar />
+                                  <div className="main d-flex w-100 flex-column">
+                                    <Route path="/u">
+                                      <UserSpace />
                                     </Route>
-                                    <Route path="/w/p/:orgId/:projectId">
-                                      <Project />
+                                    <Switch>
+                                      <Route path="/w/o/:orgId">
+                                        <Organization />
+                                      </Route>
+                                      <Route path="/w/p/:orgId/:projectId">
+                                        <Project />
+                                      </Route>
+                                      <Route path="/w/*">
+                                        <ErrorPage />
+                                      </Route>
+                                    </Switch>
+                                    <Route path="/c">
+                                      <Create />
                                     </Route>
-                                    <Route path="/w/*">
+                                    <Route path="/error">
                                       <ErrorPage />
                                     </Route>
-                                  </Switch>
-                                  <Route path="/c">
-                                    <Create />
-                                  </Route>
-                                  <Route path="/error">
-                                    <ErrorPage />
-                                  </Route>
+                                  </div>
                                 </div>
-                              </div>
-                            </>
-                          )}
-                        </Route>
-                        {logged && (
-                          <Route path={"*"}>
-                            <GlobalError />
+                              </>
+                            )}
                           </Route>
-                        )}
-                      </Switch>
-                    </div>
-                  </CurrentOrg.Provider>
-                </MyTasks.Provider>
-              </Orgs.Provider>
-            </IsDarkMode.Provider>
-          </User.Provider>
+                          {logged && (
+                            <Route path={"*"}>
+                              <GlobalError />
+                            </Route>
+                          )}
+                        </Switch>
+                      </div>
+                    </CurrentOrg.Provider>
+                  </MyTasks.Provider>
+                </Orgs.Provider>
+              </IsDarkMode.Provider>
+            </User.Provider>
+          </ModalContext.Provider>
         </IsLogged.Provider>
       </Router>
     </>

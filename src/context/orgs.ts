@@ -1,9 +1,9 @@
-import {createContext} from "react";
+import {createContext, Dispatch} from "react";
 import {IOrg} from "../interfaces/OrgInterface";
 
 interface GlobalOrgs {
     orgs: IOrg[],
-    setOrgs: (org: IOrg[]) => void
+    setOrgs: Dispatch<IOrg[]>
 }
 
 export const Orgs = createContext<GlobalOrgs>({orgs: [], setOrgs: () => {}});

@@ -1,8 +1,8 @@
-import {createContext} from "react";
+import {createContext, Dispatch} from "react";
 
 interface GlobalCurrentOrg {
     currentOrg: string,
-    setCurrentOrg: (c: string) => void
+    setCurrentOrg: Dispatch<string>
 }
 
 export const CurrentOrg = createContext<GlobalCurrentOrg>({currentOrg: '', setCurrentOrg: () => {}});
