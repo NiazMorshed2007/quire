@@ -1,34 +1,32 @@
-import { Menu, Dropdown, Divider } from "antd";
-import React, { Dispatch, FC, useContext, useEffect, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router";
+import { Button, Dropdown, Menu } from "antd";
+import React, { FC, useContext, useState } from "react";
 import {
-  BsPencil,
-  AiOutlineUser,
-  BsFullscreen,
-  AiOutlinePlus,
-  BsCreditCard2Front,
   AiOutlineAppstore,
   AiOutlineFile,
-  BsThreeDots,
-  GoTrashcan,
-  FiSettings,
+  AiOutlinePlus,
+  AiOutlineUser,
+  BiMessageDetail,
+  BsChevronDown,
+  BsCircle,
+  BsCreditCard2Front,
+  BsEye,
+  BsFullscreen,
   BsHouse,
   BsJournalBookmark,
-  BsCircle,
-  BsTag,
-  BsEye,
-  BiMessageDetail,
+  BsPencil,
   BsPrinter,
-  RiFolderReceivedLine,
+  BsTag,
+  BsThreeDots,
+  FiSettings,
+  GoTrashcan,
   GrDocumentCsv,
-  BsChevronDown,
+  RiFolderReceivedLine,
 } from "react-icons/all";
-import { IOrg } from "../../interfaces/OrgInterface";
-import CustomModal from "../modal/CustomModal";
-import { ModalContext } from "../../context/ModalContext";
+import { useHistory } from "react-router";
 import { Orgs } from "../../context/orgs";
+import { IOrg } from "../../interfaces/OrgInterface";
 import { IProject } from "../../interfaces/ProjectInterface";
-import { ISubilsts } from "../../interfaces/SublistsInterface";
+import CustomModal from "../modal/CustomModal";
 
 interface Props {
   type: "ORG" | "PRJ" | "USER";
@@ -42,9 +40,10 @@ const { SubMenu } = Menu;
 
 const DropdownFirst: FC<Props> = (props) => {
   const { type, currentOrg, org, projects, name } = props;
-  const { renderModal, setRenderModal } = useContext(ModalContext);
   const history = useHistory();
+  const [checked, setChecked] = useState<boolean>(false);
   const { orgs, setOrgs } = useContext(Orgs);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [deleteModalType, setDeleteModalType] = useState<
     "organization" | "project"
   >("project");
@@ -109,7 +108,7 @@ const DropdownFirst: FC<Props> = (props) => {
                     icon={<GoTrashcan />}
                     onClick={() => {
                       setDeleteModalType("organization");
-                      setRenderModal(true);
+                      setModalVisible(true);
                     }}
                     key={"delete"}
                   >
@@ -176,7 +175,7 @@ const DropdownFirst: FC<Props> = (props) => {
                     icon={<GoTrashcan />}
                     onClick={() => {
                       setDeleteModalType("project");
-                      setRenderModal(true);
+                      setModalVisible(true);
                     }}
                     key={"delete"}
                   >
@@ -212,21 +211,46 @@ const DropdownFirst: FC<Props> = (props) => {
       >
         <BsChevronDown />
       </Dropdown>
-      {renderModal && (
-        <CustomModal
-          layer="white"
-          content={
-            <>
-              <div className="modal-content delete-modal shadow">
-                <h2>
-                  Delete {deleteModalType === "project" && "Project"}
-                  {deleteModalType === "organization" && "Organization"}
-                </h2>
-              </div>
-            </>
-          }
-        />
-      )}
+      <CustomModal
+        layer="white"
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        okDisabled={checked}
+        onOk={() => handleDelete()}
+        modalT="delete-modal"
+        content={
+          <>
+            <h4>
+              Delete {deleteModalType === "project" && "Project"}
+              {deleteModalType === "organization" && "Organization"}
+            </h4>
+            <p className="m-0">
+              You are about to <strong>permanently delete</strong> the{" "}
+              {type === "PRJ" ? "project" : "organization"}
+              <span
+                onClick={() => setModalVisible(false)}
+                className="primary-color pointer px-1"
+              >
+                {name}
+              </span>
+            </p>
+
+            <label className="d-flex gap-1 align-items-center pt-2">
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() => setChecked(!checked)}
+              />
+              I am aware that I <strong>cannot undo</strong> this.
+            </label>
+            <hr />
+            <p className="des">
+              If you choose to upgrade your subscription plan, the deleted
+              organization can be restored within 7 days.
+            </p>
+          </>
+        }
+      />
     </>
   );
 };
