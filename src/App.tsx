@@ -1,29 +1,28 @@
 import React, { FC, useEffect, useState } from "react";
-import Login from "./pages/Login/Login";
-import { IsLogged } from "./context/isLogged";
-import { IsDarkMode } from "./context/isDarkMode";
-import { User } from "./context/user";
 import {
   BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
 } from "react-router-dom";
-import UserSpace from "./pages/User/User";
-import { Orgs } from "./context/orgs";
-import { IOrg } from "./interfaces/OrgInterface";
-import Organization from "./pages/Organization/Organization";
 import SideBar from "./components/sidebar/SideBar";
-import ErrorPage from "./pages/error/Error";
-import Project from "./pages/project/Project";
-import Create from "./pages/create/Create";
 import { CurrentOrg } from "./context/currentOrg";
-import { ITask } from "./interfaces/TaskInterface";
+import { IsDarkMode } from "./context/isDarkMode";
+import { IsLogged } from "./context/isLogged";
 import { MyTasks } from "./context/myTask";
+import { Orgs } from "./context/orgs";
+import { User } from "./context/user";
+import { IOrg } from "./interfaces/OrgInterface";
+import { ITask } from "./interfaces/TaskInterface";
+import Create from "./pages/create/Create";
+import ErrorPage from "./pages/error/Error";
 import GlobalError from "./pages/error/GlobalError";
-import { firebase } from "./firebase/firebase";
+import Login from "./pages/Login/Login";
+import Organization from "./pages/Organization/Organization";
+import Project from "./pages/project/Project";
+import UserSpace from "./pages/User/User";
 
-const db = firebase.firestore();
+// const db = firebase.firestore();
 
 const App: FC = () => {
   const loggedData = (): boolean => {
@@ -62,8 +61,6 @@ const App: FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(appearanceData());
   const [user, setUser] = useState<any>(getUser());
   const [orgs, setOrgs] = useState<IOrg[]>(getOrgs());
-  const [renderModal, setRenderModal] = useState<boolean>(false);
-  // console.log(orgs);
   const [myTasks, setMyTasks] = useState<ITask[]>(getMyTasks);
   const [currentOrg, setCurrentOrg] = useState<string>(
     orgs.length > 0 ? orgs[0].org_id : ""

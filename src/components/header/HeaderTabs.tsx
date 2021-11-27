@@ -44,8 +44,10 @@ import {
 } from "react-icons/all";
 import { useHistory, useRouteMatch } from "react-router";
 import { Orgs } from "../../context/orgs";
+import { setId } from "../../functions/SetId";
 import { ISubilsts } from "../../interfaces/SublistsInterface";
 import { ITask } from "../../interfaces/TaskInterface";
+import CustomModal from "../modal/CustomModal";
 
 const { TabPane } = Tabs;
 
@@ -63,6 +65,9 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
   const { url } = useRouteMatch();
   const { orgs, setOrgs } = useContext(Orgs);
   const [sublistId, setSublistId] = useState<string>("");
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [sublistModalVisible, setSublistModalVisible] =
+    useState<boolean>(false);
   const sublistIconsArr = [
     <VscListSelection />,
     <VscSymbolKeyword />,
@@ -109,6 +114,34 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
     setActiveKey(`${url}/lists?view=tree`);
     setOrgs([...orgs]);
   };
+
+  const handleAddSublist = (): void => {
+    const newSubList: ISubilsts = {
+      text: "new",
+      //  sublistText,
+      id: setId("new"),
+      iconIndex: 1,
+      // subListIcon,
+      tasks: [],
+      statuses: [
+        { name: "To-Do", id: "todo" },
+        {
+          name: "In-Progress",
+          id: "in-progress",
+        },
+        { name: "Completed", id: "completed" },
+      ],
+      color: "orange",
+      //  sublistColor,
+    };
+    sublists.push(newSubList);
+    setOrgs([...orgs]);
+    history.push(`${url}/sublist/${setId("new")}?view=tree`);
+    setActiveKey(`${url}/sublist/${setId("new")}?view=tree`);
+    // setSubListText('');
+    // setRenderModal(false);
+  };
+
   return (
     <>
       <Tabs
@@ -177,7 +210,10 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
                           </Menu.Item>
                           <Menu.Item
                             key={5}
-                            onClick={() => setSublistId(list.id)}
+                            onClick={() => {
+                              setSublistId(list.id);
+                              setModalVisible(true);
+                            }}
                             icon={<BsTrash />}
                           >
                             Delete
@@ -198,6 +234,7 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
             <TabPane
               tab={
                 <div
+                  onClick={() => setSublistModalVisible(true)}
                   style={{
                     borderLeft: `${sublists.length > 1 && "1px solid silver"}`,
                   }}
@@ -215,6 +252,43 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
           </>
         )}
       </Tabs>
+      <CustomModal
+        content={
+          <>
+            <h4>Delete sublist</h4>
+            <p className="m-0">
+              You are about to <strong>permanently delete</strong> the sublist
+              <span
+                onClick={() => setModalVisible(false)}
+                className="primary-color pointer px-1"
+              >
+                {sublists && sublists.find(({ id }) => id === sublistId)?.text}
+              </span>
+            </p>
+          </>
+        }
+        layer="white"
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        modalT="delete"
+        onOk={() => handleDeleteSublist()}
+      />
+
+      <CustomModal
+        content={
+          <div>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam,
+            quidem maxime distinctio laboriosam doloribus ratione voluptatum
+            sapiente itaque quas minima dicta impedit vitae cum soluta, dolorem
+            explicabo praesentium quam voluptas.
+          </div>
+        }
+        layer="white"
+        visible={sublistModalVisible}
+        setVisible={setSublistModalVisible}
+        modalT="Sublist"
+        onOk={() => handleAddSublist()}
+      />
     </>
   );
 };

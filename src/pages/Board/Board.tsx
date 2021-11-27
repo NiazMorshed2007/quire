@@ -1,15 +1,14 @@
-import React, { FC, useContext } from "react";
-import { ITask } from "../../interfaces/TaskInterface";
-import { IStatuses } from "../../interfaces/statusesInterface";
+import { Dropdown, Menu } from "antd";
+import React, { FC } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { Orgs } from "../../context/orgs";
 import {
   AiFillEyeInvisible,
   BsBox,
   BsPencil,
   BsThreeDots,
 } from "react-icons/all";
-import { Dropdown, Menu } from "antd";
+import { IStatuses } from "../../interfaces/statusesInterface";
+import { ITask } from "../../interfaces/TaskInterface";
 
 const { SubMenu } = Menu;
 
@@ -20,14 +19,14 @@ interface props {
 
 const Board: FC<props> = (props) => {
   const { statuses, tasks } = props;
-  const { orgs, setOrgs } = useContext(Orgs);
+  // const { orgs, setOrgs } = useContext(Orgs);
   return (
     <>
       <div className="board h-100 custom-scrollbar">
         <DragDropContext
           onDragEnd={(...param) => {
-            const srcI: number = param[0].source.index;
-            const desI: any = param[0].destination?.index;
+            // const srcI: number = param[0].source.index;
+            // const desI: any = param[0].destination?.index;
           }}
         >
           <Droppable droppableId={"droppable-1"}>
@@ -101,8 +100,8 @@ const Board: FC<props> = (props) => {
                         <div className="status-lists-wrapper bg-silver custom-scrollbar overflow-auto">
                           <DragDropContext
                             onDragEnd={(...param) => {
-                              const srcI: number = param[0].source.index;
-                              const desI: any = param[0].destination?.index;
+                              // const srcI: number = param[0].source.index;
+                              // const desI: any = param[0].destination?.index;
                             }}
                           >
                             <Droppable droppableId={"droppable-card-1"}>

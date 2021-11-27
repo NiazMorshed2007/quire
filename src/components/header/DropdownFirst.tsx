@@ -1,4 +1,4 @@
-import { Button, Dropdown, Menu } from "antd";
+import { Dropdown, Menu } from "antd";
 import React, { FC, useContext, useState } from "react";
 import {
   AiOutlineAppstore,
@@ -41,7 +41,6 @@ const { SubMenu } = Menu;
 const DropdownFirst: FC<Props> = (props) => {
   const { type, currentOrg, org, projects, name } = props;
   const history = useHistory();
-  const [checked, setChecked] = useState<boolean>(false);
   const { orgs, setOrgs } = useContext(Orgs);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [deleteModalType, setDeleteModalType] = useState<
@@ -215,9 +214,8 @@ const DropdownFirst: FC<Props> = (props) => {
         layer="white"
         visible={modalVisible}
         setVisible={setModalVisible}
-        okDisabled={checked}
         onOk={() => handleDelete()}
-        modalT="delete-modal"
+        modalT="Delete"
         content={
           <>
             <h4>
@@ -233,20 +231,6 @@ const DropdownFirst: FC<Props> = (props) => {
               >
                 {name}
               </span>
-            </p>
-
-            <label className="d-flex gap-1 align-items-center pt-2">
-              <input
-                type="checkbox"
-                checked={checked}
-                onChange={() => setChecked(!checked)}
-              />
-              I am aware that I <strong>cannot undo</strong> this.
-            </label>
-            <hr />
-            <p className="des">
-              If you choose to upgrade your subscription plan, the deleted
-              organization can be restored within 7 days.
             </p>
           </>
         }
