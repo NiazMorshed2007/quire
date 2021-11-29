@@ -1,4 +1,4 @@
-import { Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu, Modal } from "antd";
 import React, { FC, useContext, useState } from "react";
 import {
   AiOutlineAppstore,
@@ -26,7 +26,6 @@ import { useHistory } from "react-router";
 import { Orgs } from "../../context/orgs";
 import { IOrg } from "../../interfaces/OrgInterface";
 import { IProject } from "../../interfaces/ProjectInterface";
-import CustomModal from "../modal/CustomModal";
 
 interface Props {
   type: "ORG" | "PRJ" | "USER";
@@ -40,6 +39,7 @@ const { SubMenu } = Menu;
 
 const DropdownFirst: FC<Props> = (props) => {
   const { type, currentOrg, org, projects, name } = props;
+  const [checked, setChecked] = useState<boolean>(false);
   const history = useHistory();
   const { orgs, setOrgs } = useContext(Orgs);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -210,12 +210,69 @@ const DropdownFirst: FC<Props> = (props) => {
       >
         <BsChevronDown />
       </Dropdown>
-      <CustomModal
+
+      <Modal
+        footer={false}
+        style={{ top: 20 }}
+        visible={modalVisible}
+        onOk={() => setModalVisible(false)}
+        onCancel={() => setModalVisible(false)}
+        closeIcon={<></>}
+        mask={false}
+      >
+        <div className="my-modal delete-modal shadow">
+          <h4 className="mb-2">
+            Delete this {type === "PRJ" ? "Project" : "Organization"}
+          </h4>
+          <p className="m-0">
+            You are about to <strong>permanently delete</strong> the
+            {type === "PRJ" ? "project" : "organization"}
+            <span
+              onClick={() => setModalVisible(false)}
+              className="primary-color pointer px-1"
+            >
+              {name}
+            </span>
+          </p>
+          <label className="d-flex gap-1 align-items-center pt-2">
+            <input
+              type="checkbox"
+              onChange={() => setChecked && setChecked(!checked)}
+            />
+            I am aware that I <strong>cannot undo</strong> this.
+          </label>
+          <hr />
+          <p className="des">
+            If you choose to upgrade your subscription plan, the deleted
+            organization can be restored within 7 days.
+          </p>
+
+          <div className="btn-wrapper pt-3 d-flex align-items-center justify-content-end gap-2">
+            <Button
+              type="primary"
+              disabled={!checked}
+              danger={checked ? true : false}
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+            <Button
+              onClick={() => setModalVisible(false)}
+              className="ant-default-btn"
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* <CustomModal
+        isBtnEnabled={checked}
         layer="white"
         visible={modalVisible}
         setVisible={setModalVisible}
         onOk={() => handleDelete()}
-        modalT="Delete"
+        modalT="delete"
         content={
           <>
             <h4>
@@ -232,9 +289,21 @@ const DropdownFirst: FC<Props> = (props) => {
                 {name}
               </span>
             </p>
+            <label className="d-flex gap-1 align-items-center pt-2">
+              <input
+                type="checkbox"
+                onChange={() => setChecked && setChecked(!checked)}
+              />
+              I am aware that I <strong>cannot undo</strong> this.
+            </label>
+            <hr />
+            <p className="des">
+              If you choose to upgrade your subscription plan, the deleted
+              organization can be restored within 7 days.
+            </p>
           </>
         }
-      />
+      /> */}
     </>
   );
 };

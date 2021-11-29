@@ -1,4 +1,4 @@
-import { Divider, Dropdown, Menu, Tabs } from "antd";
+import { Divider, Dropdown, Menu, Modal, Tabs } from "antd";
 import React, { Dispatch, FC, useContext, useState } from "react";
 import {
   AiOutlineDislike,
@@ -47,7 +47,6 @@ import { Orgs } from "../../context/orgs";
 import { setId } from "../../functions/SetId";
 import { ISubilsts } from "../../interfaces/SublistsInterface";
 import { ITask } from "../../interfaces/TaskInterface";
-import CustomModal from "../modal/CustomModal";
 
 const { TabPane } = Tabs;
 
@@ -65,7 +64,7 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
   const { url } = useRouteMatch();
   const { orgs, setOrgs } = useContext(Orgs);
   const [sublistId, setSublistId] = useState<string>("");
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
   const [sublistModalVisible, setSublistModalVisible] =
     useState<boolean>(false);
   const sublistIconsArr = [
@@ -212,7 +211,7 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
                             key={5}
                             onClick={() => {
                               setSublistId(list.id);
-                              setModalVisible(true);
+                              setDeleteModalVisible(true);
                             }}
                             icon={<BsTrash />}
                           >
@@ -252,29 +251,60 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
           </>
         )}
       </Tabs>
-      <CustomModal
+
+      <Modal
+        footer={false}
+        style={{ top: 20 }}
+        visible={sublistModalVisible}
+        onOk={() => setSublistModalVisible(false)}
+        onCancel={() => setSublistModalVisible(false)}
+        closeIcon={<></>}
+        mask={false}
+      >
+        <div className="my-modal sublist-modal shadow">
+          <h4>Create sublist</h4>
+        </div>
+      </Modal>
+
+      {/* <CustomModal
+        isBtnEnabled={deleteModalButtonEnabled}
         content={
           <>
             <h4>Delete sublist</h4>
             <p className="m-0">
               You are about to <strong>permanently delete</strong> the sublist
               <span
-                onClick={() => setModalVisible(false)}
+                onClick={() => setDeleteModalVisible(false)}
                 className="primary-color pointer px-1"
               >
                 {sublists && sublists.find(({ id }) => id === sublistId)?.text}
               </span>
             </p>
+            <label className="d-flex gap-1 align-items-center pt-2">
+              <input
+                type="checkbox"
+                onChange={() =>
+                  setDeleteModalButtonEnabled(!deleteModalButtonEnabled)
+                }
+              />
+              I am aware that I <strong>cannot undo</strong> this.
+            </label>
+            <hr />
+            <p className="des">
+              If you choose to upgrade your subscription plan, the deleted
+              organization can be restored within 7 days.
+            </p>
           </>
         }
         layer="white"
         visible={modalVisible}
-        setVisible={setModalVisible}
+        setVisible={setDeleteModalVisible}
         modalT="delete"
         onOk={() => handleDeleteSublist()}
       />
 
       <CustomModal
+        isBtnEnabled={addSubModalBtnEnabled}
         content={
           <div>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam,
@@ -286,9 +316,9 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
         layer="white"
         visible={sublistModalVisible}
         setVisible={setSublistModalVisible}
-        modalT="Sublist"
+        modalT="sublist"
         onOk={() => handleAddSublist()}
-      />
+      /> */}
     </>
   );
 };

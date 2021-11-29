@@ -17,6 +17,40 @@
   color: #505050;
 }
 
-.ant-modal-content {
-  // opacity: 0;
+.ant-modal-wrap {
+  background: rgba(255, 255, 255, 0.5);
+  overflow: hidden;
+  .ant-modal {
+    transform-origin: 50% 50% !important;
+    transform: scale(1) !important;
+    .ant-modal-content {
+      background: none;
+      box-shadow: none;
+      .my-modal {
+        background: white;
+        padding: 20px 25px;
+        border: 1px solid rgb(235, 235, 235);
+        border-radius: 12px;
+      }
+      .delete-modal {
+        background: white !important;
+        width: 450px;
+        height: 271px;
+        p,
+        label {
+          font-size: 14px;
+        }
+        .des {
+          font-size: 14px;
+          color: $silver;
+        }
+      }
+
+      .sublist-modal {
+        width: 690px;
+        height: 560px;
+        transform: translateX(-14%);
+      }
+    }
+  }
 }

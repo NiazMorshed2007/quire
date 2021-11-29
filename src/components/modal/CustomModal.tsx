@@ -9,19 +9,35 @@ interface ICustomModal {
   setVisible: Dispatch<boolean>;
   onOk: () => void;
   onCancel?: () => void;
-  modalT: string;
+  modalT: "delete" | "sublist";
+  isBtnEnabled: boolean;
 }
 
 const CustomModal: FC<ICustomModal> = (props) => {
-  const { layer, content, visible, setVisible, onOk, onCancel, modalT } = props;
-  const [checked, setChecked] = useState<boolean>(false);
+  const {
+    layer,
+    content,
+    visible,
+    setVisible,
+    onOk,
+    onCancel,
+    modalT,
+    isBtnEnabled,
+  } = props;
   const handleModal = (e: Event): void => {
     if ((e.target as Element).classList.contains("modal-wrapper")) {
       tl.reverse();
     }
   };
+  const DoOk = (): void => {
+    onOk();
+    tl.reverse();
+  };
   var tl = new TimelineLite({
-    onReverseComplete: () => setVisible(false),
+    onReverseComplete: () => {
+      setVisible(false);
+      onCancel && onCancel();
+    },
   }).pause();
   useEffect(() => {
     if (visible) {
@@ -65,45 +81,20 @@ const CustomModal: FC<ICustomModal> = (props) => {
           className="modal-wrapper position-fixed vw-100 vh-100 top-0"
         >
           <div className="modal-content-wrapper">
-            <div
-              className={`modal-content shadow ${
-                modalT.toLowerCase() + "-modal"
-              }`}
-            >
+            <div className={`modal-content shadow ${modalT + "-modal"}`}>
               {content}
-              {modalT.toLowerCase() === "delete" && (
-                <>
-                  <label className="d-flex gap-1 align-items-center pt-2">
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      onChange={() => setChecked(!checked)}
-                    />
-                    I am aware that I <strong>cannot undo</strong> this.
-                  </label>
-                  <hr />
-                  <p className="des">
-                    If you choose to upgrade your subscription plan, the deleted
-                    organization can be restored within 7 days.
-                  </p>
-                </>
-              )}
+              {modalT === "delete" && <></>}
               <div className="btn-wrapper d-flex gap-2 align-items-center justify-content-end pt-3">
-                {modalT.toLowerCase() === "delete" && (
+                {modalT === "delete" && (
                   <Button
-                    className={`${checked && "ant-danger-btn"}`}
-                    onClick={() => {
-                      tl.reverse();
-                      onOk();
-                    }}
-                    disabled={!checked}
+                    className={`${isBtnEnabled && "ant-danger-btn"}`}
+                    onClick={() => DoOk()}
+                    disabled={!isBtnEnabled}
                   >
                     Delete
                   </Button>
                 )}
-                {modalT.toLowerCase() === "sublist" && (
-                  <Button onClick={onOk}>Create</Button>
-                )}
+                {modalT === "sublist" && <Button onClick={onOk}>Create</Button>}
 
                 <Button
                   onClick={() => {
