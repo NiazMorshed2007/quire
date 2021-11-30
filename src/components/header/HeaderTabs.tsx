@@ -1,4 +1,15 @@
-import { Divider, Dropdown, Menu, Modal, Tabs } from "antd";
+import {
+  Button,
+  Divider,
+  Dropdown,
+  Form,
+  Input,
+  Menu,
+  Modal,
+  Radio,
+  Select,
+  Tabs,
+} from "antd";
 import React, { Dispatch, FC, useContext, useState } from "react";
 import {
   AiOutlineDislike,
@@ -16,6 +27,7 @@ import {
   BsEmojiFrown,
   BsEmojiNeutral,
   BsEmojiSmile,
+  BsKanban,
   BsPencil,
   BsPeople,
   BsPiggyBank,
@@ -24,6 +36,7 @@ import {
   FaGraduationCap,
   FaUmbrellaBeach,
   FiDatabase,
+  FiLock,
   GiFamilyTree,
   GiHamburger,
   HiOutlineLightBulb,
@@ -48,6 +61,8 @@ import { setId } from "../../functions/SetId";
 import { ISubilsts } from "../../interfaces/SublistsInterface";
 import { ITask } from "../../interfaces/TaskInterface";
 
+const { Option } = Select;
+
 const { TabPane } = Tabs;
 
 interface IHeaderTabs {
@@ -59,11 +74,15 @@ interface IHeaderTabs {
 }
 
 const HeaderTabs: FC<IHeaderTabs> = (props) => {
+  const [form] = Form.useForm();
   const { type, activeKey, setActiveKey, tabs, sublists } = props;
+  const [selectedType, setSelectedType] = useState<number>(0);
   const history = useHistory();
   const { url } = useRouteMatch();
   const { orgs, setOrgs } = useContext(Orgs);
   const [sublistId, setSublistId] = useState<string>("");
+  const [checked, setChecked] = useState<boolean>(false);
+  const [sublistText, setSublistText] = useState<string>("");
   const [deleteModalVisible, setDeleteModalVisible] = useState<boolean>(false);
   const [sublistModalVisible, setSublistModalVisible] =
     useState<boolean>(false);
@@ -112,13 +131,14 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
     history.push(`${url}/lists?view=tree`);
     setActiveKey(`${url}/lists?view=tree`);
     setOrgs([...orgs]);
+    setDeleteModalVisible(false);
   };
 
   const handleAddSublist = (): void => {
     const newSubList: ISubilsts = {
-      text: "new",
+      text: sublistText,
       //  sublistText,
-      id: setId("new"),
+      id: setId(sublistText),
       iconIndex: 1,
       // subListIcon,
       tasks: [],
@@ -135,8 +155,9 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
     };
     sublists.push(newSubList);
     setOrgs([...orgs]);
-    history.push(`${url}/sublist/${setId("new")}?view=tree`);
-    setActiveKey(`${url}/sublist/${setId("new")}?view=tree`);
+    history.push(`${url}/sublist/${setId(sublistText)}?view=tree`);
+    setActiveKey(`${url}/sublist/${setId(sublistText)}?view=tree`);
+    setSublistText("");
     // setSubListText('');
     // setRenderModal(false);
   };
@@ -230,17 +251,23 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
                 className="text-decoration-none"
               />
             ))}
+            {sublists.length > 0 && (
+              <TabPane
+                disabled
+                className="disabled-tab"
+                tab={<Divider type="vertical" />}
+              />
+            )}
             <TabPane
               tab={
                 <div
                   onClick={() => setSublistModalVisible(true)}
-                  style={{
-                    borderLeft: `${sublists.length > 1 && "1px solid silver"}`,
-                  }}
                   className={`add-sublist disabled tab pointer border-left d-flex gap-1 align-items-center`}
                 >
                   <BsPlusCircleFill className="text-silver" />
-                  <span className={`${sublists.length < 1 && "show"}`}>
+                  <span
+                    style={{ display: sublists.length > 0 ? "none" : "block" }}
+                  >
                     Add sublist
                   </span>
                 </div>
@@ -252,6 +279,61 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
         )}
       </Tabs>
 
+      {/* delete sublist modal */}
+      <Modal
+        footer={false}
+        style={{ top: 20 }}
+        visible={deleteModalVisible}
+        onOk={() => setDeleteModalVisible(false)}
+        onCancel={() => setDeleteModalVisible(false)}
+        closeIcon={<></>}
+        mask={false}
+      >
+        <div className="my-modal delete-modal shadow">
+          <h4 className="mb-2">Delete this Sublist</h4>
+          <p className="m-0">
+            You are about to <strong>permanently delete</strong> the sublist
+            <span
+              onClick={() => setDeleteModalVisible(false)}
+              className="primary-color pointer px-1"
+            >
+              {sublists && sublists.find(({ id }) => id === sublistId)?.text}
+            </span>
+          </p>
+          <label className="d-flex gap-1 align-items-center pt-2">
+            <input
+              type="checkbox"
+              onChange={() => setChecked && setChecked(!checked)}
+            />
+            I am aware that I <strong>cannot undo</strong> this.
+          </label>
+          <hr />
+          <p className="des">
+            If you choose to upgrade your subscription plan, the deleted
+            organization can be restored within 7 days.
+          </p>
+
+          <div className="btn-wrapper pt-3 d-flex align-items-center justify-content-end gap-2">
+            <Button
+              type="primary"
+              disabled={!checked}
+              danger={checked ? true : false}
+              onClick={handleDeleteSublist}
+            >
+              Delete
+            </Button>
+            <Button
+              onClick={() => setDeleteModalVisible(false)}
+              className="ant-default-btn"
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* add sublist modal */}
+
       <Modal
         footer={false}
         style={{ top: 20 }}
@@ -262,63 +344,79 @@ const HeaderTabs: FC<IHeaderTabs> = (props) => {
         mask={false}
       >
         <div className="my-modal sublist-modal shadow">
-          <h4>Create sublist</h4>
+          <h4 className="mb-4">Create Sublist</h4>
+          <Form
+            className="add-sublist-form"
+            requiredMark="optional"
+            layout="inline"
+            colon={false}
+            form={form}
+            onFinish={() => {
+              handleAddSublist();
+              setSublistModalVisible(false);
+            }}
+            name="control-hooks"
+          >
+            <Form.Item
+              className="first-label-item sublist-name"
+              name="Name"
+              label="Name"
+              rules={[{ required: true }]}
+            >
+              <Input
+                value={sublistText}
+                onChange={(e) => setSublistText(e.target.value)}
+              />
+            </Form.Item>
+            <Form.Item
+              className="first-label-item"
+              name="share with"
+              label="Share With"
+              rules={[{ required: true }]}
+            >
+              <Select
+                style={{ width: 200 }}
+                placeholder="Select a person"
+                optionFilterProp="children"
+                defaultValue={"jack"}
+                // onChange={onChange}
+              >
+                <Option value="jack">Project Members</Option>
+                <Option value="2nd" className="d-flex align-items-center gap-1">
+                  <FiLock />
+                  <span className="mx-1">Only me</span>
+                </Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              className="mt-2 pt-1 w-100 "
+              name="Default view"
+              label="Default View"
+              rules={[{ required: true }]}
+            >
+              <Radio.Group
+                onChange={(e) => setSelectedType(e.target.value)}
+                value={selectedType}
+              >
+                <Radio value={1} checked>
+                  <VscListSelection />
+                  <p className="m-0 d-inline-block">Tree</p>
+                </Radio>
+                <Radio value={2}>
+                  <BsKanban />
+                  <p className="m-0 d-inline-block">Board</p>
+                </Radio>
+                <Radio value={3}>Timeline</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
       </Modal>
-
-      {/* <CustomModal
-        isBtnEnabled={deleteModalButtonEnabled}
-        content={
-          <>
-            <h4>Delete sublist</h4>
-            <p className="m-0">
-              You are about to <strong>permanently delete</strong> the sublist
-              <span
-                onClick={() => setDeleteModalVisible(false)}
-                className="primary-color pointer px-1"
-              >
-                {sublists && sublists.find(({ id }) => id === sublistId)?.text}
-              </span>
-            </p>
-            <label className="d-flex gap-1 align-items-center pt-2">
-              <input
-                type="checkbox"
-                onChange={() =>
-                  setDeleteModalButtonEnabled(!deleteModalButtonEnabled)
-                }
-              />
-              I am aware that I <strong>cannot undo</strong> this.
-            </label>
-            <hr />
-            <p className="des">
-              If you choose to upgrade your subscription plan, the deleted
-              organization can be restored within 7 days.
-            </p>
-          </>
-        }
-        layer="white"
-        visible={modalVisible}
-        setVisible={setDeleteModalVisible}
-        modalT="delete"
-        onOk={() => handleDeleteSublist()}
-      />
-
-      <CustomModal
-        isBtnEnabled={addSubModalBtnEnabled}
-        content={
-          <div>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nam,
-            quidem maxime distinctio laboriosam doloribus ratione voluptatum
-            sapiente itaque quas minima dicta impedit vitae cum soluta, dolorem
-            explicabo praesentium quam voluptas.
-          </div>
-        }
-        layer="white"
-        visible={sublistModalVisible}
-        setVisible={setSublistModalVisible}
-        modalT="sublist"
-        onOk={() => handleAddSublist()}
-      /> */}
     </>
   );
 };

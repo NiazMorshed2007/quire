@@ -26,16 +26,18 @@
     .ant-modal-content {
       background: none;
       box-shadow: none;
+      pointer-events: none;
       .my-modal {
         background: white;
         padding: 20px 25px;
         border: 1px solid rgb(235, 235, 235);
         border-radius: 12px;
+        pointer-events: auto;
       }
       .delete-modal {
         background: white !important;
         width: 450px;
-        height: 271px;
+        // height: 271px;
         p,
         label {
           font-size: 14px;
@@ -49,8 +51,44 @@
       .sublist-modal {
         width: 690px;
         height: 560px;
-        transform: translateX(-14%);
+        transform: translate(-15%, -1.8%);
       }
     }
   }
+}
+
+.add-sublist-form {
+  .first-label-item {
+    width: 47%;
+  }
+  .ant-form-item {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0px;
+    .ant-col.ant-form-item-control {
+      width: 100%;
+      .ant-form-item-control-input-content {
+        input {
+          width: 100%;
+        }
+        .ant-select {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+  .sublist-name {
+    .ant-col.ant-form-item-control {
+      width: 100%;
+      .ant-form-item-control-input-content {
+        input {
+          width: 95%;
+        }
+      }
+    }
+  }
+}
+
+.ant-select-item-option-selected {
+  color: $brandClr !important;
 }
