@@ -2,7 +2,7 @@
   header {
     i {
       svg {
-        font-size:28px;
+        font-size: 28px;
       }
     }
   }
@@ -19,7 +19,8 @@
           &:focus {
             border-color: $brandClr;
           }
-          &:focus ~ span, &:valid ~ span {
+          &:focus ~ span,
+          &:valid ~ span {
             transform: translateY(-16px);
             font-size: 18px;
           }
@@ -30,12 +31,12 @@
           left: 0;
           pointer-events: none;
           font-size: 24px;
-          opacity: .7;
-          transition: all .2s ease-in-out;
+          opacity: 0.7;
+          transition: all 0.2s ease-in-out;
         }
-      .submit-btn {
-        @include button($primary: true);
-      }
+        .submit-btn {
+          @include button($primary: true);
+        }
         .cancel-btn {
           @include button();
         }
